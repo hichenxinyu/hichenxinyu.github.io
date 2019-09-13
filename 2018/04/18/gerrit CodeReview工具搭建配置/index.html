@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Gerrit CodeReview代码审核工具搭建配置 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、环境准备 OS:centos6.8gerrit依赖 (java&amp;amp;git)yum -y install java-1.8.0安装git 2.14.1 (低版本git同步gitlab时会出问题)yum install -y  http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.">
+<meta name="keywords" content="gitlab,gerrit,CodeReview">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gerrit CodeReview代码审核工具搭建配置">
+<meta property="og:url" content="http://yoursite.com/2018/04/18/gerrit CodeReview工具搭建配置/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、环境准备 OS:centos6.8gerrit依赖 (java&amp;amp;git)yum -y install java-1.8.0安装git 2.14.1 (低版本git同步gitlab时会出问题)yum install -y  http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-09-13T01:45:02.284Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gerrit CodeReview代码审核工具搭建配置">
+<meta name="twitter:description" content="一、环境准备 OS:centos6.8gerrit依赖 (java&amp;amp;git)yum -y install java-1.8.0安装git 2.14.1 (低版本git同步gitlab时会出问题)yum install -y  http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-gerrit CodeReview工具搭建配置" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/18/gerrit CodeReview工具搭建配置/" class="article-date">
+  <time datetime="2018-04-17T16:00:00.000Z" itemprop="datePublished">2018-04-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Gerrit CodeReview代码审核工具搭建配置
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h3><ol>
+<li><p>OS:centos6.8<br>gerrit依赖 (java&amp;git)<br>yum -y install java-1.8.0<br>安装git 2.14.1 (低版本git同步gitlab时会出问题)<br>yum install -y  <a href="http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm" target="_blank" rel="noopener">http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm</a><br>yum install -y git<br>yum -y install epel-release &amp;&amp; yum -y install nginx httpd-tools</p>
+</li>
+<li><p>gerrit环境<br>下载：Gerrit 2.15.1  wget <a href="https://www.gerritcodereview.com/download/gerrit-2.15.1.war" target="_blank" rel="noopener">https://www.gerritcodereview.com/download/gerrit-2.15.1.war</a></p>
+<a id="more"></a> 
+</li>
+<li><p>gerrit管理帐号(可选，使用独立账号配置gerrit)<br>gerrit依赖，用来管理gerrit。<br>sudo adduser gerrit<br>sudo passwd gerrit<br>并将gerrit加入sudo权限<br>sudo vi /etc/sudoers<br>gerrit  ALL=(ALL:ALL) ALL<br>备注：这里我直接使用root用户安装</p>
+</li>
+</ol>
+<h3 id="二-安装与配置gerrit"><a href="#二-安装与配置gerrit" class="headerlink" title="二. 安装与配置gerrit"></a>二. 安装与配置gerrit</h3><ol>
+<li>配置gerrit<br>默认安装：java -jar gerrit-2.15.1.war init -d /usr/local/review(此目录最好放在空间比较大的目录)</li>
+</ol>
+<blockquote>
+<p>配置的时候 该选择Y的时候要选择Y</p>
+</blockquote>
+<p>Install Verified label         [y/N]? N    //如果选择默认的话 会出现没有submit按钮<br>Install plugin download-commands version v2.13.4 [y/N]? y  //如果不安装 会出现创建项目没有clone地址</p>
+<p>更新配置文件：vim /usr/local/review/etc/gerrit.config</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">[gerrit]</span><br><span class="line">        basePath = git</span><br><span class="line">        serverId = 90b8d687-f735-4a2c-b117-0518fe571670</span><br><span class="line">        canonicalWebUrl = http://192.168.2.238:8080/</span><br><span class="line">[database]</span><br><span class="line">        type = h2</span><br><span class="line">        database = /usr/local/review/db/ReviewDB</span><br><span class="line">[index]</span><br><span class="line">        type = LUCENE</span><br><span class="line">[auth]</span><br><span class="line">        type = HTTP</span><br><span class="line">[receive]</span><br><span class="line">        enableSignedPush = true</span><br><span class="line">[sendemail]</span><br><span class="line">        enable = true</span><br><span class="line">        smtpServer = smtp.exmail.qq.com</span><br><span class="line">        smtpServerPort = 465  </span><br><span class="line">        smtpEncryption = ssl</span><br><span class="line">        smtpUser = *@*.com</span><br><span class="line">        smtpPass = ***</span><br><span class="line">        sslVerify = false</span><br><span class="line">        from = Code Review &lt;*@*.comm&gt;</span><br><span class="line">[container]</span><br><span class="line">        user = root</span><br><span class="line">        javaHome = /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.171-3.b10.el6_9.x86_64/jre</span><br><span class="line">[sshd]</span><br><span class="line">        listenAddress = *:29418</span><br><span class="line">[httpd]</span><br><span class="line">        listenUrl = http://192.168.2.238:8080/</span><br><span class="line">[cache]</span><br><span class="line">        directory = cache</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>配置nginx反向代理<br>配置：vim gerrit.conf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">         listen 80;</span><br><span class="line">         server_name 192.168.2.238;</span><br><span class="line">         auth_basic &quot;Welcomme to Gerrit Code Review Site!&quot;;</span><br><span class="line">         auth_basic_user_file /opt/.passwd;</span><br><span class="line">         location / &#123;</span><br><span class="line">            proxy_pass  http://192.168.2.238:8080;</span><br><span class="line">         &#125;</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置gerrit账户密码 创建认证用户(通过httpd-tools工具)<br>touch /opt/.passwd<br>htpasswd -c -b /opt/.passwd admin 123456(管理员)</p>
+</li>
+<li><p>启动gerrit&amp;启动nginx<br>sudo /usr/local/review/bin/gerrit.sh restart<br>service nginx start</p>
+</li>
+<li><p>访问gerrit 管理界面 <a href="http://xxx.xxxxx.com/" target="_blank" rel="noopener">http://xxx.xxxxx.com/</a><br>第一次访问，需要输入第3步设置的admin及密码，该账户将作为gerrit管理员账户。</p>
+</li>
+</ol>
+<h3 id="三、如何使用gerrit"><a href="#三、如何使用gerrit" class="headerlink" title="三、如何使用gerrit"></a>三、如何使用gerrit</h3><p>前提：需要git使用端 / gerrit服务端配合使用。</p>
+<ol>
+<li>添加项目(gerrit 服务端)</li>
+<li>1 使用gerrit添加新项目：（适用于开启新项目并使用gerrit）<br>使用gerrit管理界面创建项目</li>
+</ol>
+<p>1.2使用gerrit添加已有项目：（适用于已有项目下移植到gerrit中）<br>ssh -p 3389 gerrit1@公网IP gerrit create-project –name exist-project #建议采用管理界面添加<br>或者使用gerrit管理界面<br>然后将已有项目与gerrit上建立的exist-project关联，即将已有代码库代码push到gerrit中进行管理。<br>cd /usr/local/review/git/exist-project<br>git push ssh://gerrit1@公网IP:3389/exist-project <em>:</em></p>
+<ol start="2">
+<li>生成sshkey(git使用端)<br>在开发账户中生成sshkey，用作与gerrit服务器连接。<br>ssh-keygen -t rsa #生成sshkey</li>
+</ol>
+<p>cat ~/.ssh/id_rsa.pub #查看sshkey</p>
+<ol start="3">
+<li><p>添加sshkey到gerrit服务器(gerrit 服务端)<br>此步骤与git流程类似，即将/root/.ssh/id_rsa.pub内容添加到gerri和gitlab(后面gerrit和gitlab直接同步)</p>
+</li>
+<li><p>拉取代码＆配置git hooks(git client端)<br>验证sshkey是否配置成功：ssh -p 29418 <a href="mailto:admin@192.168.199.222" target="_blank" rel="noopener">admin@192.168.199.222</a></p>
+</li>
+</ol>
+<p>拉取代码url：选择 clone with commit-msg hook  //会直接配置Change-ID gerrit流程必备</p>
+<p>修改代码并提交，推送时与原有git流程不一致，采用 git push origin HEAD:refs/for/master</p>
+<h3 id="四-使用gerrit-website完成code-review"><a href="#四-使用gerrit-website完成code-review" class="headerlink" title="四.使用gerrit website完成code review"></a>四.使用gerrit website完成code review</h3><p>当完成push后，可在gerrit管理界面看到当前提交code review的change。<br>查看需要code review的提交：<br>查看某次提交的详细信息（审核者+2可通过本次提交，提交者可通过Abandon本次提交）：<br>如果审核者+2通过后，可提交该次commit.</p>
+<h5 id="配置gerrit和gitlab同步"><a href="#配置gerrit和gitlab同步" class="headerlink" title="配置gerrit和gitlab同步"></a>配置gerrit和gitlab同步</h5><p>gerrit和gitlab同步需要配置两个地方 (前提示已将sshkey 添加至gerrit和gitlab)</p>
+<p>配置 /root/.ssh/config</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Host 192.168.2.244</span><br><span class="line">    User root</span><br><span class="line">    IdentityFile ~/.ssh/id_rsa</span><br><span class="line">    StrictHostKeyChecking no</span><br><span class="line">    UserKnownHostsFile /dev/null</span><br><span class="line">    PreferredAuthentications publickey</span><br></pre></td></tr></table></figure>
+
+<p>配置replation插件<br>/usr/local/review/etc/replication.config   //以实际gerrit安装位置为准</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[remote &quot;192.168.2.244&quot;]</span><br><span class="line">         url = git@192.168.2.244:root/$&#123;name&#125;.git</span><br><span class="line">         push = +refs/heads/*:refs/heads/*</span><br><span class="line">         push = +refs/tags/*:refs/tags/*</span><br><span class="line">         push = +refs/changes/*:refs/changes/*</span><br><span class="line">         timtout = 30</span><br><span class="line">         threads = 3</span><br></pre></td></tr></table></figure>
+
+<h3 id="五-gerrit注意事项"><a href="#五-gerrit注意事项" class="headerlink" title="五.gerrit注意事项"></a>五.gerrit注意事项</h3><ul>
+<li>需要为每个使用者分配gerrit账号，不要都使用admin账号，因为admin账号可直接push master</li>
+<li>push代码时需要使用<br>git push origin HEAD:refs/for/master(branch),gerrit默认关闭非admin账号的push direct权限</li>
+<li>push代码时需要commit email与gerrit logoutaccount email一致，否则无法push成功，可选择关闭email notify，并开启forge user权限，或者通过修改gerrit数据库account email信息</li>
+<li>git配置的email一定要和gerrit里注册的email一致，否者push会出错</li>
+<li>gerrit数据库与gitlab同步，需要安装replication插件，并开启该功能</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/18/gerrit CodeReview工具搭建配置/" data-id="ck0hgz3kb000ge86van0itslk" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CodeReview/">CodeReview</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gerrit/">gerrit</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gitlab/">gitlab</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/01/14/VScode使用笔记/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          VScode使用笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/02/15/Yum命令被锁解决/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Yum 命令被锁</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodeReview/">CodeReview</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDE/">IDE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prometheus/">Prometheus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gerrit/">gerrit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/">gitlab</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/CodeReview/" style="font-size: 10px;">CodeReview</a> <a href="/tags/IDE/" style="font-size: 10px;">IDE</a> <a href="/tags/Linux/" style="font-size: 20px;">Linux</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Prometheus/" style="font-size: 10px;">Prometheus</a> <a href="/tags/gerrit/" style="font-size: 10px;">gerrit</a> <a href="/tags/gitlab/" style="font-size: 10px;">gitlab</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/09/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/07/01/Prometheus/">Prometheus+Grafana监控实践</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/14/VScode使用笔记/">VScode使用笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/18/gerrit CodeReview工具搭建配置/">Gerrit CodeReview代码审核工具搭建配置</a>
+          </li>
+        
+          <li>
+            <a href="/2018/02/15/Yum命令被锁解决/">Yum 命令被锁</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

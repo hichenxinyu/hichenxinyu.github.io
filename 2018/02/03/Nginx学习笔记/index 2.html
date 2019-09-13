@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Nginx实战 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="搭建一个简易的代理服务nginx 常常用来作为代理服务器，这代表着服务器接收请求，然后将它们传递给被代理服务器，得到请求的响应，再将它们发送给客户端。 我们将配置一个基本的代理服务器，它会处理本地图片文件的请求并返回其他的请求给被代理的服务器。在这个例子中，两个服务器都会定义在一个 nginx 实例中。 首先，通过在 nginx 配置文件中添加另一个 server 区块，来定义一个被代理的服务器，">
+<meta name="keywords" content="Nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx实战">
+<meta property="og:url" content="http://yoursite.com/2018/02/03/Nginx学习笔记/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="搭建一个简易的代理服务nginx 常常用来作为代理服务器，这代表着服务器接收请求，然后将它们传递给被代理服务器，得到请求的响应，再将它们发送给客户端。 我们将配置一个基本的代理服务器，它会处理本地图片文件的请求并返回其他的请求给被代理的服务器。在这个例子中，两个服务器都会定义在一个 nginx 实例中。 首先，通过在 nginx 配置文件中添加另一个 server 区块，来定义一个被代理的服务器，">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-09-13T01:45:02.281Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Nginx实战">
+<meta name="twitter:description" content="搭建一个简易的代理服务nginx 常常用来作为代理服务器，这代表着服务器接收请求，然后将它们传递给被代理服务器，得到请求的响应，再将它们发送给客户端。 我们将配置一个基本的代理服务器，它会处理本地图片文件的请求并返回其他的请求给被代理的服务器。在这个例子中，两个服务器都会定义在一个 nginx 实例中。 首先，通过在 nginx 配置文件中添加另一个 server 区块，来定义一个被代理的服务器，">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Nginx学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/03/Nginx学习笔记/" class="article-date">
+  <time datetime="2018-02-02T16:00:00.000Z" itemprop="datePublished">2018-02-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Nginx实战
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="搭建一个简易的代理服务"><a href="#搭建一个简易的代理服务" class="headerlink" title="搭建一个简易的代理服务"></a>搭建一个简易的代理服务</h1><p>nginx 常常用来作为代理服务器，这代表着服务器接收请求，然后将它们传递给被代理服务器，得到请求的响应，再将它们发送给客户端。 我们将配置一个基本的代理服务器，它会处理本地图片文件的请求并返回其他的请求给被代理的服务器。在这个例子中，两个服务器都会定义在一个 nginx 实例中。 首先，通过在 nginx 配置文件中添加另一个 server 区块，来定义一个被代理的服务器，像下面的配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 8080;</span><br><span class="line">    root /data/up1;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a> 
+
+
+<p>上面就是一个简单的服务器，它监听在 8080 端口（之前，listen 并没被定义，是因为默认监听的 80 端口）并且会映射所有的请求给 本地文件目录 /data/up1。创建该目录，然后添加 index.html 文件。注意，root 指令是放在 server 上下文中。当响应请求的 location 区块中，没有自己的 root 指令，上述的 root 指令才会被使用。 接着，使用前面章节中的 server 配置，然后将它改为一个代理服务配置。在第一个 location 区块中，放置已经添加被代理服务器的协议，名字和端口等参数的 proxy_pass 指令（在这里，就是 <a href="http://localhost:8080）" target="_blank" rel="noopener">http://localhost:8080）</a>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://localhost:8080;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /images/ &#123;</span><br><span class="line">        root /data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="location相关"><a href="#location相关" class="headerlink" title="location相关"></a>location相关</h2><p>我们将修改第二个 location 区块，使他返回一些典型后缀的图片文件请求，<br>现在它只会映射带有 /images/ 前缀的请求到 /data/images 目录下。<br>修改后的 location 指令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ \.(gif|jpg|png)$ &#123;</span><br><span class="line">    root /data/images;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该参数是一个正则表达式，它会匹配所有以 .gif，.jpg 或者 .png 结尾的 URIs。<br>一个正则表达式需要以 ~ 开头。匹配到的请求会被映射到 /data/images 目录下。<br> 当 nginx 在选择 location 去响应一个请求时，它会先检测带有前缀的 location 指令，记住先是检测带有最长前缀的 location，然后检测正则表达式。<br> 如果有一个正则的匹配的规则，nginx 会选择该 location，否则，会选择之前缓存的规则。 最终，一个代理服务器的配置结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> server &#123;</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://localhost:8080/;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location ~ \.(gif|jpg|png)$ &#123;</span><br><span class="line">        root /data/images;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该服务器会选择以 .gif，.jpg，或者 .png 结束的请求并且映射到 /data/images 目录（通过添加 URI 给 root 指令的参数），<br>接着将其他所有的请求映射到上述被代理的服务器。 为了使用新的配置，像前几个章节描述的一样，需要向 nginx 发送重载信号。<br> 这还有很多其他的指令，可以用于进一步配置代理连接。</p>
+<h3 id="location-配置"><a href="#location-配置" class="headerlink" title="location 配置"></a>location 配置</h3><ol>
+<li>= 开头表示精确匹配</li>
+<li>^~ 开头表示uri以某个常规字符串开头，不是正则匹配</li>
+<li>~ 开头表示区分大小写的正则匹配;</li>
+<li>~* 开头表示不区分大小写的正则匹配</li>
+<li>/ 通用匹配, 如果没有其它匹配,任何请求都会匹配到</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/02/03/Nginx学习笔记/" data-id="ck0hgnalp0003356vqpnxdb91" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/02/15/Yum命令被锁解决/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Yum 命令被锁
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/02/02/更换yum源/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Centos更换yum源</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodeReview/">CodeReview</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDE/">IDE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prometheus/">Prometheus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gerrit/">gerrit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/">gitlab</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/CodeReview/" style="font-size: 10px;">CodeReview</a> <a href="/tags/IDE/" style="font-size: 10px;">IDE</a> <a href="/tags/Linux/" style="font-size: 20px;">Linux</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Prometheus/" style="font-size: 10px;">Prometheus</a> <a href="/tags/gerrit/" style="font-size: 10px;">gerrit</a> <a href="/tags/gitlab/" style="font-size: 10px;">gitlab</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/09/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/07/01/Prometheus/">Prometheus+Grafana监控实践</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/14/VScode使用笔记/">VScode使用笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/18/gerrit CodeReview工具搭建配置/">Gerrit CodeReview代码审核工具搭建配置</a>
+          </li>
+        
+          <li>
+            <a href="/2018/02/15/Yum命令被锁解决/">Yum 命令被锁</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
