@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>Shell 语法规范 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">陈欣宇&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">陈欣宇&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Shell 语法规范</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">陈欣宇</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">April 7, 2018&nbsp;&nbsp;0:00:00</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="shell-语法规范"><a href="#shell-语法规范" class="headerlink" title="shell 语法规范"></a>shell 语法规范</h1><h3 id="规范细则"><a href="#规范细则" class="headerlink" title="规范细则"></a>规范细则</h3><ol>
+<li>脚本名以.sh结尾，名称尽量见名之意，比如ClearLog.sh Clear_Log.sh clearlog.sh SerRestart.sh Ser_Restart.sh;</li>
+<li>尽量使用UTF-8编码，注释及输出尽量使用英文；</li>
+<li>一般给到执行权限，但一些关于变量的配置文件不用加执行权限；</li>
+<li>执行的时候可以使用bash 执行，或者使用bash -x执行，可以直观的显示具体的执行过程；</li>
+<li>脚本首行使用/bin/bash,没有空格，不带任何选项；</li>
+<li>第二行为空格，或者是添加一行空注释</li>
+<li>接着开始注释内容：文件名、功能描述、作者、最后修改日期、版本号以及一些说明，还加上邮箱/手机号做为联系，如果可以，需要加上版权声明；</li>
+<li>注释内容之后空一行开始定义shell脚本中的变量；</li>
+<li>脚本内的变量定义，尽量使用大写，或者大小写驼峰写法,或者使用下划线连接的方式。变量名要见名之意，避免a,b,c类似的定义，变量的定义前后不要用空格。</li>
+</ol>
+<p>如果是整形，需要使用declare -i来声明。</p>
+<p>如果是数组，则需要使用declare -a来声明。</p>
+<p>如果是只读变量，则需要使用declare -r来声明。</p>
+<p>变量值尽量使用双引号引起来，如果要使用强引用，如变量值中包含$符号，则使用”单引号引起来。</p>
+<p>如果要将命令的执行结果赋值给变量，则使用反引号，或者使用$().</p>
+<ol>
+<li>变量的引用使用以下方式：</li>
+</ol>
+<p>${GameZone}</p>
+<p>$GameZone</p>
+<p>推荐使用第一种，如：tar zcf ${GameZone}.tar.gz /apps/data/</p>
+<ol>
+<li>单引号和双引号混合使用的场景：</li>
+</ol>
+<p>echo ‘Welcome to “my school”‘</p>
+<ol>
+<li>在某些特殊的环境下，shell脚本里引用的命令，有可能是自己定义的bin路径，在执行的时候会报出command not found，</li>
+</ol>
+<p>解决的方式是在执行的时候命令跟全路径，或者在脚本的开始，显式的设置一下PATH 变量，</p>
+<p>如： export PATH=”/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/apps/bin/”</p>
+<ol>
+<li>建议在脚本执行的开始重读下/etc/profile 或者是自己定义的关于环境变量的配置文件，推荐使用source，</li>
+</ol>
+<p>如： source /etc/profile</p>
+<p>source /opt/sh/appenv.sh</p>
+<ol>
+<li>使用here document；</li>
+</ol>
+<p>如果脚本在执行的时候需要大段输出提示信息，可是使用以下方式：</p>
+<p>cat &lt;&lt; EOF</p>
+<p>This scripts used for XXX</p>
+<p>Usage:$0 [option]</p>
+<p>Pls be careful.</p>
+<p>Enjoy Yourself.</p>
+<p>EOF</p>
+<p>如果只是单行提示信息，可是使用echo的方式，可以添加颜色：</p>
+<p>echo “Welcome to use my script”</p>
+<ol>
+<li>如果需要在脚本里生成配置文件的模板，也可以使用here document的方式，示例如下：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">cat&gt;&gt;/etc/rsyncd.conf&lt;&lt;EOF</span><br><span class="line">log file = /usr/local/logs/rsyncd.log</span><br><span class="line">transfer logging = yes</span><br><span class="line">log format = %t %a %m %f %b</span><br><span class="line">syslog facility = local3</span><br><span class="line">timeout = 300</span><br><span class="line">[data1]</span><br><span class="line">path=/home/username</span><br><span class="line">list=yes</span><br><span class="line">ignore errors</span><br><span class="line">auth users = data1user</span><br><span class="line">secrets file=/etc/rsyncd/rsyncd.secrets</span><br><span class="line">comment = some description about this moudle</span><br><span class="line">exclude = test1/ test2/</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<ol start="16">
+<li>如果需要创建临时文件，可以使用如下方式：</li>
+</ol>
+<p>mktemp -d /tmp/file$$</p>
+<ol start="16">
+<li>条件测试的时候，尽量使用[[]],而不用[]或者test，因为[[]]功能会更强大</li>
+</ol>
+<p>[[ -d /tmp/logs ]]</p>
+<p>不在使用[ “x$NAME” == “x” ]这种方式；</p>
+<ol start="16">
+<li>算数运算使用(())或者是中括号，但是记得括号里面的变量不要再加$</li>
+</ol>
+<p>((12+i))</p>
+<p>而非((12+$i))</p>
+<ol start="16">
+<li>使用高级变量的用法，比如使用</li>
+</ol>
+<p>${GameZone:?”Error Message”}确保关键变量已经定义</p>
+<p>${GameZone:=”S1″} 或者设置默认值</p>
+<p>否则：</p>
+<p>rm -rf ${GameZone}/* 后果不堪设想</p>
+<ol start="16">
+<li>可以使用&amp;&amp; ||来替代简单的if-then-else-fi语句。</li>
+<li>尽量给每条语句或者代码段的执行给一个执行结果状态，如果某条命令执行失败，则exit N.</li>
+</ol>
+<p>尽可能使用$?来检查前面一条命令的执行状态。</p>
+<ol start="16">
+<li>流程控制语句尽量使用以下方式：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">for I in &#123;1..10&#125;;do</span><br><span class="line">..。</span><br><span class="line">done</span><br><span class="line">while true;do</span><br><span class="line">…</span><br><span class="line">done</span><br><span class="line">if [];then</span><br><span class="line">…</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+<ol start="23">
+<li>如果命令过长，可以分成多行来写，比如：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">./configure \</span><br><span class="line">–prefix=/usr \</span><br><span class="line">–sbin-path=/usr/sbin/nginx \</span><br><span class="line">–conf-path=/etc/nginx/nginx.conf \</span><br><span class="line">–error-log-path=/var/log/nginx/error.log \</span><br><span class="line">–http-log-path=/var/log/nginx/access.log \</span><br><span class="line">–pid-path=/var/run/nginx/nginx.pid \</span><br><span class="line">–lock-path=/var/lock/nginx.lock \</span><br></pre></td></tr></table></figure>
+
+<ol start="24">
+<li>shell脚本并不要求强制缩进，但是要养成缩进的好习惯，可以使用两个空格，建议使用tab键。如：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if [];then</span><br><span class="line">…</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+<ol start="25">
+<li>尽可能多的注释信息。</li>
+<li>想要获取当前脚本所在目录，可以使用</li>
+</ol>
+<p>ScriptDir=$(cd $(dirname $0) &amp;&amp; pwd)</p>
+<ol start="25">
+<li>尽可能的使用函数的功能，将不同的功能定义为函数，直接引用函数；</li>
+<li>如果自定义环境变量，可以专门写到一个文件中，避免在/etc/profile中添加；</li>
+<li>禁止使用SUID和SGID以及ACL用户访问控制列表的功能，如果需要较高权限，可以使用sudo；</li>
+<li>关键的操作须有日志输出，专门记录操作的成功或者失败以及执行的时间点。</li>
+<li>脚本内可能包含敏感信息，如服务器密码或者是数据库密码，如果公开之前先确认敏感信息是否已经删除。</li>
+</ol>
+<hr>
+<p>####<br>参考Google规范&amp;老男孩</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">if ［ 1 -ne 1 ］;then</span><br><span class="line">...</span><br><span class="line">fi</span><br><span class="line">这是指当1不等于1时执行then后的语句</span><br><span class="line">-eq:等于</span><br><span class="line">-ne:不等于</span><br><span class="line">-le:小于等于</span><br><span class="line">-ge:大于等于</span><br><span class="line">-lt:小于</span><br><span class="line">-gt：大于</span><br></pre></td></tr></table></figure>
+
+<p>Shell开发规范<br>$# 是传给脚本的参数个数<br>$0 是脚本本身的名字<br>$1 是传递给该shell脚本的第一个参数<br>$2 是传递给该shell脚本的第二个参数</p>
+<h5 id="和-的区别"><a href="#和-的区别" class="headerlink" title="$() 和 ``的区别"></a>$() 和 ``的区别</h5><p>在 bash shell 中，$( ) 与``(反引号) 都是用来做命令替换用(commandsubstitution)的。<br>例如 version=$(uname -r)和version=<code>uname -r</code>都可以是version得到内核的版本号<br>各自的优缺点：</p>
+<ol>
+<li>`` 基本上可用在全部的 unix shell 中使用，若写成 shell script ，其移植性比较高。但反单引号容易打错或看错。</li>
+<li>$()并不是所有shell都支持。</li>
+</ol>
+<p>${ } ：</p>
+<p>${ }用于变量替换。一般情况下，$var 与${var} 并没有啥不一样。但是用 ${ } 会比较精确的界定变量名称的范围。比如</p>
+<p>$ A=B</p>
+<p>$ echo $AB</p>
+<p>原本是打算先将 $A 的结果替换出来，然后再补一个 B 字母于其后，</p>
+<p>但在命令行上，真正的结果却是只会提换变量名称为 AB 的值出来…</p>
+<p>若使用 ${ } 就没问题了：</p>
+<p>$ echo ${A}B</p>
+<p>BB</p>
+<h4 id="反引号"><a href="#反引号" class="headerlink" title="反引号``"></a>反引号``</h4><p>这个东西的用法，我百度了一下，和$()是一样的。在执行一条命令时，会先将其中的 <code>，或者是$() 中的语句当作命令执行一遍，再将结果加入到原命令中重新执行，例如： echo</code>ls<code>会先执行 ls 得到xx.sh等，再替换原命令为： echo xx.sh 最后执行结果为 xx.sh 那么，平时我们遇到的把一堆命令的执行结果输出到一个变量中，需要用这个命令替换符括起来，也就可以理解了。 这里又涉及到了一个问题，虽然不少系统工程师在使用替换功能时，喜欢使用反引号将命令括起来。但是根据POSIX规范，要求系统工程师采用的是$(命令)的形式。所以，我们最好还是遵循这个规范，少用</code> ，多用$()<br><strong>与PHP和JAVA不同,shell的流程控制不可为空</strong></p>
+<h4 id="这里是Linux进程要经历的四个阶段。"><a href="#这里是Linux进程要经历的四个阶段。" class="headerlink" title="这里是Linux进程要经历的四个阶段。"></a>这里是Linux进程要经历的四个阶段。</h4><p>##<br>等待：Linux进程等待资源。<br>运行：Linux进程当前正在执行中。<br>停止：Linux进程在成功执行后或收到杀死进程信号后停止。<br>僵尸：如果该进程已经结束，但仍然留在进程表中，被称为‘僵尸’</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>陈欣宇</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://yoursite.com/2018/04/07/shell/">http://yoursite.com/2018/04/07/shell/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY<strong>?</strong></strong></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Shell/"># Shell</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2018/04/18/gerrit CodeReview工具搭建配置/">Gerrit CodeReview代码审核工具搭建配置</a>
+            
+            
+            <a class="next" rel="next" href="/2018/02/15/Yum命令被锁解决/">Yum 命令被锁</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 陈欣宇 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
