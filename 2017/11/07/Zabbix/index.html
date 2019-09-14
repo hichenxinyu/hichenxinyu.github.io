@@ -183,18 +183,26 @@
         </header>
 
         <div class="post-content">
-            <h1 id="Zabbix-安装笔记"><a href="#Zabbix-安装笔记" class="headerlink" title="Zabbix 安装笔记"></a>Zabbix 安装笔记</h1><p><strong>一、zabbix介绍</strong></p>
-<p>Zabbix 是一个企业级的分布式开源监控方案。</p>
-<p>Zabbix是一款能够监控各种网络参数以及服务器健康性和完整性的软件。Zabbix使用灵活的通知机制，允许用户为几乎任何事件配置基于邮件的告警。这样可以快速反馈服务器的问题。基于已存储的数据，Zabbix提供了出色的报告和数据可视化功能。这些功能使得Zabbix成为容量规划的理想方案。</p>
-<p>Zabbix支持主动轮询和被动捕获。Zabbix所有的报告、统计信息和配置参数都可以通过基于Web的前端页面进行访问。基于Web的前端页面可以确保您从任何方面评估您的网络状态和服务器的健康性。适当的配置后，Zabbix可以在IT基础架构监控方面扮演重要的角色。对于只有少量服务器的小型组织和拥有大量服务器的大型公司也同样如此。<br>Zabbix是免费的。Zabbix是根据GPL通用公共许可证第2版编写和发行的。这意味着它的源代码都是免费发行的，可供公众任意使用。</p>
-<p><strong>zabbix</strong>能监视各种网络参数，保证服务器系统的安全运营;并提供柔软的通知机制以让系统管理员快速定位/解决存在的各种问题。</p>
+            <h1 id="Zabbix-安装笔记"><a href="#Zabbix-安装笔记" class="headerlink" title="Zabbix 安装笔记"></a>Zabbix 安装笔记</h1><h3 id="一、zabbix介绍"><a href="#一、zabbix介绍" class="headerlink" title="一、zabbix介绍"></a>一、zabbix介绍</h3><blockquote>
+<p>Zabbix 是一个企业级分布式开源监控解决方案。<br>Zabbix 软件能够监控众多网络参数和服务器的健康度、完整性。Zabbix 使用灵活的告警机制，允许用户为几乎任何事件配置基于邮件的告警。这样用户可以快速响应服务器问题。Zabbix 基于存储的数据提供出色的报表和数据可视化功能。这些功能使得 Zabbix 成为容量规划的理想选择。<br>Zabbix 支持主动轮询（polling）和被动捕获（trapping）。Zabbix所有的报表、统计数据和配置参数都可以通过基于 Web 的前端页面进行访问。基于 Web 的前端页面确保您可以在任何地方访问您监控的网络状态和服务器健康状况。适当的配置后，Zabbix 可以在监控 IT 基础设施方面发挥重要作用。无论是对于有少量服务器的小型组织，还是拥有大量服务器的大企业而言，同样适用。</p>
+</blockquote>
 <p><strong>zabbix</strong> 由2部分构成，zabbix server 与可选组件zabbix agent。<br>zabbix server 可以通过SNMP，zabbix agent ，ping，端口监视等方法提供对远程服务器/网络状态的监视，数据收集等功能，它可以运行在Linux, Solaris, HP-UX, AIX, Free BSD, Open BSD, OS X等平台之上。<br>zabbix agent 需要安装在被监视的目标服务器上，它主要完成对硬件信息或与操作系统有关的内存，CPU等信息的收集。zabbix agent 可以运行在Linux ,Solaris, HP-UX, AIX, Free BSD, Open BSD, OS X, Tru64/OSF1, Windows NT4.0, Windows 2000/2003/XP/Vista)等系统之上。</p>
 <p>zabbix server 可以单独监视远程服务器的服务状态;同时也可以与zabbix agent 配合，可以轮询zabbix agent <strong>主动</strong>接收监视数据(trapping方式)，同时还可<strong>被动</strong>接收zabbix agent 发送的数据(trapping方式)。<br>另外zabbix server 还支持SNMP (v1,v2)，可以与SNMP软件(例如：net-snmp)等配合使用。</p>
-<p><strong>Zabbix 功能：</strong><br>①具备常见的商业监控软件所具备的功能（主机的性能监控、网络设备性能监控、数据库、性能监控、FTP 等通用协议监控、多种告警方式、详细的报表图表绘制）<br>②支持自动发现网络设备和服务器（可以通过配置自动发现服务器规则来实现）<br>③支持自动发现（low discovery）key 实现动态监控项的批量监控（需写脚本）<br>④支持分布式，能集中展示、管理分布式的监控点<br>⑤扩展性强，server 提供通用接口（api 功能），可以自己开发完善各类监控（根据相关接口编写程序实现）编写插件容易，可以自定义监控项，报警级别的设置。<br>⑥数据收集 </p>
-<p>可用和性能检测<br>支持snmp(包括trapping and polling)，IPMI，JMX，SSH，TELNET<br>自定义的检测<br>自定义收集数据的频率<br>服务器/代理和客户端模式<br>灵活的触发器<br>可以定义非常灵活的问题阈值，称为触发器，从后端数据库的参考值<br>高可定制的报警<br>发送通知，可定制的报警升级，收件人，媒体类型<br>通知可以使用宏变量有用的变量<br>自动操作包括远程命令<br>实时的绘图功能<br>监控项实时的将数据绘制在图形上面<br>WEB 监控能力<br>ZABBIX 可以模拟鼠标点击了一个网站，并检查返回值和响应时间</p>
-<p><strong>API 功能 ：</strong><br>应用api功能，可以方便的和其他系统结合，包括手机客户端的使用。<br>更多功能请查看<br><a href="http://www.zabbix.com/documentation.php" target="_blank" rel="noopener">http://www.zabbix.com/documentation.php</a></p>
+<h3 id="Zabbix-功能"><a href="#Zabbix-功能" class="headerlink" title="Zabbix 功能"></a>Zabbix 功能</h3><p>①具备常见的商业监控软件所具备的功能（主机的性能监控、网络设备性能监控、数据库、性能监控、FTP 等通用协议监控、多种告警方式、详细的报表图表绘制）<br>②支持自动发现网络设备和服务器（可以通过配置自动发现服务器规则来实现）<br>③支持自动发现（low discovery）key 实现动态监控项的批量监控（需写脚本）<br>④支持分布式，能集中展示、管理分布式的监控点<br>⑤扩展性强，server 提供通用接口（api 功能），可以自己开发完善各类监控（根据相关接口编写程序实现）编写插件容易，可以自定义监控项，报警级别的设置。<br>⑥数据收集 </p>
+<ul>
+<li>可用和性能检测<br>支持snmp(包括trapping and polling)，IPMI，JMX，SSH，TELNET </li>
+<li>自定义的检测<br>自定义收集数据的频率<br>服务器/代理和客户端模式 </li>
+<li>灵活的触发器<br>可以定义非常灵活的问题阈值，称为触发器，从后端数据库的参考值 </li>
+<li>高可定制的报警 <ul>
+<li>发送通知，可定制的报警升级，收件人，媒体类型<br>通知可以使用宏变量有用的变量<br>自动操作包括远程命令 </li>
+</ul>
+</li>
+<li>实时的绘图功能<br>监控项实时的将数据绘制在图形上面 </li>
+<li>WEB 监控能力<br>ZABBIX 可以模拟鼠标点击了一个网站，并检查返回值和响应时间</li>
+</ul>
+<h4 id="API-功能-："><a href="#API-功能-：" class="headerlink" title="API 功能 ："></a>API 功能 ：</h4><p>应用api功能，可以方便的和其他系统结合，包括手机客户端的使用。<br>更多功能请查看<br><a href="http://www.zabbix.com/documentation.php" target="_blank" rel="noopener">http://www.zabbix.com/documentation.php</a></p>
 <hr>
-<p>二、安装zabbix环境及准备工作<br>linux 系统版本 准备工作 安装的软件类型 服务内容</p>
+<h3 id="二、安装zabbix环境及准备工作"><a href="#二、安装zabbix环境及准备工作" class="headerlink" title="二、安装zabbix环境及准备工作"></a>二、安装zabbix环境及准备工作</h3><p>linux 系统版本 准备工作 安装的软件类型 服务内容</p>
 <hr>
 <p>1，安装Zabbix需要的硬件环境及软件版本，我这里在官网上查了一下，你可以根据自己的环境和要求来选择：<br>下表是几个硬件配置的示例:</p>
 <table>
@@ -238,8 +246,7 @@
 </tbody></table>
 <p>具体的配置极其依赖于Active Item数量和轮询频率。如需要进行大规模部署，强烈建议将数据库进行独立部署。</p>
 <hr>
-<p>2，接下来我说一下我实验环境</p>
-<table>
+<h5 id="2，接下来我说一下我实验环境"><a href="#2，接下来我说一下我实验环境" class="headerlink" title="2，接下来我说一下我实验环境"></a>2，接下来我说一下我实验环境</h5><table>
 <thead>
 <tr>
 <th>操作系统</th>
@@ -268,7 +275,7 @@
 </tr>
 </tbody></table>
 <hr>
-<p>3,正式开始安装zabbix<br>3.1）在监控主机上需要预先安装yum 源，下面正式开始安装；</p>
+<h5 id="3-正式开始安装zabbix"><a href="#3-正式开始安装zabbix" class="headerlink" title="3,正式开始安装zabbix"></a>3,正式开始安装zabbix</h5><p>3.1）在监控主机上需要预先安装yum 源，下面正式开始安装；</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-release-3.4-2.el7.noarch.rpm</span><br></pre></td></tr></table></figure>
 
 <p>3.2）安装Zabbix-server包和zabbix-agent包</p>
@@ -303,35 +310,66 @@
 
 <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/330515/1566820865825-ed2c12f5-8f7a-4b81-a075-69b8e822dda1.jpeg#align=left&display=inline&height=200&name=image.jpeg&originHeight=200&originWidth=760&size=20266&status=done&width=760" alt="image.jpeg"></p>
 <hr>
-<p>4.修改配置文件，给服务授权、启动Zabbix Server服务<br>4.1）修改配置文件</p>
+<h5 id="4-修改配置文件，给服务授权、启动Zabbix-Server服务"><a href="#4-修改配置文件，给服务授权、启动Zabbix-Server服务" class="headerlink" title="4.修改配置文件，给服务授权、启动Zabbix Server服务"></a>4.修改配置文件，给服务授权、启动Zabbix Server服务</h5><ul>
+<li>修改配置文件</li>
+</ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">备注：记得先备份 cp /etc/zabbix/zabbix_server.conf  /etc/zabbix/zabbix_server.conf.bak </span><br><span class="line">[root@zabbix ~]#vim  /etc/zabbix/zabbix_server.conf</span><br><span class="line">DBHost=localhost</span><br><span class="line">DBName=zabbix</span><br><span class="line">DBUser=zabbix</span><br><span class="line">DBPassword=Pass123!</span><br></pre></td></tr></table></figure>
 
-<p>4.2）给服务授权</p>
+<ul>
+<li>给服务授权</li>
+</ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@zabbix ~]#chown -R zabbix:zabbix /etc/zabbix/</span><br><span class="line">[root@zabbix ~]#chmod -R 755 /etc/zabbix/</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/330515/1566820865873-2b47d5d2-2311-41be-91ae-9f589dbe4c80.jpeg#align=left&display=inline&height=239&name=image.jpeg&originHeight=239&originWidth=748&size=44185&status=done&width=748" alt="image.jpeg"><br>4.3）启动Zabbix Server服务</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/330515/1566820865873-2b47d5d2-2311-41be-91ae-9f589dbe4c80.jpeg#align=left&display=inline&height=239&name=image.jpeg&originHeight=239&originWidth=748&size=44185&status=done&width=748" alt="image.jpeg"></p>
+<ul>
+<li>启动Zabbix Server服务</li>
+</ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@zabbix ~]#systemctl start  zabbix-server</span><br><span class="line">[root@zabbix ~]#systemctl enable zabbix-server</span><br></pre></td></tr></table></figure>
 
 <p>备注：这里会有一个坑，就是在启动zabbix服务会失败，Job for zabbix-server.service failed. See ‘systemctl status zabbix-server.service’ and ‘journalctl -xn’ for details.查了一下原因是gnutls-3.3的高版本问题，解决办法是;1,先卸载这个高版本的gnutls-3.3,命令：rpm -e gnutls-3.3.24-1.el7.x86_64 –nodeps2，然后去网上下载一个gnutls-3.1的版本，然后使用命令rpm -Uvh –force gnutls-3.1.18-8.el7.x86_64.rpm</p>
 <hr>
-<p>5.编辑Zabbix前端的PHP配置<br>5.1）zabbix前端的Apache配置文件位于 /etc/httpd/conf.d/zabbix.conf 。一些PHP设置已经完成了配置。</p>
+<h4 id="编辑Zabbix前端的PHP配置"><a href="#编辑Zabbix前端的PHP配置" class="headerlink" title="编辑Zabbix前端的PHP配置"></a>编辑Zabbix前端的PHP配置</h4><ul>
+<li>zabbix前端的Apache配置文件位于 /etc/httpd/conf.d/zabbix.conf 。一些PHP设置已经完成了配置。</li>
+</ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@zabbix ~]# vim /etc/httpd/conf.d/zabbix.conf</span><br><span class="line">找到&lt;IfModule mod_php5.c&gt;标签下面</span><br><span class="line">添加一条php_value date.timezone Asia/Shanghai</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/330515/1566820865901-22f58a69-75c5-4b9d-b04c-9e17479633c2.jpeg#align=left&display=inline&height=230&name=image.jpeg&originHeight=230&originWidth=614&size=35861&status=done&width=614" alt="image.jpeg"><br>5.2）启动apache服务，并设置开机自启</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@zabbix ~]#systemctl start httpd</span><br><span class="line">[root@zabbix ~]#systemctl enable  httpd</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/330515/1566820865901-22f58a69-75c5-4b9d-b04c-9e17479633c2.jpeg#align=left&display=inline&height=230&name=image.jpeg&originHeight=230&originWidth=614&size=35861&status=done&width=614" alt="image.jpeg"></p>
+<ul>
+<li>启动apache服务，并设置开机自启</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start httpd</span><br><span class="line">systemctl enable  httpd</span><br></pre></td></tr></table></figure>
 
 <hr>
-<p>三、登录网页客户端操作添加一台Linux机器<br>1，访问ip：<a href="http://192.168.0.20/zabbix/index.php" target="_blank" rel="noopener">http://192.168.0.20/zabbix/index.php</a><br>中间省略一部分—————————–直接到登录界面了。<br>默认的用户名是：Admin 密码：zabbix<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/330515/1566820865925-c8b13233-a26c-4cd5-9101-1dc8e9c5b280.jpeg#align=left&display=inline&height=469&name=image.jpeg&originHeight=469&originWidth=570&size=26663&status=done&width=570" alt="image.jpeg"></p>
-<p>2，添加一台Linux客户端机器（ip:192.168.0.157）<br>访问zabbix官网：<a href="https://www.zabbix.com/download?zabbix=3.4&amp;os_distribution=centos&amp;os_version=6&amp;db=MySQL" target="_blank" rel="noopener">https://www.zabbix.com/download?zabbix=3.4&amp;os_distribution=centos&amp;os_version=6&amp;db=MySQL</a><br>2.1）添加centos6下的源:<br>[root@Test02 ~]# rpm -ivh <a href="http://repo.zabbix.com/zabbix/3.4/rhel/6/x86_64/zabbix-release-3.4-1.el6.noarch.rpm" target="_blank" rel="noopener">http://repo.zabbix.com/zabbix/3.4/rhel/6/x86_64/zabbix-release-3.4-1.el6.noarch.rpm</a><br>Centos7: rpm -ivh <a href="http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.1-1.el7.x86_64.rpm" target="_blank" rel="noopener">http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.1-1.el7.x86_64.rpm</a><br>2.2）安装客户端agent软件<br>[root@Test02 ~]# yum -y install zabbix-agent<br>2.3）修改agent配置文件<br>[root@Test02 ~]# grep -v ‘^$’ /etc/zabbix/zabbix_agentd.conf |grep -v ‘^#’<br>PidFile=/var/run/zabbix/zabbix_agentd.pid<br>LogFile=/var/log/zabbix/zabbix_agentd.log<br>LogFileSize=0<br>Server=192.168.2.82<br>ServerActive=192.168.2.82:10050<br>Hostname=Test02<br>Include=/etc/zabbix/zabbix_agentd.d/*.conf<br>2.4）给配置文件授权<br>[root@Test02 ~]# chmod 775 /etc/zabbix/zabbix_agentd.conf<br>2.5）启动agent服务并查看服务启动成功没有<br>[root@Test02 ~]# /etc/init.d/zabbix-agent start<br>[root@Test02 ~]# netstat -lntup |grep zabbix_agent<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/330515/1566820865935-65aff6c2-d52f-4464-99f2-96ddbe9c0808.jpeg#align=left&display=inline&height=126&name=image.jpeg&originHeight=126&originWidth=671&size=15509&status=done&width=671" alt="image.jpeg"><br>3 在回到网页上来添加第一台主机</p>
+<h3 id="三、登录网页客户端操作添加一台Linux机器"><a href="#三、登录网页客户端操作添加一台Linux机器" class="headerlink" title="三、登录网页客户端操作添加一台Linux机器"></a>三、登录网页客户端操作添加一台Linux机器</h3><ul>
+<li><p>访问ip：<a href="http://192.168.0.20/zabbix/index.php" target="_blank" rel="noopener">http://192.168.0.20/zabbix/index.php</a><br>中间省略一部分—————————–直接到登录界面了。<br>默认的用户名是：Admin 密码：zabbix<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/330515/1566820865925-c8b13233-a26c-4cd5-9101-1dc8e9c5b280.jpeg#align=left&display=inline&height=469&name=image.jpeg&originHeight=469&originWidth=570&size=26663&status=done&width=570" alt="image.jpeg"></p>
+</li>
+<li><p>添加一台Linux客户端机器（ip:192.168.0.157）<br>访问zabbix官网：<a href="https://www.zabbix.com/download?zabbix=3.4&amp;os_distribution=centos&amp;os_version=6&amp;db=MySQL" target="_blank" rel="noopener">https://www.zabbix.com/download?zabbix=3.4&amp;os_distribution=centos&amp;os_version=6&amp;db=MySQL</a></p>
+</li>
+</ul>
+<p>2.1）添加centos6下的源:<br>[root@Test02 ~]# rpm -ivh <a href="http://repo.zabbix.com/zabbix/3.4/rhel/6/x86_64/zabbix-release-3.4-1.el6.noarch.rpm" target="_blank" rel="noopener">http://repo.zabbix.com/zabbix/3.4/rhel/6/x86_64/zabbix-release-3.4-1.el6.noarch.rpm</a><br>Centos7: rpm -ivh <a href="http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.1-1.el7.x86_64.rpm" target="_blank" rel="noopener">http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.1-1.el7.x86_64.rpm</a></p>
+<ul>
+<li>安装客户端agent软件<br>[root@Test02 ~]# yum -y install zabbix-agent</li>
+<li>修改agent配置文件<br>[root@Test02 ~]# grep -v ‘^$’ /etc/zabbix/zabbix_agentd.conf |grep -v ‘^#’<br>PidFile=/var/run/zabbix/zabbix_agentd.pid<br>LogFile=/var/log/zabbix/zabbix_agentd.log<br>LogFileSize=0<br>Server=192.168.2.82<br>ServerActive=192.168.2.82:10050<br>Hostname=Test02<br>Include=/etc/zabbix/zabbix_agentd.d/*.conf</li>
+<li>给配置文件授权<br>[root@Test02 ~]# chmod 775 /etc/zabbix/zabbix_agentd.conf</li>
+<li>启动agent服务并查看服务启动成功没有<br>[root@Test02 ~]# /etc/init.d/zabbix-agent start<br>[root@Test02 ~]# netstat -lntup |grep zabbix_agent<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/330515/1566820865935-65aff6c2-d52f-4464-99f2-96ddbe9c0808.jpeg#align=left&display=inline&height=126&name=image.jpeg&originHeight=126&originWidth=671&size=15509&status=done&width=671" alt="image.jpeg"></li>
+</ul>
+<p>3 在回到网页上来添加第一台主机</p>
 <hr>
-<p>3.1）在配置–主机—创建主机<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/330515/1566820865956-5e088bc9-5c0f-4802-a8bd-1c15eadaadc3.jpeg#align=left&display=inline&height=127&name=image.jpeg&originHeight=127&originWidth=1110&size=17260&status=done&width=1110" alt="image.jpeg"></p>
+<ul>
+<li>在配置–主机—创建主机<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/330515/1566820865956-5e088bc9-5c0f-4802-a8bd-1c15eadaadc3.jpeg#align=left&display=inline&height=127&name=image.jpeg&originHeight=127&originWidth=1110&size=17260&status=done&width=1110" alt="image.jpeg"></li>
+</ul>
 <hr>
-<p>3.2）添加主机详细信息<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/330515/1566820866035-50e0b03a-c17a-4ead-b7ea-07aa5ab9ab59.jpeg#align=left&display=inline&height=424&name=image.jpeg&originHeight=424&originWidth=920&size=59066&status=done&width=920" alt="image.jpeg"></p>
+<ul>
+<li>添加主机详细信息<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/330515/1566820866035-50e0b03a-c17a-4ead-b7ea-07aa5ab9ab59.jpeg#align=left&display=inline&height=424&name=image.jpeg&originHeight=424&originWidth=920&size=59066&status=done&width=920" alt="image.jpeg"></li>
+</ul>
 <hr>
-<p>3.3）添加主机模板信息<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/330515/1566820866041-dcdb2528-20f6-4d69-977b-7439124a9811.jpeg#align=left&display=inline&height=303&name=image.jpeg&originHeight=303&originWidth=716&size=25609&status=done&width=716" alt="image.jpeg"></p>
+<ul>
+<li>添加主机模板信息<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/330515/1566820866041-dcdb2528-20f6-4d69-977b-7439124a9811.jpeg#align=left&display=inline&height=303&name=image.jpeg&originHeight=303&originWidth=716&size=25609&status=done&width=716" alt="image.jpeg"></li>
+</ul>
 <hr>
-<p>3.4）这样一台客户端Linux基本添加完成，过几分钟就能开到Zabbix图标变绿证明添加成功了。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/330515/1566820866012-aec0ab3b-0fcc-4c9d-80c4-029ac6d51945.jpeg#align=left&display=inline&height=53&name=image.jpeg&originHeight=53&originWidth=1224&size=10705&status=done&width=1224" alt="image.jpeg"></p>
-<hr>
+<ul>
+<li>这样一台客户端Linux基本添加完成，过几分钟就能开到Zabbix图标变绿证明添加成功了。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/330515/1566820866012-aec0ab3b-0fcc-4c9d-80c4-029ac6d51945.jpeg#align=left&display=inline&height=53&name=image.jpeg&originHeight=53&originWidth=1224&size=10705&status=done&width=1224" alt="image.jpeg"></li>
+</ul>
 
         </div>
 
