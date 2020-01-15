@@ -1,0 +1,48 @@
+name: HexoCI
+
+on:
+  push:
+    branches:
+    - hexo 
+
+jobs:
+  hexo_build:
+    name: hexo build & deploy
+    runs-on: ubuntu-16.04  #指定 ubuntu16.04
+    
+    steps:
+    - name: Checkout # 将仓库内master分支的内容下载到工作目录
+      uses: actions/checkout@v1 # 脚本来自 https://github.com/actions/checkout
+      with:
+        submodules: true
+      
+    - name: Use Node.js 10.x # 配置Node环境
+      uses: actions/setup-node@v1 # 配置脚本来自 https://github.com/actions/setup-node
+      with:
+        node-version: "10.x"
+        
+    - name: Installation
+      run: |
+        npm install
+        npm install -g hexo
+        npm install -g hexo-cli
+        npm install hexo-renderer-jade hexo-renderer-stylus
+
+          
+    - name: Setup Hexo env
+      env:
+        GITHUB_REPO_TOKEN: ${{ secrets.GITHUB_ACTION_PRIVATE_KEY }}
+      run: |
+        git clone --depth 1 --branch=master https://github.com/hichenxinyu/hichenxinyu.github.io.git .deploy_git
+        cd .deploy_git
+        # 这样 git 可以跟踪上次提交中删除的文件
+        find . -path ./.git -prune -o -exec rm -rf {} \; 2> /dev/null
+        cd ../
+        # 部署
+        hexo clean
+        sed -i "s/GITHUB_REPO_TOKEN/${GITHUB_REPO_TOKEN}/g" ./_config.yml
+
+    - name: Deploy
+    run: |
+      # publish
+      hexo generate && hexo deploy # 执行部署程序
