@@ -43,6 +43,6 @@ jobs:
         sed -i "s/GITHUB_REPO_TOKEN/${GITHUB_REPO_TOKEN}/g" ./_config.yml
 
     - name: Deploy
-    run: |
-      # publish
-      hexo generate && hexo deploy # 执行部署程序
+      run: |
+        # publish
+        hexo generate && hexo deploy # 执行部署程序
