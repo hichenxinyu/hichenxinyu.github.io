@@ -1,0 +1,51 @@
+# 指定语言环境
+language: node_js
+
+# 指定node_js版本
+node_js: stable
+dist: xenial  #指定 ubuntu16.04
+# 指定需要sudo权限
+sudo: required
+# 指定缓存模块，可选。缓存可加快编译速度。
+# 设置缓存文件
+cache:
+  directories:
+    - node_modules
+# 指定分支
+branches:
+  only:
+    - hexo 
+
+
+#在构建之前安装hexo环境
+before_install:
+  # 全局安装 Hexo
+  - npm install -g hexo
+# 全局安装 Hexo 命令行工具，因为我们是命令行操作
+  - npm install -g hexo-cli
+  - export TZ='Asia/Shanghai'
+
+install:
+# 安装 package.json 中的依赖
+  - npm install
+  - npm install hexo-renderer-jade hexo-renderer-stylus
+# 设置git提交名，邮箱；最后depoy部署
+after_script:
+
+- git clone --depth 1 --branch=master https://github.com/hichenxinyu/hichenxinyu.github.io.git .deploy_git
+- cd .deploy_git
+# 这样 git 可以跟踪上次提交中删除的文件
+- find . -path ./.git -prune -o -exec rm -rf {} \; 2> /dev/null
+- cd ../
+# 部署
+- hexo clean
+- sed -i "s/GITHUB_REPO_TOKEN/${GITHUB_REPO_TOKEN}/g" ./_config.yml
+- hexo generate
+- hexo deploy
+
+env:
+    global:
+        - GH_REF: github.com/hichenxinyu/hichenxinyu.github.io.git #设置GH_REF，注意更改成自己的仓库地址
+
+
+        .travis.yml
