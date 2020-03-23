@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://nevea.top/</id>
+    <title/>
+    <updated>2020-03-23T10:20:48.301Z</updated>
+    <generator>Saber</generator>
+    <author>
+        <name>Nevea</name>
+        <email>hichenxinyu@gmail.com</email>
+        <uri>https://nevea.top</uri>
+    </author>
+    <link rel="alternate" href="https://nevea.top"/>
+    <link rel="self" href="https://nevea.top/rss.xml"/>
+    <rights>All rights reserved</rights>
+    <entry>
+        <title type="html"><![CDATA[我常用的 Mac 软件]]></title>
+        <id>https://nevea.top/blog/Mac%E8%BD%AF%E4%BB%B6</id>
+        <link href="https://nevea.top/blog/Mac%E8%BD%AF%E4%BB%B6"/>
+        <updated>2020-03-23T10:02:40.238Z</updated>
+        <summary type="html"><![CDATA[选择软件的一些标准
+]]></summary>
+        <content type="html"><![CDATA[<p>选择软件的一些标准</p> <ul><li>跨平台</li> <li>开源免费</li> <li>简洁 无广告</li></ul> <hr> <p>Markdown编辑器：Typora+PicGo
+​	 开源免费的，所见即所得的实时预览很舒服，界面也非常清爽，而且还是最近也支持了PicGo，配合腾讯云的COS来做图床，</p> <p>编辑器 ：VScode
+​    日常写脚本，写个Python代码，丰富的插件，</p> <p>视频播放器： IINA</p> <p>解压缩软件：The Unarachiver</p> <p>云盘： OneDrive ，iCloud
+OneDrive是Office 365 订阅赠送，日常来用作资料同步 ，Apple 全家桶的前提下，iCloud非常好用，免费的5GB也够用了，大文件放在Onedrive中。</p> <p>Git GUI客户端：GitKraken
+​	 非常经典的章鱼，感觉比Sourcetree好用，基于electron ，跨平台。免费版本也够用了，只是不支持github私有仓库。</p> <p>终端：iTerm2
+​	iTerm2 +oh-my-zsh ，作为运维，命令行是经常打交道的地方，一个好看好用功能强大的终端是以一个很好的工具，Mac上最好用的终端工具</p> <p>快捷工具：AIfred3
+​	日常搜索文件，搜索软件速度更快</p>]]></content>
+        <published>2020-03-23T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Prometheus+Grafana监控实践]]></title>
+        <id>https://nevea.top/blog/Prometheus</id>
+        <link href="https://nevea.top/blog/Prometheus"/>
+        <updated>2020-03-23T07:09:43.838Z</updated>
+        <summary type="html"><![CDATA[什么是Prometheus
+
+Prometheus 是由 SoundCloud 开源监控告警解决方案，从 2012 年开始编写代码，再到 2015 年 github 上开源以来，已经吸引了 9k+ 关注，以及很多大公司的使用；2016 年 Prometheus 成为继 k8s 后，第二名 CNCF(Cloud Native Computing Foundation) 成员。
+
+作为新一代开源解决方案，很多理念与 Google SRE 运维之道不谋而合。
+为什么选择prometheus：
+
+Prometheus 是按照 Google SRE 运维之道的理念构建的，具有实用性和前瞻性。
+Prometheus 社区非常活跃，基本稳定在 1个月1个版本的迭代速度，从 2016 年 v1.01 开始接触使用以来，到目前发布的 v1.8.2 以及最新最新的 v2.1 ，你会发现 Prometheus 一直在进步、在优化。
+Go 语言开发，性能不错，安装部署简单，多平台部署兼容性好。
+丰富的数据收集客户端，官方提供了各种常用 exporter。
+丰富强大的查询能力,内置更强大的统计函数。
+Prometheus 属于一站式监控告警平台，依赖少，功能齐全。
+Prometheus支持对云或容器的监控，其他监控系统主要对主机监控。
+
+]]></summary>
+        <content type="html"><![CDATA[<h4 id="什么是prometheus">什么是Prometheus</h4> <blockquote><p>Prometheus 是由 SoundCloud 开源监控告警解决方案，从 2012 年开始编写代码，再到 2015 年 github 上开源以来，已经吸引了 9k+ 关注，以及很多大公司的使用；2016 年 Prometheus 成为继 k8s 后，第二名 CNCF(Cloud Native Computing Foundation) 成员。</p></blockquote> <p>作为新一代开源解决方案，很多理念与 Google SRE 运维之道不谋而合。</p> <h4 id="为什么选择prometheus：">为什么选择prometheus：</h4> <ul><li>Prometheus 是按照 Google SRE 运维之道的理念构建的，具有实用性和前瞻性。</li> <li>Prometheus 社区非常活跃，基本稳定在 1个月1个版本的迭代速度，从 2016 年 v1.01 开始接触使用以来，到目前发布的 v1.8.2 以及最新最新的 v2.1 ，你会发现 Prometheus 一直在进步、在优化。</li> <li>Go 语言开发，性能不错，安装部署简单，多平台部署兼容性好。</li> <li>丰富的数据收集客户端，官方提供了各种常用 exporter。</li> <li>丰富强大的查询能力,内置更强大的统计函数。</li> <li>Prometheus 属于一站式监控告警平台，依赖少，功能齐全。</li> <li>Prometheus支持对云或容器的监控，其他监控系统主要对主机监控。</li></ul> <p>Prometheus 在数据存储扩展性以及持久性上没有 InfluxDB，OpenTSDB，Sensu 好。</p> <h4 id="安装prometheus">安装prometheus</h4> <ol><li>下载二进制包</li></ol> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">在这个页面https://prometheus.io/download
+找到最新的二进制包
+wget https://github.com/prometheus/prometheus/releases/download/v2.7.2/prometheus-2.7.2.linux-amd64.tar.gz</code></pre></div><ol start="2"><li>解压并进入对应文件夹</li></ol> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">tar xvfz prometheus-*.tar.gz
+cd prometheus-*</code></pre></div><ol start="3"><li>启动prometheus</li></ol> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">./prometheus --config.file=prometheus.yml</code></pre></div><p>grafana dashboard
+主机基础监控 dashboard id 9276</p> <h5 id="此时，prometheus-服务已在后台运行，注意暴露的端口号-9090（address0-0-0-09090），可以直接在浏览器打开-ip9090-查看简易控制台，此控制台可以做调试使用，需要更强大、美观的数据展示官方建议使用-grafana-">此时，prometheus 服务已在后台运行，注意暴露的端口号 9090（address=0.0.0.0:9090），可以直接在浏览器打开 ip:9090 查看简易控制台，此控制台可以做调试使用，需要更强大、美观的数据展示官方建议使用 Grafana.</h5> <hr> <h4 id="安装-grafana">安装 grafana</h4> <p>（数据展示<a rel="noopener noreferrer" target="_blank" href="https://grafana.com">https://grafana.com</a>）</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-5.0.2-1.x86_64.rpm
+
+yum  localinstall grafana-5.0.2-1.x86_64.rpm
+
+service grafana-server start</code></pre></div><p>此时，grafana 服务已经启动，可以直接在浏览器中打开 localhost:3000 开始体验 grafana 了</p> <hr> <h4 id="exporter">exporter</h4> <p>Prometheus官网有很多exporter，exporter可以理解为<strong>采集客户端</strong>，即采集指标，通过http方式暴露metrics给prometheus，Prometheus通过pull方式拉取这些指标。</p> <ol><li>node_exporter（linux 系统信息采集器）</li></ol> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">wget https://github.com/prometheus/node_exporter/releases/download/v0.18.0/node_exporter-0.18.0.linux-amd64.tar.gz
+
+tar -zxvf node_exporter-0.18.0.linux-amd64.tar.gz
+
+cd node_exporter-0.18.0.linux-amd64
+
+nohup ./node_exporter &amp; （在后台运行系统信息采集器）</code></pre></div><p>可以通过curl查看<br>
+curl 127.0.0.1:9100/metrics</p> <blockquote><p>Tips：0.16.0 版本在 centos 6.x 运行时报错 kernel too old，下载 0.15.2 或之前版本即可
+<a rel="noopener noreferrer" target="_blank" href="https://github.com/prometheus/node_exporter/releases/download/v0.15.2/node_exporter-0.15.2.linux-amd64.tar.gz">https://github.com/prometheus/node_exporter/releases/download/v0.15.2/node_exporter-0.15.2.linux-amd64.tar.gz</a></p></blockquote> <p>此时，系统信息采集器已在后台运行，等待 prometheus 服务来拉取数据，注意暴露的端口号 9100（msg=&quot;Listening on :9100&quot;），prometheus 拉取数据需要使用此端口号</p> <h4 id="安装-prometheus">安装 prometheus</h4> <p>prometheus <a rel="noopener noreferrer" target="_blank" href="https://prometheus.io/">https://prometheus.io/</a>）</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">wget https://github.com/prometheus/prometheus/releases/download/v2.2.1/prometheus-2.2.1.linux-amd64.tar.gz
+tar -zxvf prometheus-2.2.1.linux-amd64.tar.gz
+cd prometheus-2.2.1.linux-amd64</code></pre></div><p>vi prometheus.yml</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">global:
+  scrape_interval: 10s
+  evaluation_interval: 10s
+
+scrape_configs:
+  - job_name: prometheus
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          instance: prometheus
+
+  - job_name: mysql
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['localhost:9104']
+        labels:
+          instance: mysql
+
+  - job_name: 'linux'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['localhost:9100']
+        labels:
+          instance: linux</code></pre></div><h5 id="启动">启动</h5> <p>nohup ./prometheus --config.file=&quot;prometheus.yml&quot; &amp;（在后台运行 prometheus 服务）</p> <h4 id="prometheus配置的热加载">Prometheus配置的热加载</h4> <p>Prometheus配置信息的热加载有两种方式：</p> <ul><li><p>第一种热加载方式：查看Prometheus的进程id，发送SIGHUP信号:
+kill -HUP <pid></pid></p></li> <li><p>第二种热加载方式：发送一个POST请求到/-/reload，需要在启动时给定--web.enable-lifecycle选项：
+curl -X POST <a rel="noopener noreferrer" target="_blank" href="http://localhost:9090/-/reload">http://localhost:9090/-/reload</a></p></li></ul> <p>我们使用的是第一种热加载方式，systemd unit文件如下：</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">[Unit]
+Description=prometheus
+After=network.target
+[Service]
+Type=simple
+User=prometheus
+ExecStart=/usr/local/prometheus/prometheus \
+ --config.file=/usr/local/prometheus/prometheus.yml \
+ --storage.tsdb.path=/home/prometheus/data \
+ --storage.tsdb.retention=365d \
+ --web.listen-address=:9090 \
+ --web.external-url=https://prometheus.frognew.com
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target</code></pre></div><p>systemctl reload prometheus</p> <h4 id="告警服务-alertmanager">告警服务 Alertmanager</h4> <p>告警能力在Prometheus的架构中被划分成两个独立的部分。如下所示，通过在Prometheus中定义AlertRule（告警规则），Prometheus会周期性的对告警规则进行计算，如果满足告警触发条件就会向Alertmanager发送告警信息。
+<img src="evernotecid://94C76643-58DA-4407-AFA8-9F2A33EF0AAA/appyinxiangcom/11651347/ENResource/p3081" alt="2957ddc2799240dd958cbdf9bf4a46f7.png"></p> <h4 id="一些问题">一些问题</h4> <ol><li>为什么选择 pull  而不是push
+通过HTTP提供了许多优势：</li></ol> <ul><li>您可以在开发更改时在笔记本电脑上运行监控。</li> <li>您可以更轻松地判断目标是否已关闭。</li> <li>您可以手动转到目标并使用Web浏览器检查其运行状况。
+总体而言，我们认为拉动比推动略好，但在考虑监控系统时，不应将其视为重点。</li></ul> <p>附录:
+线上 Prometheus 配置文件 prometheus.yml</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text"># my global config
+global:
+  scrape_interval:     30s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 30s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+       - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+   - &quot;/etc/prometheus/rules/*.rules&quot;
+  # - &quot;second_rules.yml&quot;
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=&lt;job_name&gt;` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+    - targets: ['localhost:9090']
+
+  - job_name: 'telegraf'
+    file_sd_configs:
+      - files: ['./*.json']
+
+remote_write:
+  - url: &quot;http://influxdb:8086/api/v1/prom/write?db=prometheus&quot;
+
+remote_read:
+  - url: &quot;http://influxdb:8086/api/v1/prom/read?db=prometheus&quot;</code></pre></div>]]></content>
+        <published>2019-07-01T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[VScode使用笔记]]></title>
+        <id>https://nevea.top/blog/VScode%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0</id>
+        <link href="https://nevea.top/blog/VScode%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0"/>
+        <updated>2020-03-23T07:09:55.110Z</updated>
+        <summary type="html"><![CDATA[电脑可能会换，系统可能会换，但是编辑器，可能会跟你很久.
+]]></summary>
+        <content type="html"><![CDATA[<blockquote><p>电脑可能会换，系统可能会换，但是编辑器，可能会跟你很久.</p></blockquote> <h5 id="推荐安装插件">推荐安装插件:</h5> <ol><li>Atom One Dark Theme   #Atom主题</li> <li>Settings Sync         #配置同步</li> <li>VSCode Great Icons    #文件图标替换</li></ol> <h5 id="vscode写python">VScode写Python</h5> <p>比如要自动格式化代码，只需要按下Alt+Shift+F，vscode就会调用autopep8自动格式化代码
+然后就开始自动安装autopep8. autopep8在每个python环境中都要安装
+如果是是用python-autopep8的插件 则要在终端中使用brew install autopep8</p> <p>python虚拟环境:virtualenv</p>]]></content>
+        <published>2019-01-14T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Gerrit CodeReview代码审核工具搭建配置]]></title>
+        <id>https://nevea.top/blog/gerrit%20CodeReview%E5%B7%A5%E5%85%B7%E6%90%AD%E5%BB%BA%E9%85%8D%E7%BD%AE</id>
+        <link href="https://nevea.top/blog/gerrit%20CodeReview%E5%B7%A5%E5%85%B7%E6%90%AD%E5%BB%BA%E9%85%8D%E7%BD%AE"/>
+        <updated>2020-03-23T07:09:40.047Z</updated>
+        <summary type="html"><![CDATA[一、环境准备
+
+
+OS:centos6.8
+gerrit依赖 (java&amp;git)
+yum -y install java-1.8.0
+安装git 2.14.1 (低版本git同步gitlab时会出问题)
+yum install -y  http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm
+yum install -y git
+yum -y install epel-release &amp;&amp; yum -y install nginx httpd-tools
+
+
+gerrit环境
+下载：Gerrit 2.15.1  wget https://www.gerritcodereview.com/download/gerrit-2.15.1.war
+
+
+]]></summary>
+        <content type="html"><![CDATA[<h3 id="一、环境准备">一、环境准备</h3> <ol><li><p>OS:centos6.8
+gerrit依赖 (java&amp;git)
+yum -y install java-1.8.0
+安装git 2.14.1 (低版本git同步gitlab时会出问题)
+yum install -y  <a rel="noopener noreferrer" target="_blank" href="http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm">http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm</a>
+yum install -y git
+yum -y install epel-release &amp;&amp; yum -y install nginx httpd-tools</p></li> <li><p>gerrit环境
+下载：Gerrit 2.15.1  wget <a rel="noopener noreferrer" target="_blank" href="https://www.gerritcodereview.com/download/gerrit-2.15.1.war">https://www.gerritcodereview.com/download/gerrit-2.15.1.war</a></p></li></ol> <ol start="3"><li>gerrit管理帐号(可选，使用独立账号配置gerrit)
+gerrit依赖，用来管理gerrit。
+sudo adduser gerrit
+sudo passwd gerrit
+并将gerrit加入sudo权限
+sudo vi /etc/sudoers
+gerrit  ALL=(ALL:ALL) ALL
+备注：这里我直接使用root用户安装</li></ol> <h3 id="二--安装与配置gerrit">二. 安装与配置gerrit</h3> <ol><li>配置gerrit
+默认安装：java -jar gerrit-2.15.1.war init -d /usr/local/review(此目录最好放在空间比较大的目录)</li></ol> <blockquote><p>配置的时候 该选择Y的时候要选择Y</p></blockquote> <p>Install Verified label         [y/N]? N    //如果选择默认的话 会出现没有submit按钮
+Install plugin download-commands version v2.13.4 [y/N]? y  //如果不安装 会出现创建项目没有clone地址</p> <p>更新配置文件：vim /usr/local/review/etc/gerrit.config</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">[gerrit]
+        basePath = git
+        serverId = 90b8d687-f735-4a2c-b117-0518fe571670
+        canonicalWebUrl = http://192.168.2.238:8080/
+[database]
+        type = h2
+        database = /usr/local/review/db/ReviewDB
+[index]
+        type = LUCENE
+[auth]
+        type = HTTP
+[receive]
+        enableSignedPush = true
+[sendemail]
+        enable = true
+        smtpServer = smtp.exmail.qq.com
+        smtpServerPort = 465  
+        smtpEncryption = ssl
+        smtpUser = *@*.com
+        smtpPass = ***
+        sslVerify = false
+        from = Code Review &lt;*@*.comm&gt;
+[container]
+        user = root
+        javaHome = /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.171-3.b10.el6_9.x86_64/jre
+[sshd]
+        listenAddress = *:29418
+[httpd]
+        listenUrl = http://192.168.2.238:8080/
+[cache]
+        directory = cache</code></pre></div><ol start="2"><li>配置nginx反向代理
+配置：vim gerrit.conf</li></ol> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">server {
+         listen 80;
+         server_name 192.168.2.238;
+         auth_basic &quot;Welcomme to Gerrit Code Review Site!&quot;;
+         auth_basic_user_file /opt/.passwd;
+         location / {
+            proxy_pass  http://192.168.2.238:8080;
+         }
+       }</code></pre></div><ol start="3"><li><p>配置gerrit账户密码 创建认证用户(通过httpd-tools工具)
+touch /opt/.passwd
+htpasswd -c -b /opt/.passwd admin 123456(管理员)</p></li> <li><p>启动gerrit&amp;启动nginx
+sudo /usr/local/review/bin/gerrit.sh restart
+service nginx start</p></li> <li><p>访问gerrit 管理界面 <a rel="noopener noreferrer" target="_blank" href="http://xxx.xxxxx.com/">http://xxx.xxxxx.com/</a>
+第一次访问，需要输入第3步设置的admin及密码，该账户将作为gerrit管理员账户。</p></li></ol> <h3 id="三、如何使用gerrit">三、如何使用gerrit</h3> <p>前提：需要git使用端 / gerrit服务端配合使用。</p> <ol><li>添加项目(gerrit 服务端)
+1.1 使用gerrit添加新项目：（适用于开启新项目并使用gerrit）
+使用gerrit管理界面创建项目</li></ol> <p>1.2使用gerrit添加已有项目：（适用于已有项目下移植到gerrit中）
+ssh -p 3389 gerrit1@公网IP gerrit create-project --name exist-project #建议采用管理界面添加
+或者使用gerrit管理界面
+然后将已有项目与gerrit上建立的exist-project关联，即将已有代码库代码push到gerrit中进行管理。
+cd /usr/local/review/git/exist-project
+git push ssh://gerrit1@公网IP:3389/exist-project <em>:</em></p> <ol start="2"><li>生成sshkey(git使用端)
+在开发账户中生成sshkey，用作与gerrit服务器连接。
+ssh-keygen -t rsa #生成sshkey</li></ol> <p>cat ~/.ssh/id_rsa.pub #查看sshkey</p> <ol start="3"><li><p>添加sshkey到gerrit服务器(gerrit 服务端)
+此步骤与git流程类似，即将/root/.ssh/id_rsa.pub内容添加到gerri和gitlab(后面gerrit和gitlab直接同步)</p></li> <li><p>拉取代码＆配置git hooks(git client端)
+验证sshkey是否配置成功：ssh -p 29418 <a href="mailto:admin@192.168.199.222">admin@192.168.199.222</a></p></li></ol> <p>拉取代码url：选择 clone with commit-msg hook  //会直接配置Change-ID gerrit流程必备</p> <p>修改代码并提交，推送时与原有git流程不一致，采用 git push origin HEAD:refs/for/master</p> <h3 id="四-使用gerrit-website完成code-review">四.使用gerrit website完成code review</h3> <p>当完成push后，可在gerrit管理界面看到当前提交code review的change。
+查看需要code review的提交：
+查看某次提交的详细信息（审核者+2可通过本次提交，提交者可通过Abandon本次提交）：
+如果审核者+2通过后，可提交该次commit.</p> <h5 id="配置gerrit和gitlab同步">配置gerrit和gitlab同步</h5> <p>gerrit和gitlab同步需要配置两个地方 (前提示已将sshkey 添加至gerrit和gitlab)</p> <p>配置 /root/.ssh/config</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">Host 192.168.2.244
+    User root
+    IdentityFile ~/.ssh/id_rsa
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    PreferredAuthentications publickey</code></pre></div><p>配置replation插件
+/usr/local/review/etc/replication.config   //以实际gerrit安装位置为准</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">[remote &quot;192.168.2.244&quot;]
+         url = git@192.168.2.244:root/${name}.git
+         push = +refs/heads/*:refs/heads/*
+         push = +refs/tags/*:refs/tags/*
+         push = +refs/changes/*:refs/changes/*
+         timtout = 30
+         threads = 3</code></pre></div><h3 id="五-gerrit注意事项">五.gerrit注意事项</h3> <ul><li>需要为每个使用者分配gerrit账号，不要都使用admin账号，因为admin账号可直接push master</li> <li>push代码时需要使用
+git push origin HEAD:refs/for/master(branch),gerrit默认关闭非admin账号的push direct权限</li> <li>push代码时需要commit email与gerrit logoutaccount email一致，否则无法push成功，可选择关闭email notify，并开启forge user权限，或者通过修改gerrit数据库account email信息</li> <li>git配置的email一定要和gerrit里注册的email一致，否者push会出错</li> <li>gerrit数据库与gitlab同步，需要安装replication插件，并开启该功能</li></ul>]]></content>
+        <published>2018-04-17T16:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Yum 命令被锁]]></title>
+        <id>https://nevea.top/blog/Yum%E5%91%BD%E4%BB%A4%E8%A2%AB%E9%94%81%E8%A7%A3%E5%86%B3</id>
+        <link href="https://nevea.top/blog/Yum%E5%91%BD%E4%BB%A4%E8%A2%AB%E9%94%81%E8%A7%A3%E5%86%B3"/>
+        <updated>2020-03-23T07:09:57.576Z</updated>
+        <summary type="html"><![CDATA[root@centos001 ~]# yum clean all      //执行一个yum命令
+已加载插件：fastestmirror
+Repodata is over 2 weeks old. Install yum-cron? Or run: yum makecache fast
+/var/run/yum.pid 已被锁定，PID 为 2308 的另一个程序正在运行。  //可以看到文件被锁定]]></summary>
+        <content type="html"><![CDATA[<div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">root@centos001 ~]# yum clean all      //执行一个yum命令
+已加载插件：fastestmirror
+Repodata is over 2 weeks old. Install yum-cron? Or run: yum makecache fast
+/var/run/yum.pid 已被锁定，PID 为 2308 的另一个程序正在运行。  //可以看到文件被锁定</code></pre></div> <h4 id="此处发现命令被锁，无法使用新的yum命令">此处发现命令被锁，无法使用新的yum命令</h4> <p>解决方法</p> <ol><li>先用CTRL+Z暂停命令</li> <li>输入命令：</li></ol> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">rm -f /var/run/yum.pid    //删除这个文件</code></pre></div><p>3 在执行yum命令就ok了</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">[root@centos001 ~]# yum clean all
+已加载插件：fastestmirror
+正在清理软件源： base extras updates
+Cleaning up everything</code></pre></div>]]></content>
+        <published>2018-02-14T16:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Nginx实战]]></title>
+        <id>https://nevea.top/blog/Nginx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0</id>
+        <link href="https://nevea.top/blog/Nginx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0"/>
+        <updated>2020-03-23T06:55:54.592Z</updated>
+        <summary type="html"><![CDATA[搭建一个简易的代理服务
+nginx 常常用来作为代理服务器，这代表着服务器接收请求，然后将它们传递给被代理服务器，得到请求的响应，再将它们发送给客户端。 我们将配置一个基本的代理服务器，它会处理本地图片文件的请求并返回其他的请求给被代理的服务器。在这个例子中，两个服务器都会定义在一个 nginx 实例中。 首先，通过在 nginx 配置文件中添加另一个 server 区块，来定义一个被代理的服务器，像下面的配置：
+server {
+    listen 8080;
+    root /data/up1;
+
+    location / {
+    }
+}]]></summary>
+        <content type="html"><![CDATA[<h1 id="搭建一个简易的代理服务">搭建一个简易的代理服务</h1> <p>nginx 常常用来作为代理服务器，这代表着服务器接收请求，然后将它们传递给被代理服务器，得到请求的响应，再将它们发送给客户端。 我们将配置一个基本的代理服务器，它会处理本地图片文件的请求并返回其他的请求给被代理的服务器。在这个例子中，两个服务器都会定义在一个 nginx 实例中。 首先，通过在 nginx 配置文件中添加另一个 server 区块，来定义一个被代理的服务器，像下面的配置：</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">server {
+    listen 8080;
+    root /data/up1;
+
+    location / {
+    }
+}</code></pre></div> <p>上面就是一个简单的服务器，它监听在 8080 端口（之前，listen 并没被定义，是因为默认监听的 80 端口）并且会映射所有的请求给 本地文件目录 /data/up1。创建该目录，然后添加 index.html 文件。注意，root 指令是放在 server 上下文中。当响应请求的 location 区块中，没有自己的 root 指令，上述的 root 指令才会被使用。 接着，使用前面章节中的 server 配置，然后将它改为一个代理服务配置。在第一个 location 区块中，放置已经添加被代理服务器的协议，名字和端口等参数的 proxy_pass 指令（在这里，就是 <a rel="noopener noreferrer" target="_blank" href="http://localhost:8080">http://localhost:8080</a>）:</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">server {
+    location / {
+        proxy_pass http://localhost:8080;
+    }
+
+    location /images/ {
+        root /data;
+    }
+}</code></pre></div><h2 id="location相关">location相关</h2> <p>我们将修改第二个 location 区块，使他返回一些典型后缀的图片文件请求，
+现在它只会映射带有 /images/ 前缀的请求到 /data/images 目录下。
+修改后的 location 指令如下：</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">location ~ \.(gif|jpg|png)$ {
+    root /data/images;
+}</code></pre></div><p>该参数是一个正则表达式，它会匹配所有以 .gif，.jpg 或者 .png 结尾的 URIs。
+一个正则表达式需要以 ~ 开头。匹配到的请求会被映射到 /data/images 目录下。
+当 nginx 在选择 location 去响应一个请求时，它会先检测带有前缀的 location 指令，记住先是检测带有最长前缀的 location，然后检测正则表达式。
+如果有一个正则的匹配的规则，nginx 会选择该 location，否则，会选择之前缓存的规则。 最终，一个代理服务器的配置结果如下：</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">server {
+    location / {
+        proxy_pass http://localhost:8080/;
+    }
+
+    location ~ \.(gif|jpg|png)$ {
+        root /data/images;
+    }
+}</code></pre></div><p>该服务器会选择以 .gif，.jpg，或者 .png 结束的请求并且映射到 /data/images 目录（通过添加 URI 给 root 指令的参数），
+接着将其他所有的请求映射到上述被代理的服务器。 为了使用新的配置，像前几个章节描述的一样，需要向 nginx 发送重载信号。
+这还有很多其他的指令，可以用于进一步配置代理连接。</p> <h3 id="location-配置">location 配置</h3> <ol><li>= 开头表示精确匹配</li> <li>^~ 开头表示uri以某个常规字符串开头，不是正则匹配</li> <li>~ 开头表示区分大小写的正则匹配;</li> <li>~* 开头表示不区分大小写的正则匹配</li> <li>/ 通用匹配, 如果没有其它匹配,任何请求都会匹配到</li></ol>]]></content>
+        <published>2018-02-03T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Centos更换yum源]]></title>
+        <id>https://nevea.top/blog/%E6%9B%B4%E6%8D%A2yum%E6%BA%90</id>
+        <link href="https://nevea.top/blog/%E6%9B%B4%E6%8D%A2yum%E6%BA%90"/>
+        <updated>2020-03-23T06:53:15.388Z</updated>
+        <summary type="html"><![CDATA[第一步：备份你的原镜像文件，以免出错后可以恢复。
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup第二步：下载新的CentOS-Base.repo 到/etc/yum.repos.d/
+CentOS 6
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo
+CentOS 7
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo]]></summary>
+        <content type="html"><![CDATA[<h4 id="第一步：备份你的原镜像文件，以免出错后可以恢复。">第一步：备份你的原镜像文件，以免出错后可以恢复。</h4> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</code></pre></div><h4 id="第二步：下载新的centos-base-repo-到etcyum-repos-d">第二步：下载新的CentOS-Base.repo 到/etc/yum.repos.d/</h4> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">CentOS 6
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo
+CentOS 7
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</code></pre></div> <h4 id="第三步：运行yum-makecache生成缓存">第三步：运行yum makecache生成缓存</h4> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">yum clean all
+yum makecache</code></pre></div>]]></content>
+        <published>2018-02-02T03:12:48.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[搭建自己的 Gitlab CI Runner]]></title>
+        <id>https://nevea.top/blog/gitlab-ci-runner</id>
+        <link href="https://nevea.top/blog/gitlab-ci-runner"/>
+        <updated>2020-03-22T16:40:02.372Z</updated>
+        <summary type="html"><![CDATA[假定你已经有一台可用的，可联网的机器
+]]></summary>
+        <content type="html"><![CDATA[<blockquote><p>假定你已经有一台可用的，可联网的机器</p></blockquote> <h2 id="preface">Preface</h2> <p>这篇文章将介绍如何使用自己的机器来搭建用于 Gitlab CI 的 runner.  在搭建自己的 CI Runner 之前，需要先明确一些概念：</p> <h3 id="ci-continuous-integration">CI (Continuous Integration)</h3> <p>CI 的全称是 Continuous Integration (持续集成)，是 extreme programming (极限编程) 的一部分。我们常用 CI 来做一些自动化工作，这种自动化工作会运行在一台集中的机器上，比如程序的打包，单元测试，部署等。这种构建方式避免了了打包环境差异引动的错误，并且通过 Gitlab 的 hook, 在代码提交的各个环节自动地完成一系列的构建工作。</p> <h3 id="ci-runner">CI Runner</h3> <p>和第三方的 Travis CI, CircleCI 不同，<strong>Gitlab 本身并不提供机器</strong>，只提供一个注册机器的接口。这些机器用于运行构建逻辑，在 Gitlab 中被称为 Runner.</p> <p><img src="https://gbstatic.djyde.com/assets/006tNc79gy1fet5ffxwglj31ac0y2wj8.jpg" alt="runners"></p> <h2 id="gitlab-runner-环境">Gitlab Runner 环境</h2> <p>在这里直接使用 Gitlab Runner 的官方 docker image:</p> <h3 id="安装-docker">安装 Docker</h3> <div class="saber-highlight" data-lang="bash"><pre class="saber-highlight-code language-bash"><code class="language-bash"><span class="token function">curl</span> -sSL https://get.daocloud.io/docker <span class="token operator">|</span> <span class="token function">sh</span></code></pre></div><h3 id="拉取-gitlab-runner-镜像">拉取 gitlab-runner 镜像</h3> <p>因为众所周知的原因，国内 pull docker 镜像非常不稳定，所以在这里用 Daocloud 提供的镜像：</p> <div class="saber-highlight" data-lang="bash"><pre class="saber-highlight-code language-bash"><code class="language-bash"><span class="token function">curl</span> -sSL https://get.daocloud.io/daotools/set_mirror.sh <span class="token operator">|</span> <span class="token function">sh</span> -s http://718dbf2d.m.daocloud.io
+
+<span class="token function">sudo</span> <span class="token function">service</span> docker restart</code></pre></div><p>拉取镜像：</p> <div class="saber-highlight" data-lang="bash"><pre class="saber-highlight-code language-bash"><code class="language-bash"><span class="token function">sudo</span> docker pull gitlab/gitlab-runner:latest</code></pre></div><h3 id="添加-gitlab-runner-container">添加 gitlab-runner container</h3> <div class="saber-highlight" data-lang="bash"><pre class="saber-highlight-code language-bash"><code class="language-bash"><span class="token function">sudo</span> docker run -d --name gitlab-runner --restart always <span class="token punctuation">\</span>
+  -v /srv/gitlab-runner/config:/etc/gitlab-runner <span class="token punctuation">\</span>
+  -v /var/run/docker.sock:/var/run/docker.sock <span class="token punctuation">\</span>
+  gitlab/gitlab-runner:latest</code></pre></div><h3 id="配置用于-runner-的-docker-image">配置用于 runner 的 docker image</h3> <blockquote><p>虽然 Gitlab 支持多种 runner 运行方式，但本文建议使用 docker，因为使用 docker 较为灵活，一台机器可以创建多个 docker images 分别为不同的项目进行 CI, 但仍能保持环境隔离。</p></blockquote> <p>配置 Docker image 最简单的方式是写 <code>Dockerfile</code>, 比如可以用 Node.js 官方的 Docker image:</p> <div class="saber-highlight" data-lang="dockerfile"><pre class="saber-highlight-code language-dockerfile"><code class="language-dockerfile"><span class="token comment"># Dockerfile</span>
+<span class="token keyword">FROM</span> node<span class="token punctuation">:</span>7.9.0</code></pre></div><p>由于每个业务总会有各自的环境要求，比如应用依赖底层的库。这时可以通过 <code>Dockerfile</code> 配置：</p> <div class="saber-highlight" data-lang="dockerfile"><pre class="saber-highlight-code language-dockerfile"><code class="language-dockerfile"><span class="token comment"># Dockerfile</span>
+<span class="token keyword">FROM</span> node<span class="token punctuation">:</span>7.9.0
+
+<span class="token keyword">RUN</span> apt<span class="token punctuation">-</span>get update &amp;&amp; apt<span class="token punctuation">-</span>get install <span class="token punctuation">-</span>y \
+	package<span class="token punctuation">-</span>foo
+	package<span class="token punctuation">-</span>bar</code></pre></div><h3 id="构建-docker-image">构建 Docker Image</h3> <p>写好 <code>Dockerfile</code> 后，需要把它构建成 Image:</p> <div class="saber-highlight" data-lang="bash"><pre class="saber-highlight-code language-bash"><code class="language-bash"><span class="token function">ls</span>
+<span class="token comment"># Dockerfile</span>
+
+docker build -t IMAGE_NAME <span class="token builtin class-name">.</span></code></pre></div><p>Build 完后，通过 <code>sudo docker image ls</code> 查看 image 状态。</p> <h3 id="注册-runner">注册 Runner</h3> <p>接下来就可以注册 Runner:</p> <div class="saber-highlight" data-lang="bash"><pre class="saber-highlight-code language-bash"><code class="language-bash"><span class="token function">sudo</span> docker <span class="token builtin class-name">exec</span> -it gitlab-runner gitlab-ci-multi-runner register</code></pre></div><p>程序会要求你填写相关的信息，这些信息可以从 Gitlab 项目的 <code>Settings -&gt; Runners</code> 页面中找到：</p> <p><img src="https://gbstatic.djyde.com/assets/006tNc79gy1fetavn7r0lj319u0os78u.jpg" alt="Gitlab runner info"></p> <div class="saber-highlight" data-lang="bash"><pre class="saber-highlight-code language-bash"><code class="language-bash">Please enter the gitlab-ci coordinator URL:
+<span class="token comment"># http://gitlab.alibaba-inc.com/ci</span>
+
+Please enter the gitlab-ci token <span class="token keyword">for</span> this runner:
+<span class="token comment"># 项目的 token</span>
+
+Please enter the gitlab-ci description <span class="token keyword">for</span> this runner:
+<span class="token comment"># Runner 的 description</span>
+
+Please enter the gitlab-ci tags <span class="token keyword">for</span> this runner <span class="token punctuation">(</span>comma separated<span class="token punctuation">)</span>:
+<span class="token comment"># Runner 的 tag</span>
+
+Whether to run untagged builds <span class="token punctuation">[</span>true/false<span class="token punctuation">]</span>:
+<span class="token comment"># true</span>
+
+Please enter the executor: docker, parallels, shell, kubernetes, docker-ssh, ssh, virtualbox, docker+machine, docker-ssh+machine:
+<span class="token comment"># docker</span>
+
+Please enter the default Docker image <span class="token punctuation">(</span>e.g. ruby:2.1<span class="token punctuation">)</span>:
+<span class="token comment"># 填入构建 Docker image 时填写的 image 名称</span></code></pre></div><p>这时 runner 就会出现在 <code>runners</code> 页面：</p> <p><img src="https://gbstatic.djyde.com/assets/006tNc79gy1fetbnh1e12j310008qdgs.jpg" alt=""></p> <h2 id="faq">FAQ</h2> <h3 id="ci-运行时出现-error-job-failed-api-error-404-repository-xxx-not-found-does-not-exist-or-no-pull-access">CI 运行时出现 <code>ERROR: Job failed: API error (404): repository xxx not found: does not exist or no pull access</code></h3> <p>这是由于 Gitlab 会默认从远程拉取 image，而我们的 image 是在本地构建的，所以需要对 gitlab-runner 进行配置，把 <code>pull_policy</code> 设置为 <code>if-not-present</code> 或 <code>never</code>.</p> <div class="saber-highlight" data-lang="bash"><pre class="saber-highlight-code language-bash"><code class="language-bash"><span class="token comment"># 进入 gitlab-runner 的 bash 环境</span>
+<span class="token function">sudo</span> docker <span class="token builtin class-name">exec</span> -it gitlab-runner <span class="token function">bash</span>
+
+<span class="token comment"># 编辑 config.toml</span>
+<span class="token function">nano</span> /etc/gitlab-runner/config.toml</code></pre></div><p>编辑 <code>config.toml</code> 中对应的 runner:</p> <div class="saber-highlight" data-lang="diff"><pre class="saber-highlight-code language-diff"><code class="language-diff">[[runners]]
+<span class="token unchanged">  name = &quot;&quot;
+  url = &quot;&quot;
+  token = &quot;&quot;
+  executor = &quot;docker&quot;
+  [runners.docker]
+    tls_verify = false
+    image = &quot;nb-node&quot;
+    privileged = false
+    disable_cache = false
+    volumes = [&quot;/cache&quot;]
+</span><span class="token inserted-sign inserted">+   pull_policy = &quot;if-not-present&quot;
+</span><span class="token unchanged">  [runners.cache]
+</span></code></pre></div><h2 id="延伸阅读">延伸阅读</h2> <ul><li><a rel="noopener noreferrer" target="_blank" href="https://docs.gitlab.com/runner/install/docker.html">Run GitLab Runner in a container</a></li> <li><a rel="noopener noreferrer" target="_blank" href="https://www.daocloud.io/mirror#accelerator-doc">配置 Docker 加速器</a></li> <li><a rel="noopener noreferrer" target="_blank" href="https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/">Best practices for writing Dockerfiles</a></li> <li><a rel="noopener noreferrer" target="_blank" href="https://docs.gitlab.com/runner/executors/docker.html#using-the-if-not-present-pull-policy">Using the if-not-present pull policy</a></li></ul>]]></content>
+        <published>2017-04-20T12:17:42.000Z</published>
+    </entry>
+</feed>

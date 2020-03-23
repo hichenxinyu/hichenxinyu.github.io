@@ -1,0 +1,58 @@
+<!DOCTYPE html><html data-saber-ssr><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta http-equiv="X-UA-Compatible" content="ie=edge" /><meta data-saber-head="ssr" name="generator" content="Saber v0.11.5"><meta data-saber-head="ssr" name="og:site_name" content="Nevea&#x27;s Blog"><meta data-saber-head="ssr" property="title" content="Nginx实战 - Nevea&#x27;s Blog"><meta data-saber-head="ssr" property="description" content="&lt;h1 id=&quot;搭建一个简易的代理服务&quot;&gt;搭建一个简易的代理服务&lt;/h1&gt;
+&lt;p&gt;nginx 常常用来作为代理服务器，这代表着服务器接收请求，然后将它们传递给被代理服务器，得到请求的响应，再将它们发送给客户端。 我们将配置一个基本的代理服务器，它会处理本地图片文件的请求并返回其他的请求给被代理的服务器。在这个例子中，两个服务器都会定义在一个 nginx 实例中。 首先，通过在 nginx 配置文件中添加另一个 server 区块，来定义一个被代理的服务器，像下面的配置：&lt;/p&gt;
+&lt;div class=&quot;saber-highlight&quot; v-pre=&quot;&quot; data-lang=&quot;&quot;&gt;&lt;pre class=&quot;saber-highlight-code language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;server {
+listen 8080;
+root /data/up1;
+location / {
+}
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;"><meta data-saber-head="ssr" property="og:description" content="&lt;h1 id=&quot;搭建一个简易的代理服务&quot;&gt;搭建一个简易的代理服务&lt;/h1&gt;
+&lt;p&gt;nginx 常常用来作为代理服务器，这代表着服务器接收请求，然后将它们传递给被代理服务器，得到请求的响应，再将它们发送给客户端。 我们将配置一个基本的代理服务器，它会处理本地图片文件的请求并返回其他的请求给被代理的服务器。在这个例子中，两个服务器都会定义在一个 nginx 实例中。 首先，通过在 nginx 配置文件中添加另一个 server 区块，来定义一个被代理的服务器，像下面的配置：&lt;/p&gt;
+&lt;div class=&quot;saber-highlight&quot; v-pre=&quot;&quot; data-lang=&quot;&quot;&gt;&lt;pre class=&quot;saber-highlight-code language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;server {
+listen 8080;
+root /data/up1;
+location / {
+}
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;"><meta data-saber-head="ssr" property="twitter:description" content="&lt;h1 id=&quot;搭建一个简易的代理服务&quot;&gt;搭建一个简易的代理服务&lt;/h1&gt;
+&lt;p&gt;nginx 常常用来作为代理服务器，这代表着服务器接收请求，然后将它们传递给被代理服务器，得到请求的响应，再将它们发送给客户端。 我们将配置一个基本的代理服务器，它会处理本地图片文件的请求并返回其他的请求给被代理的服务器。在这个例子中，两个服务器都会定义在一个 nginx 实例中。 首先，通过在 nginx 配置文件中添加另一个 server 区块，来定义一个被代理的服务器，像下面的配置：&lt;/p&gt;
+&lt;div class=&quot;saber-highlight&quot; v-pre=&quot;&quot; data-lang=&quot;&quot;&gt;&lt;pre class=&quot;saber-highlight-code language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;server {
+listen 8080;
+root /data/up1;
+location / {
+}
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;"><meta data-saber-head="ssr" property="og:title" content="Nginx实战 - Nevea&#x27;s Blog"><meta data-saber-head="ssr" property="og:type" content="article"><meta data-saber-head="ssr" property="article:published_time" content="2018-02-03"><meta data-saber-head="ssr" property="twitter:title" content="Nginx实战 - Nevea&#x27;s Blog"><meta data-saber-head="ssr" property="og:url" content="https://nevea.top/blog/Nginx学习笔记"><meta data-saber-head="ssr" property="og:image" content="https://gbstatic.djyde.com/assets/Snapseed%203.jpg?x-oss-process=image/auto-orient,1/quality,q_80/bright,-10/resize,w_2560/contrast,-30/interlace,1"><meta data-saber-head="ssr" property="twitter:image" content="https://gbstatic.djyde.com/assets/Snapseed%203.jpg?x-oss-process=image/auto-orient,1/quality,q_80/bright,-10/resize,w_2560/contrast,-30/interlace,1"> <title>Nginx实战 - Nevea&#x27;s Blog</title> <link data-saber-head="ssr" rel="stylesheet" href="//ppp.djyde.com/css?family=Noto+Serif+SC"><link rel="stylesheet" href="/_saber/css/styles.4d0ecf2f.chunk.css">  </head><body><div id="_saber" data-server-rendered="true"><div><div data-v-9dd6d5de><nav class="bg-black flex text-white item-center font-serif" data-v-069cc566 data-v-9dd6d5de><div class="text font-bold mr-4 p-1 pl-4" data-v-069cc566><a href="/" class="router-link-active" data-v-069cc566>Nevea's Blog</a></div> <div class="flex item-center" data-v-069cc566><a href="/" class="mr-4 hover:bg-gray-300 hover:text-gray-900 p-1 router-link-active" data-v-069cc566>写作</a></div><div class="flex item-center" data-v-069cc566><a href="/readings" class="mr-4 hover:bg-gray-300 hover:text-gray-900 p-1" data-v-069cc566>我读</a></div><div class="flex item-center" data-v-069cc566><a href="/about" class="mr-4 hover:bg-gray-300 hover:text-gray-900 p-1" data-v-069cc566>关于我</a></div></nav> <!----> <div class="post container mx-auto lg:pl-48 lg:pr-48" data-v-9dd6d5de><h1 class="pl-4 pr-4" data-v-9dd6d5de>Nginx实战</h1> <div class="mb-2 text-sm text-gray-500 pl-4 pr-4" data-v-9dd6d5de>February 03, 2018</div> <div class="content" data-v-9dd6d5de><h1 id="搭建一个简易的代理服务" data-v-9dd6d5de>搭建一个简易的代理服务</h1> <p data-v-9dd6d5de>nginx 常常用来作为代理服务器，这代表着服务器接收请求，然后将它们传递给被代理服务器，得到请求的响应，再将它们发送给客户端。 我们将配置一个基本的代理服务器，它会处理本地图片文件的请求并返回其他的请求给被代理的服务器。在这个例子中，两个服务器都会定义在一个 nginx 实例中。 首先，通过在 nginx 配置文件中添加另一个 server 区块，来定义一个被代理的服务器，像下面的配置：</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>server {
+    listen 8080;
+    root /data/up1;
+
+    location / {
+    }
+}</code></pre></div> <p data-v-9dd6d5de>上面就是一个简单的服务器，它监听在 8080 端口（之前，listen 并没被定义，是因为默认监听的 80 端口）并且会映射所有的请求给 本地文件目录 /data/up1。创建该目录，然后添加 index.html 文件。注意，root 指令是放在 server 上下文中。当响应请求的 location 区块中，没有自己的 root 指令，上述的 root 指令才会被使用。 接着，使用前面章节中的 server 配置，然后将它改为一个代理服务配置。在第一个 location 区块中，放置已经添加被代理服务器的协议，名字和端口等参数的 proxy_pass 指令（在这里，就是 <a rel="noopener noreferrer" target="_blank" href="http://localhost:8080" data-v-9dd6d5de>http://localhost:8080</a>）:</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>server {
+    location / {
+        proxy_pass http://localhost:8080;
+    }
+
+    location /images/ {
+        root /data;
+    }
+}</code></pre></div><h2 id="location相关" data-v-9dd6d5de>location相关</h2> <p data-v-9dd6d5de>我们将修改第二个 location 区块，使他返回一些典型后缀的图片文件请求，
+现在它只会映射带有 /images/ 前缀的请求到 /data/images 目录下。
+修改后的 location 指令如下：</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>location ~ \.(gif|jpg|png)$ {
+    root /data/images;
+}</code></pre></div><p data-v-9dd6d5de>该参数是一个正则表达式，它会匹配所有以 .gif，.jpg 或者 .png 结尾的 URIs。
+一个正则表达式需要以 ~ 开头。匹配到的请求会被映射到 /data/images 目录下。
+当 nginx 在选择 location 去响应一个请求时，它会先检测带有前缀的 location 指令，记住先是检测带有最长前缀的 location，然后检测正则表达式。
+如果有一个正则的匹配的规则，nginx 会选择该 location，否则，会选择之前缓存的规则。 最终，一个代理服务器的配置结果如下：</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>server {
+    location / {
+        proxy_pass http://localhost:8080/;
+    }
+
+    location ~ \.(gif|jpg|png)$ {
+        root /data/images;
+    }
+}</code></pre></div><p data-v-9dd6d5de>该服务器会选择以 .gif，.jpg，或者 .png 结束的请求并且映射到 /data/images 目录（通过添加 URI 给 root 指令的参数），
+接着将其他所有的请求映射到上述被代理的服务器。 为了使用新的配置，像前几个章节描述的一样，需要向 nginx 发送重载信号。
+这还有很多其他的指令，可以用于进一步配置代理连接。</p> <h3 id="location-配置" data-v-9dd6d5de>location 配置</h3> <ol data-v-9dd6d5de><li data-v-9dd6d5de>= 开头表示精确匹配</li> <li data-v-9dd6d5de>^~ 开头表示uri以某个常规字符串开头，不是正则匹配</li> <li data-v-9dd6d5de>~ 开头表示区分大小写的正则匹配;</li> <li data-v-9dd6d5de>~* 开头表示不区分大小写的正则匹配</li> <li data-v-9dd6d5de>/ 通用匹配, 如果没有其它匹配,任何请求都会匹配到</li></ol></div></div> <div class="post text-center text-sm" data-v-9dd6d5de><hr class="mt-12 mb-12" data-v-9dd6d5de> <p data-v-9dd6d5de>讨论请发邮件到 hichenxinyu@gmail.com</p> <p data-v-9dd6d5de>未经授权，禁止转载</p> <p data-v-9dd6d5de>通过赞赏码赞助此文</p> <br data-v-9dd6d5de> <p data-v-9dd6d5de><img src="https://blog-pic-1253367462.cos.ap-shanghai.myqcloud.com/20200323135043.png" class="w-auto sm:w-64 mx-auto" data-v-9dd6d5de></p></div></div> <div class="font-serif text-sm text-center p-12 sm:p-32 text-gray-500 font-bold"><div>
+      2017-2020
+      <a href="/" class="router-link-active">Nevea's Blog</a></div> <div class="mt-2">
+      可通过
+      <a href="/rss.xml" class="border-b-4">RSS</a>  订阅本博客
+    </div></div></div></div><script src="/_saber/js/styles.4d0ecf2f.js" defer></script><script src="/_saber/js/page--_posts-Nginx-----md.26358ccb.js" defer></script><script src="/_saber/js/client.0412f369.js" defer></script></body></html>
