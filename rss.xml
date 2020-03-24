@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://nevea.top/</id>
     <title/>
-    <updated>2020-03-24T09:36:38.744Z</updated>
+    <updated>2020-03-24T13:47:08.430Z</updated>
     <generator>Saber</generator>
     <author>
         <name>Nevea</name>
@@ -27,6 +27,284 @@ OneDrive是Office 365 订阅赠送，日常来用作资料同步 ，Apple 全家
 ​	iTerm2 +oh-my-zsh ，作为运维，命令行是经常打交道的地方，一个好看好用功能强大的终端是以一个很好的工具，Mac上最好用的终端工具</p> <p>快捷工具：AIfred3
 ​	日常搜索文件，搜索软件速度更快</p>]]></content>
         <published>2020-03-23T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Kubernetes集群安装]]></title>
+        <id>https://nevea.top/blog/Kubernetes%20%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85</id>
+        <link href="https://nevea.top/blog/Kubernetes%20%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85"/>
+        <updated>2020-03-24T13:35:10.982Z</updated>
+        <summary type="html"><![CDATA[Master 组件提供的集群控制，Master 组件对集群做出全局性决策(例如：调度)等，负责维护集群的目标状态。
+]]></summary>
+        <content type="html"><![CDATA[<h3 id="master包含组件">Master包含组件</h3> <p>Master 组件提供的集群控制，Master 组件对集群做出全局性决策(例如：调度)等，负责维护集群的目标状态。</p> <table><thead><tr><th>组件</th> <th>说明</th></tr></thead> <tbody><tr><td>etcd</td> <td>用于 Kubernetes 的后端数据存储，所有集群数据都存储在此处</td></tr> <tr><td>kube-apiserver</td> <td>对外暴露了 Kubernetes API，它是的 Kubernetes 前端控制层，只有 API Server 会与 etcd 通信，其它模块都必须通过 API Server 访问集群状态。</td></tr> <tr><td>kube-controller-manager</td> <td>处理集群中常规任务，它是单独的进程，内部包含多个控制器，包含节点控制器,副本控制器,端点控制器,服务帐户和令牌控制器</td></tr> <tr><td>kube-scheduler</td> <td>监视新创建的 Pod 为新创建的 POD 分配合适的 node 节点</td></tr> <tr><td>addons（插件）</td> <td>插件是实现集群功能的 Pod 和 Service，一般被创建于 kube-system 命名空间。例如：coreDNS</td></tr></tbody></table> <h3 id="node--包含组件">Node  包含组件</h3> <p>Node 节点实际负责实施，也就是运行 POD 的节点，上面运行的组件有</p> <table><thead><tr><th>组件</th> <th>说明</th></tr></thead> <tbody><tr><td>kubelet</td> <td>它监测已经分配给自己的 Pod，为 POD 准备卷，下载 POD 所需的 Secret，下载镜像并运行，进行生命周期探测，上报 POD 和节点状态</td></tr> <tr><td>kube-proxy</td> <td>通过维护主机上的网络规则并执行连接转发，将 Kubernetes 提供的网络服务代理到每个节点上，实现了Kubernetes服务抽象</td></tr> <tr><td>docker</td> <td>用于运行容器</td></tr></tbody></table> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">#!/bin/bash
+#执行该脚本需要添加k8s版本号,作为参数 将脚本第79行（已高亮）的 ${1} 替换成您需要的版本号，例如 1.17.0
+# 在 master 节点和 worker 节点都要执行
+
+# 安装 docker
+# 参考文档如下
+# https://docs.docker.com/install/linux/docker-ce/centos/ 
+# https://docs.docker.com/install/linux/linux-postinstall/
+
+# 卸载旧版本
+yum remove -y docker \
+docker-client \
+docker-client-latest \
+docker-common \
+docker-latest \
+docker-latest-logrotate \
+docker-logrotate \
+docker-selinux \
+docker-engine-selinux \
+docker-engine
+
+# 设置 yum repository
+yum install -y yum-utils \
+device-mapper-persistent-data \
+lvm2
+yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+
+# 安装并启动 docker
+yum install -y docker-ce-18.09.7 docker-ce-cli-18.09.7 containerd.io
+systemctl enable docker
+systemctl start docker
+
+# 安装 nfs-utils
+# 必须先安装 nfs-utils 才能挂载 nfs 网络存储
+yum install -y nfs-utils
+yum install -y wget
+
+# 关闭 防火墙
+systemctl stop firewalld
+systemctl disable firewalld
+
+# 关闭 SeLinux
+setenforce 0
+sed -i &quot;s/SELINUX=enforcing/SELINUX=disabled/g&quot; /etc/selinux/config
+
+# 关闭 swap
+swapoff -a
+yes | cp /etc/fstab /etc/fstab_bak
+cat /etc/fstab_bak |grep -v swap &gt; /etc/fstab
+
+# 修改 /etc/sysctl.conf
+# 如果有配置，则修改
+sed -i &quot;s#^net.ipv4.ip_forward.*#net.ipv4.ip_forward=1#g&quot;  /etc/sysctl.conf
+sed -i &quot;s#^net.bridge.bridge-nf-call-ip6tables.*#net.bridge.bridge-nf-call-ip6tables=1#g&quot;  /etc/sysctl.conf
+sed -i &quot;s#^net.bridge.bridge-nf-call-iptables.*#net.bridge.bridge-nf-call-iptables=1#g&quot;  /etc/sysctl.conf
+# 可能没有，追加
+echo &quot;net.ipv4.ip_forward = 1&quot; &gt;&gt; /etc/sysctl.conf
+echo &quot;net.bridge.bridge-nf-call-ip6tables = 1&quot; &gt;&gt; /etc/sysctl.conf
+echo &quot;net.bridge.bridge-nf-call-iptables = 1&quot; &gt;&gt; /etc/sysctl.conf
+# 执行命令以应用
+sysctl -p
+
+# 配置K8S的yum源
+cat &lt;&lt;EOF &gt; /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=0
+repo_gpgcheck=0
+gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
+       http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+
+# 卸载旧版本
+yum remove -y kubelet kubeadm kubectl
+
+# 安装kubelet、kubeadm、kubectl
+yum install -y kubelet-${1} kubeadm-${1} kubectl-${1}
+
+# 修改docker Cgroup Driver为systemd
+# # 将/usr/lib/systemd/system/docker.service文件中的这一行 ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+# # 修改为 ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock --exec-opt native.cgroupdriver=systemd
+# 如果不修改，在添加 worker 节点时可能会碰到如下错误
+# [WARNING IsDockerSystemdCheck]: detected &quot;cgroupfs&quot; as the Docker cgroup driver. The recommended driver is &quot;systemd&quot;. 
+# Please follow the guide at https://kubernetes.io/docs/setup/cri/
+sed -i &quot;s#^ExecStart=/usr/bin/dockerd.*#ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock --exec-opt native.cgroupdriver=systemd#g&quot; /usr/lib/systemd/system/docker.service
+
+# 设置 docker 镜像，提高 docker 镜像下载速度和稳定性
+# 如果您访问 https://hub.docker.io 速度非常稳定，亦可以跳过这个步骤
+curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io
+
+# 重启 docker，并启动 kubelet
+systemctl daemon-reload
+systemctl restart docker
+systemctl enable kubelet &amp;&amp; systemctl start kubelet
+
+docker version</code></pre></div><p><a name="D3lWQ"></a></p> <h3 id="初始化-master-节点">初始化 Master 节点</h3> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text"># 只在 master 节点执行
+# 替换 x.x.x.x 为 master 节点的内网IP
+# export 命令只在当前 shell 会话中有效，开启新的 shell 窗口后，如果要继续安装过程，请重新执行此处的 export 命令
+export MASTER_IP=x.x.x.x
+# 替换 apiserver.demo 为 您想要的 dnsName
+export APISERVER_NAME=apiserver.demo
+# Kubernetes 容器组所在的网段，该网段安装完成后，由 kubernetes 创建，事先并不存在于您的物理网络中
+export POD_SUBNET=10.100.0.1/16
+echo &quot;${MASTER_IP}    ${APISERVER_NAME}&quot; &gt;&gt; /etc/hosts</code></pre></div><h3 id="请将脚本第21行（已高亮）的-1-替换成您需要的版本号，例如-1-17-0">请将脚本第21行（已高亮）的 ${1} 替换成您需要的版本号，例如 1.17.0</h3> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">#!/bin/bash
+
+# 只在 master 节点执行
+
+# 脚本出错时终止执行
+set -e
+
+if [ ${#POD_SUBNET} -eq 0 ] || [ ${#APISERVER_NAME} -eq 0 ]; then
+  echo -e &quot;\033[31;1m请确保您已经设置了环境变量 POD_SUBNET 和 APISERVER_NAME \033[0m&quot;
+  echo 当前POD_SUBNET=$POD_SUBNET
+  echo 当前APISERVER_NAME=$APISERVER_NAME
+  exit 1
+fi
+
+
+# 查看完整配置选项 https://godoc.org/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta2
+rm -f ./kubeadm-config.yaml
+cat &lt;&lt;EOF &gt; ./kubeadm-config.yaml
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+kubernetesVersion: v${1}
+imageRepository: registry.cn-hangzhou.aliyuncs.com/google_containers
+controlPlaneEndpoint: &quot;${APISERVER_NAME}:6443&quot;
+networking:
+  serviceSubnet: &quot;10.96.0.0/16&quot;
+  podSubnet: &quot;${POD_SUBNET}&quot;
+  dnsDomain: &quot;cluster.local&quot;
+EOF
+
+# kubeadm init
+# 根据您服务器网速的情况，您需要等候 3 - 10 分钟
+kubeadm init --config=kubeadm-config.yaml --upload-certs
+
+# 配置 kubectl
+rm -rf /root/.kube/
+mkdir /root/.kube/
+cp -i /etc/kubernetes/admin.conf /root/.kube/config
+
+# 安装 calico 网络插件
+# 参考文档 https://docs.projectcalico.org/v3.10/getting-started/kubernetes/
+echo &quot;安装calico-3.10.2&quot;
+rm -f calico-3.10.2.yaml
+wget https://kuboard.cn/install-script/calico/calico-3.10.2.yaml
+sed -i &quot;s#192\.168\.0\.0/16#${POD_SUBNET}#&quot; calico-3.10.2.yaml
+kubectl apply -f calico-3.10.2.yaml</code></pre></div><p><a name="AnGTK"></a></p> <h4 id="检查master-初始化结果">检查Master 初始化结果</h4> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text"># 只在 master 节点执行
+
+# 执行如下命令，等待 3-10 分钟，直到所有的容器组处于 Running 状态
+watch kubectl get pod -n kube-system -o wide
+
+# 查看 master 节点初始化结果
+kubectl get nodes -o wide</code></pre></div><p><a name="9imZK"></a></p> <h3 id="初始化--work-节点">初始化  work 节点</h3> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text"># 只在 master 节点执行
+kubeadm token create --print-join-command</code></pre></div><div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text"># 只在 worker 节点执行
+# 替换 x.x.x.x 为 master 节点的内网 IP
+export MASTER_IP=x.x.x.x
+# 替换 apiserver.demo 为初始化 master 节点时所使用的 APISERVER_NAME
+export APISERVER_NAME=apiserver.demo
+echo &quot;${MASTER_IP}    ${APISERVER_NAME}&quot; &gt;&gt; /etc/hosts
+
+# 替换为 master 节点上 kubeadm token create 命令的输出
+kubeadm join apiserver.demo:6443 --token mpfjma.4vjjg8flqihor4vt     --discovery-token-ca-cert-hash sha256:6f7a8e40a810323672de5eee6f4d19aa2dbdb38411845a1bf5dd63485c43d303</code></pre></div><p><a name="lmnJc"></a></p> <h4 id="检查初始化结果">检查初始化结果</h4> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text"># 只在 master 节点执行
+kubectl get nodes -o wide</code></pre></div><p>输出结果如下所示</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">[root@demo-master-a-1 ~]# kubectl get nodes
+NAME     STATUS   ROLES    AGE     VERSION
+demo-master-a-1   Ready    master   5m3s    v1.17.x
+demo-worker-a-1   Ready    &lt;none&gt;   2m26s   v1.17.x
+demo-worker-a-2   Ready    &lt;none&gt;   3m56s   v1.17.x</code></pre></div>]]></content>
+        <published>2019-07-20T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Kafka & ZooKeeper 集群搭建]]></title>
+        <id>https://nevea.top/blog/Kafka%20&amp;%20ZooKeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA</id>
+        <link href="https://nevea.top/blog/Kafka%20&%20ZooKeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA"/>
+        <updated>2020-03-24T13:28:27.391Z</updated>
+        <summary type="html"><![CDATA[三台机器 CentOS 7.4
+10.0.19.218
+10.0.19.216
+10.0.19.142
+]]></summary>
+        <content type="html"><![CDATA[<h4 id="环境准备">环境准备</h4> <p>三台机器 CentOS 7.4
+10.0.19.218
+10.0.19.216
+10.0.19.142</p> <p>kafka 集群搭建准备:</p> <ul><li>Java环境</li> <li>ZooKeeper 集群搭建</li></ul> <h4 id="zookeeper-集群搭建">Zookeeper 集群搭建</h4> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">server.1=10.0.19.218:2888:3888
+server.2=10.0.19.216:2888:3888
+server.3=10.0.19.142:2888:3888</code></pre></div><div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">echo &quot;1&quot; &gt;/tmp/zookeeper/myid ##生成ID，这里需要注意， myid对应的zoo.cfg的server.ID，比如第二台zookeeper主机对应的myid应该是2</code></pre></div><p>启动ZooKeeper</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">cd /usr/local/zookeeper-3.4.9/bin
+./zkServer.sh start</code></pre></div><p>停止Zookeeper</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">cd /usr/local/zookeeper-3.4.9/bin
+./zkServer.sh stop</code></pre></div><p>附美味测试环境Zookeeper 集群配置</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">[root@rdpops_server-146-199 conf]# cat zoo.cfg
+# The number of milliseconds of each tick
+tickTime=2000
+# The number of ticks that the initial
+# synchronization phase can take
+initLimit=10
+# The number of ticks that can pass between
+# sending a request and getting an acknowledgement
+syncLimit=5
+# the directory where the snapshot is stored.
+# do not use /tmp for storage, /tmp here is just
+# example sakes.
+dataDir=/var/zookeeper/
+dataLogDir=/var/zookeeper/datalog/
+# the port at which the clients will connect
+clientPort=2181
+# the maximum number of client connections.
+# increase this if you need to handle more clients
+maxClientCnxns=0
+#
+# Be sure to read the maintenance section of the
+# administrator guide before turning on autopurge.
+#
+# http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance
+#
+# The number of snapshots to retain in dataDir
+autopurge.snapRetainCount=30
+# Purge task interval in hours
+# Set to &quot;0&quot; to disable auto purge feature
+#autopurge.purgeInterval=1
+server.1=10.0.146.126:2888:3888
+server.2=10.0.146.150:2888:3888
+server.3=10.0.146.199:2888:3888</code></pre></div><hr> <h4 id="kafka--集群搭建">Kafka  集群搭建</h4> <p>下载安装包</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">wget http://apache.claz.org/kafka/2.2.0/kafka_2.11-2.2.0.tgz
+tar -xzf kafka_2.11-2.2.0.tgz
+cd kafka_2.11-2.2.0</code></pre></div><h4 id="启动服务">启动服务</h4> <h5 id="kafka-依赖-zookeeper">kafka 依赖 zookeeper</h5> <h5 id="启动-kafka-server">启动 Kafka server:</h5> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">./kafka-server-start.sh -daemon ../config/server.properties</code></pre></div><h4 id="kafka-web管理工具-kafka-manager">Kafka Web管理工具-Kafka-manager</h4> <h4 id="消息生产-测试">消息生产 测试</h4> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">./kafka-console-producer.sh --broker-list localhost:9092 --topic demo
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --from-beginning --topic demo</code></pre></div>]]></content>
+        <published>2019-07-11T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Redis 持久化]]></title>
+        <id>https://nevea.top/blog/Redis%20%E6%8C%81%E4%B9%85%E5%8C%96</id>
+        <link href="https://nevea.top/blog/Redis%20%E6%8C%81%E4%B9%85%E5%8C%96"/>
+        <updated>2020-03-24T13:22:22.255Z</updated>
+        <summary type="html"><![CDATA[Redis的读写性能俱佳，但由于是内存数据库，如果没有提前备份，Redis数据是掉电即失的。
+Redis提供了两种方式进行持久化：
+]]></summary>
+        <content type="html"><![CDATA[<p>Redis的读写性能俱佳，但由于是内存数据库，如果没有提前备份，Redis数据是掉电即失的。
+Redis提供了两种方式进行持久化：</p> <ol><li>RDB持久化</li> <li>AOF持久化</li></ol> <h3 id="原理">原理</h3> <p>将Redis在内存中的数据定时<code>dump</code>到磁盘上，实际操作过程是<code>fork</code>一个子进程，先将数据写入临时文件，写入成功后，再替换之前的文件，用二进制压缩存储
+打印rdb文件</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">root@pa6:/var/lib/redis# od -c dump.rdb
+0000000   R   E   D   I   S   0   0   0   6 376  \0  \0 003   k   e   y
+0000020 301 177   # 377   ]   } 362 366 313 362   n 020
+0000034</code></pre></div><p><img src="https://blog-pic-1253367462.cos.ap-shanghai.myqcloud.com/1567665181186-fcf56c20-aed6-4cb4-b55b-edeff6d6c3a3.png" alt="image.png"></p> <h4 id="aof-持久化存储">AOF 持久化存储</h4> <p>AOF持久化：将Redis的操作日志以文件追加的方式写入文件，只记录写、删除操作，查询操作不会记录（类似于MySQL的Binlog日志）</p> <p><img src="https://blog-pic-1253367462.cos.ap-shanghai.myqcloud.com/1567665214953-264e7ec5-2993-431b-9e38-6ccfd3206f57.png" alt="image.png"></p> <p>因为BGSAVE命令可以在不阻塞服务器进程的情况下执行，所以Redis允许用户通过设置服务器配置的save选项，让服务器每隔一段时间自动执行一次BGSAVE命令
+用户可以通过save选项设置多个保存条件，但只要其中任意一个条件被满足，服务器就会执行BGSAVE命令 举个例子，如果我们向服务器提供以下配置
+vim redis.conf</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">save 900 1
+save 300 10
+save 60 10000</code></pre></div><p>那么只要满足以下三个条件中的任意一个，BGSAVE命令就会被执行 服务器在900秒之内，对数据库进行了至少1次修改
+服务器在300秒之内，对数据库进行了至少10次修改
+服务器在60秒之内，对数据库进行了至少10000次修改。</p> <h4 id="备份脚本">备份脚本</h4> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">#!/bin/bash
+# 避免造成雪崩
+set -e
+# bak 目录
+BACKUPDIR=/data/redis/backup
+#PASSWD='redis密码'
+#DATADIR=`/usr/local/bin/redis-cli -p 端口 -a &quot;$PASSWD&quot; config get dir|grep -Ev 'dir|grep'`
+# 获取redis-cli 二进制文件
+REDIS_CMD=$(which redis-cli)
+DATADIR=`$REDIS_CMD  config get dir|grep -Ev 'dir|grep'`
+DATE=`date +'%Y-%m-%d-%H-%M'`
+BACKUPDIR_DATE=$BACKUPDIR_$DATE
+
+if [ ! -d $BACKUPDIR ];then
+        mkdir -p $BACKUPDIR \
+        || echo &quot;can't make dir !!!&quot; \
+        &amp;&amp; exit 1
+fi
+#以日期分类
+mkdir -p $BACKUPDIR/$BACKUPDIR_DATE
+$REDIS_CMD  bgsave
+sleep 3
+cp -rf $DATADIR/* $BACKUPDIR/$BACKUPDIR_DATE</code></pre></div>]]></content>
+        <published>2019-07-11T00:00:00.000Z</published>
     </entry>
     <entry>
         <title type="html"><![CDATA[Prometheus+Grafana监控实践]]></title>

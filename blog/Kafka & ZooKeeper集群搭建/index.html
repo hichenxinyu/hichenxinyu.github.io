@@ -1,0 +1,60 @@
+<!DOCTYPE html><html data-saber-ssr><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta http-equiv="X-UA-Compatible" content="ie=edge" /><meta data-saber-head="ssr" name="generator" content="Saber v0.11.5"><meta data-saber-head="ssr" name="og:site_name" content="Nevea&#x27;s Blog"><meta data-saber-head="ssr" property="title" content="Kafka &amp; ZooKeeper 集群搭建 - Nevea&#x27;s Blog"><meta data-saber-head="ssr" property="description" content="&lt;p&gt;三台机器 CentOS 7.4
+10.0.19.218
+10.0.19.216
+10.0.19.142&lt;/p&gt;
+"><meta data-saber-head="ssr" property="og:description" content="&lt;p&gt;三台机器 CentOS 7.4
+10.0.19.218
+10.0.19.216
+10.0.19.142&lt;/p&gt;
+"><meta data-saber-head="ssr" property="twitter:description" content="&lt;p&gt;三台机器 CentOS 7.4
+10.0.19.218
+10.0.19.216
+10.0.19.142&lt;/p&gt;
+"><meta data-saber-head="ssr" property="og:title" content="Kafka &amp; ZooKeeper 集群搭建 - Nevea&#x27;s Blog"><meta data-saber-head="ssr" property="og:type" content="article"><meta data-saber-head="ssr" property="article:published_time" content="2019-07-11"><meta data-saber-head="ssr" property="twitter:title" content="Kafka &amp; ZooKeeper 集群搭建 - Nevea&#x27;s Blog"><meta data-saber-head="ssr" property="og:url" content="https://nevea.top/blog/Kafka &amp; ZooKeeper集群搭建"><meta data-saber-head="ssr" property="og:image" content="https://gbstatic.djyde.com/assets/Snapseed%203.jpg?x-oss-process=image/auto-orient,1/quality,q_80/bright,-10/resize,w_2560/contrast,-30/interlace,1"><meta data-saber-head="ssr" property="twitter:image" content="https://gbstatic.djyde.com/assets/Snapseed%203.jpg?x-oss-process=image/auto-orient,1/quality,q_80/bright,-10/resize,w_2560/contrast,-30/interlace,1"> <title>Kafka &amp; ZooKeeper 集群搭建 - Nevea&#x27;s Blog</title> <link data-saber-head="ssr" rel="stylesheet" href="//ppp.djyde.com/css?family=Noto+Serif+SC"><link rel="stylesheet" href="/_saber/css/styles.4dd661b1.chunk.css">  </head><body><div id="_saber" data-server-rendered="true"><div><div data-v-9dd6d5de><nav class="bg-black flex text-white item-center font-serif" data-v-069cc566 data-v-9dd6d5de><div class="text font-bold mr-4 p-1 pl-4" data-v-069cc566><a href="/" class="router-link-active" data-v-069cc566>Nevea's Blog</a></div> <div class="flex item-center" data-v-069cc566><a href="/" class="mr-4 hover:bg-gray-300 hover:text-gray-900 p-1 router-link-active" data-v-069cc566>写作</a></div><div class="flex item-center" data-v-069cc566><a href="/readings" class="mr-4 hover:bg-gray-300 hover:text-gray-900 p-1" data-v-069cc566>我读</a></div><div class="flex item-center" data-v-069cc566><a href="/about" class="mr-4 hover:bg-gray-300 hover:text-gray-900 p-1" data-v-069cc566>关于我</a></div></nav> <!----> <div class="post container mx-auto lg:pl-48 lg:pr-48" data-v-9dd6d5de><h1 class="pl-4 pr-4" data-v-9dd6d5de>Kafka &amp; ZooKeeper 集群搭建</h1> <div class="mb-2 text-sm text-gray-500 pl-4 pr-4" data-v-9dd6d5de>July 11, 2019</div> <div class="content" data-v-9dd6d5de><h4 id="环境准备" data-v-9dd6d5de>环境准备</h4> <p data-v-9dd6d5de>三台机器 CentOS 7.4
+10.0.19.218
+10.0.19.216
+10.0.19.142</p> <p data-v-9dd6d5de>kafka 集群搭建准备:</p> <ul data-v-9dd6d5de><li data-v-9dd6d5de>Java环境</li> <li data-v-9dd6d5de>ZooKeeper 集群搭建</li></ul> <h4 id="zookeeper-集群搭建" data-v-9dd6d5de>Zookeeper 集群搭建</h4> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>server.1=10.0.19.218:2888:3888
+server.2=10.0.19.216:2888:3888
+server.3=10.0.19.142:2888:3888</code></pre></div><div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>echo &quot;1&quot; &gt;/tmp/zookeeper/myid ##生成ID，这里需要注意， myid对应的zoo.cfg的server.ID，比如第二台zookeeper主机对应的myid应该是2</code></pre></div><p data-v-9dd6d5de>启动ZooKeeper</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>cd /usr/local/zookeeper-3.4.9/bin
+./zkServer.sh start</code></pre></div><p data-v-9dd6d5de>停止Zookeeper</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>cd /usr/local/zookeeper-3.4.9/bin
+./zkServer.sh stop</code></pre></div><p data-v-9dd6d5de>附美味测试环境Zookeeper 集群配置</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>[root@rdpops_server-146-199 conf]# cat zoo.cfg
+# The number of milliseconds of each tick
+tickTime=2000
+# The number of ticks that the initial
+# synchronization phase can take
+initLimit=10
+# The number of ticks that can pass between
+# sending a request and getting an acknowledgement
+syncLimit=5
+# the directory where the snapshot is stored.
+# do not use /tmp for storage, /tmp here is just
+# example sakes.
+dataDir=/var/zookeeper/
+dataLogDir=/var/zookeeper/datalog/
+# the port at which the clients will connect
+clientPort=2181
+# the maximum number of client connections.
+# increase this if you need to handle more clients
+maxClientCnxns=0
+#
+# Be sure to read the maintenance section of the
+# administrator guide before turning on autopurge.
+#
+# http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance
+#
+# The number of snapshots to retain in dataDir
+autopurge.snapRetainCount=30
+# Purge task interval in hours
+# Set to &quot;0&quot; to disable auto purge feature
+#autopurge.purgeInterval=1
+server.1=10.0.146.126:2888:3888
+server.2=10.0.146.150:2888:3888
+server.3=10.0.146.199:2888:3888</code></pre></div><hr data-v-9dd6d5de> <h4 id="kafka--集群搭建" data-v-9dd6d5de>Kafka  集群搭建</h4> <p data-v-9dd6d5de>下载安装包</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>wget http://apache.claz.org/kafka/2.2.0/kafka_2.11-2.2.0.tgz
+tar -xzf kafka_2.11-2.2.0.tgz
+cd kafka_2.11-2.2.0</code></pre></div><h4 id="启动服务" data-v-9dd6d5de>启动服务</h4> <h5 id="kafka-依赖-zookeeper" data-v-9dd6d5de>kafka 依赖 zookeeper</h5> <h5 id="启动-kafka-server" data-v-9dd6d5de>启动 Kafka server:</h5> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>./kafka-server-start.sh -daemon ../config/server.properties</code></pre></div><h4 id="kafka-web管理工具-kafka-manager" data-v-9dd6d5de>Kafka Web管理工具-Kafka-manager</h4> <h4 id="消息生产-测试" data-v-9dd6d5de>消息生产 测试</h4> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>./kafka-console-producer.sh --broker-list localhost:9092 --topic demo
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --from-beginning --topic demo</code></pre></div></div></div> <div class="post text-center text-sm" data-v-9dd6d5de><hr class="mt-12 mb-12" data-v-9dd6d5de> <p data-v-9dd6d5de>讨论请发邮件到 hichenxinyu@gmail.com</p> <p data-v-9dd6d5de>未经授权，禁止转载</p> <p data-v-9dd6d5de>通过赞赏码赞助此文</p> <br data-v-9dd6d5de> <p data-v-9dd6d5de><img src="https://blog-pic-1253367462.cos.ap-shanghai.myqcloud.com/20200323135043.png" class="w-auto sm:w-64 mx-auto" data-v-9dd6d5de></p></div></div> <div class="font-serif text-sm text-center p-12 sm:p-32 text-gray-500 font-bold"><div>
+      2017-2020
+      <a href="/" class="router-link-active">Nevea's Blog</a></div> <div class="mt-2">
+      可通过
+      <a href="/rss.xml" class="border-b-4">RSS</a>  订阅本博客
+    </div></div></div></div><script src="/_saber/js/styles.4dd661b1.js" defer></script><script src="/_saber/js/page--_posts-Kafka---ZooKeeper-----md.1924b837.js" defer></script><script src="/_saber/js/client.307507f4.js" defer></script></body></html>
