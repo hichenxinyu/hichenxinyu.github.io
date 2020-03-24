@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://nevea.top/</id>
     <title/>
-    <updated>2020-03-24T13:51:29.467Z</updated>
+    <updated>2020-03-24T14:03:30.694Z</updated>
     <generator>Saber</generator>
     <author>
         <name>Nevea</name>
@@ -1045,5 +1045,62 @@ CentOS 7
 wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</code></pre></div> <h4 id="第三步：运行yum-makecache生成缓存">第三步：运行yum makecache生成缓存</h4> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">yum clean all
 yum makecache</code></pre></div>]]></content>
         <published>2018-02-02T03:12:48.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Zabbix4.4安装]]></title>
+        <id>https://nevea.top/blog/Zabbix4.4%20%E5%AE%89%E8%A3%85%E6%96%87%E6%A1%A3</id>
+        <link href="https://nevea.top/blog/Zabbix4.4%20%E5%AE%89%E8%A3%85%E6%96%87%E6%A1%A3"/>
+        <updated>2020-03-24T14:02:38.450Z</updated>
+        <summary type="html"><![CDATA[Zabbix 是一个企业级的分布式开源监控方案。
+zabbix server ，zabbix agent&gt; 与可选组件zabbix proxy。
+]]></summary>
+        <content type="html"><![CDATA[<h3 id="zabbix介绍">Zabbix介绍</h3> <blockquote><p>Zabbix 是一个企业级的分布式开源监控方案。
+zabbix server ，zabbix agent&gt; 与可选组件zabbix proxy。</p></blockquote> <p><strong>API 功能 ：</strong> 应用api功能，可以方便的和其他系统结合，包括手机客户端的使用。</p> <p>更多功能请查看<a rel="noopener noreferrer" target="_blank" href="http://www.zabbix.com/documentation.php">http://www.zabbix.com/documentation.php</a></p> <h3 id="安装zabbix环境及准备工作">安装zabbix环境及准备工作</h3> <p>zabbix 依赖 LAMP （LNMP 也可以）</p> <h5 id="安装zabbix">安装zabbix</h5> <ul><li>（单机）--&gt; LAMP</li> <li>（架构）--&gt; LAP + MYSQL（生产环境，建议数据库与 Zabbix-Server 分开部署）</li> <li>服务端端口：10051</li> <li>客户端端口：10050</li></ul> <hr> <p>1，安装Zabbix需要的硬件环境及软件版本，我这里在官网上查了一下，你可以根据自己的环境和要求来选择：<br>下表是几个硬件配置的示例:</p> <table><thead><tr><th>名称</th> <th>平台</th> <th>**CPU/**内存</th> <th>数据库</th> <th>监控主机数量</th></tr></thead> <tbody><tr><td><strong>小型</strong></td> <td>CentOS</td> <td>虚拟应用</td> <td>MySQL   InnoDB</td> <td>100</td></tr> <tr><td><strong>中型</strong></td> <td>CentOS</td> <td>2 CPU   cores/2GB</td> <td>MySQL   InnoDB</td> <td>500</td></tr> <tr><td><strong>大型</strong></td> <td>RedHat   Enterprise Linux</td> <td>4 CPU   cores/8GB</td> <td>RAID10   MySQL InnoDB or PostgreSQL</td> <td>&gt;1000</td></tr> <tr><td><strong>巨大型</strong></td> <td>RedHat   Enterprise Linux</td> <td>8 CPU   cores/16GB</td> <td>快速RAID10 MySQL InnoDB or PostgreSQL</td> <td>&gt;10000</td></tr></tbody></table> <p>具体的配置极其依赖于Active Item数量和轮询频率。如需要进行大规模部署，强烈建议将数据库进行独立部署。</p> <hr> <p>2，接下来我说一下我实验环境</p> <table><thead><tr><th>操作系统</th> <th>主机IP</th> <th>主机名称</th> <th>安装软件</th> <th>安装zabbix版本</th> <th>MySQL版本</th></tr></thead> <tbody><tr><td>Centos7.3</td> <td>192.68.0.20</td> <td>zabbix</td> <td>Zabbix-server</td> <td>Zabbix 3.4.10</td> <td>MySQL5.7.22</td></tr> <tr><td>centos6.5</td> <td>192.168.0.157</td> <td>Test02</td> <td>zabbix-agent</td> <td>zabbix-agent-3.4.10</td> <td>/</td></tr></tbody></table> <h3 id="安装zabbix-2">安装zabbix</h3> <p>3.1）在监控主机上需要预先安装yum 源，下面正式开始安装；</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">rpm -Uvh https://repo.zabbix.com/zabbix/4.4/rhel/6/x86_64/zabbix-release-4.4-1.el6.noarch.rpm
+yum clean all</code></pre></div><p>3.2）安装Zabbix-server包和zabbix-agent包</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">yum -y install zabbix-server-mysql zabbix-web-mysql zabbix-agent</code></pre></div><p>3.3）下载安装mysql源</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">rpm -ivh https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm</code></pre></div><p>3.4)查看当前可用的Mysql安装源</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">[root@zabbix ~]# yum repolist enabled | grep &quot;mysql.*-community.*&quot;
+mysql-connectors-community/x86_64 MySQL Connectors Community                  51
+mysql-tools-community/x86_64      MySQL Tools Community                       63
+mysql57-community/x86_64          MySQL 5.7 Community Server                 267</code></pre></div><h3 id="mysql-安装amp配置">MySQL 安装&amp;配置</h3> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">yum -y install mysql-community-server</code></pre></div><p>3.6）启动mysql服务并设置开机启动</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">[root@zabbix ~]#systemctl start mysqld
+[root@zabbix ~]#systemctl enable mysqld</code></pre></div><p>3.7)进入MySQL并修改密码</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">[root@zabbix ~]# cat /var/log/mysqld.log | grep password
+或者：/usr/bin/mysqladmin -u root password 'new-password'
+
+[root@zabbix ~]# mysql -uroot -pnew-password
+mysql&gt; SET PASSWORD = PASSWORD ('Pass123!');
+如果想用简单的密码必须先改一个变量；
+mysql&gt; set global validate_password_policy=0;
+mysql&gt; SET PASSWORD = PASSWORD ('12345678');
+不然你改密码会不通过，会有密码复杂度要求。</code></pre></div><p>3.8）创建数据库和zabbix用户并授权</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">mysql&gt; create database zabbix character set utf8 collate utf8_bin;
+Query OK, 1 row affected (10.03 sec)
+mysql&gt; grant all privileges on zabbix.* to zabbix@localhost identified by 'Pass123!';
+Query OK, 0 rows affected, 1 warning (0.00 sec)</code></pre></div><p>3.9)导入初始架构（Schema）和数据</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">[root@zabbix ~]#cd zabbix-server-mysql-4.4.1/
+[root@zabbix  zabbix-server-mysql-3.4.10 ~]#zcat create.sql.gz | mysql -uzabbix -pPass123! -D zabbix
+mysql: [Warning] Using a password on the command line interface can be insecure.</code></pre></div><p>3.10)然后进入mysql查看这些内容是否导入进去</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">mysql&gt; show tables from zabbix;</code></pre></div><p><img src="https://blog-pic-1253367462.cos.ap-shanghai.myqcloud.com/1574069473892-5a56476b-3d7f-46f5-b559-02bb58924e09.png" alt="image.png"></p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">mysql&gt; select count(*) tables,table_schema from information_schema.tables where table_schema =&quot;zabbix&quot;;</code></pre></div><hr> <p>4.修改配置文件，给服务授权、启动Zabbix Server服务<br>4.1）修改配置文件</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">备注：记得先备份 cp /etc/zabbix/zabbix_server.conf  /etc/zabbix/zabbix_server.conf.bak 
+[root@zabbix ~]#vim  /etc/zabbix/zabbix_server.conf
+DBHost=localhost
+DBName=zabbix
+DBUser=zabbix
+DBPassword=Pass123!</code></pre></div><p>4.2）给服务授权</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">[root@zabbix ~]#chown -R zabbix:zabbix /etc/zabbix/
+[root@zabbix ~]#chmod -R 755 /etc/zabbix/</code></pre></div><h5 id="启动zabbix-server服务">启动Zabbix Server服务</h5> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">[root@zabbix ~]#systemctl start  zabbix-server
+[root@zabbix ~]#systemctl enable zabbix-server</code></pre></div><p>备注：这里会有一个坑，就是在启动zabbix服务会失败，Job for zabbix-server.service failed. See 'systemctl status zabbix-server.service' and 'journalctl -xn' for details.查了一下原因是gnutls-3.3的高版本问题，解决办法是;1,先卸载这个高版本的gnutls-3.3,命令：rpm -e gnutls-3.3.24-1.el7.x86_64 --nodeps2，然后去网上下载一个gnutls-3.1的版本，然后使用命令rpm -Uvh --force gnutls-3.1.18-8.el7.x86_64.rpm</p> <hr> <p><a name="13601554"></a></p> <h5 id="编辑zabbix前端的php配置">编辑Zabbix前端的PHP配置</h5> <ul><li>Zabbix前端的Apache配置文件位于 /etc/httpd/conf.d/zabbix.conf 。一些PHP设置已经完成了配置。</li></ul> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">#CentOS6 中获取zabbix apache 配置路径命令
+rpm -ql zabbix-web | grep example.conf</code></pre></div><div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">[root@zabbix ~]# vim /etc/httpd/conf.d/zabbix.conf
+找到&lt;IfModule mod_php5.c&gt;标签下面
+添加一条
+php_value date.timezone Asia/Shanghai</code></pre></div><ul><li>启动apache服务，并设置开机自启</li></ul> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">[root@zabbix ~]#systemctl start httpd
+[root@zabbix ~]#systemctl enable  httpd</code></pre></div><hr> <p><a name="2bbf3759"></a></p> <h4 id="zabbix-web-页面配置">Zabbix Web 页面配置</h4> <p>1，访问ip：<a rel="noopener noreferrer" target="_blank" href="http://192.168.0.20/zabbix/index.php">http://IP/zabbix/index.php</a><br></p> <p>中间省略一部分-----------------------------直接到登录界面了。<br></p> <p><img src="https://blog-pic-1253367462.cos.ap-shanghai.myqcloud.com/image-20200324220001544.png" alt="">默认的用户名是：Admin 密码：zabbix<br></p> <h4 id="zabbix-agent">Zabbix Agent</h4> <ul><li>添加一台Linux客户端机器（ip:192.168.0.157）</li></ul> <p>访问zabbix官网：<a rel="noopener noreferrer" target="_blank" href="https://www.zabbix.com/download?zabbix=3.4&amp;os_distribution=centos&amp;os_version=6&amp;db=MySQL">https://www.zabbix.com/download?zabbix=3.4&amp;os_distribution=centos&amp;os_version=6&amp;db=MySQL</a></p> <ul><li>添加Yum源:</li></ul> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">#Centos6
+rpm -ivh  http://repo.zabbix.com/zabbix/3.4/rhel/6/x86_64/zabbix-release-3.4-1.el6.noarch.rpm
+#Centos7 
+rpm -ivh http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.1-1.el7.x86_64.rpm</code></pre></div><ul><li>安装客户端agent软件</li></ul> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">yum -y install zabbix-agent</code></pre></div><ul><li>修改agent配置文件</li></ul> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">grep -v '^$' /etc/zabbix/zabbix_agentd.conf |grep -v '^#'
+
+PidFile=/var/run/zabbix/zabbix_agentd.pid
+LogFile=/var/log/zabbix/zabbix_agentd.log
+LogFileSize=0
+Server=192.168.2.82
+ServerActive=192.168.2.82:10050
+Hostname=Test02
+Include=/etc/zabbix/zabbix_agentd.d/*.conf</code></pre></div><div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text"># 给配置文件授权
+chmod 775 /etc/zabbix/zabbix_agentd.conf
+# 启动agent服务并查看服务启动成功没有
+/etc/init.d/zabbix-agent start 
+netstat -lntup |grep zabbix_agent</code></pre></div><ul><li><p>Web 页面添加第一台主机</p> <ul><li><p>配置--主机---创建主机</p> <p><img src="https://blog-pic-1253367462.cos.ap-shanghai.myqcloud.com/image-20200324215908603.png" alt="image-20200324215908603"></p></li></ul></li></ul> <hr> <ul><li>添加主机详细信息</li></ul> <p><img src="https://blog-pic-1253367462.cos.ap-shanghai.myqcloud.com/image-20200324215844994.png" alt="image-20200324215844994"></p> <h5 id="添加主机模板信息">添加主机模板信息</h5> <p><img src="https://blog-pic-1253367462.cos.ap-shanghai.myqcloud.com/image-20200324215828877.png" alt="image-20200324215828877"></p> <p>这样一台客户端Linux基本添加完成，过几分钟就能开到Zabbix图标变绿证明添加成功了。</p>]]></content>
+        <published>2017-11-28T00:00:00.000Z</published>
     </entry>
 </feed>
