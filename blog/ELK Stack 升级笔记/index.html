@@ -1,0 +1,94 @@
+<!DOCTYPE html><html data-saber-ssr><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta http-equiv="X-UA-Compatible" content="ie=edge" /><meta data-saber-head="ssr" name="generator" content="Saber v0.11.5"><meta data-saber-head="ssr" name="og:site_name" content="Nevea&#x27;s Blog"><meta data-saber-head="ssr" property="title" content="ELK Stack 升级 - Nevea&#x27;s Blog"><meta data-saber-head="ssr" property="description" content="&lt;p&gt;比较常见的 ELK Stack 升级方式有一下 3 种&lt;/p&gt;
+"><meta data-saber-head="ssr" property="og:description" content="&lt;p&gt;比较常见的 ELK Stack 升级方式有一下 3 种&lt;/p&gt;
+"><meta data-saber-head="ssr" property="twitter:description" content="&lt;p&gt;比较常见的 ELK Stack 升级方式有一下 3 种&lt;/p&gt;
+"><meta data-saber-head="ssr" property="og:title" content="ELK Stack 升级 - Nevea&#x27;s Blog"><meta data-saber-head="ssr" property="og:type" content="article"><meta data-saber-head="ssr" property="article:published_time" content="2019-06-11"><meta data-saber-head="ssr" property="twitter:title" content="ELK Stack 升级 - Nevea&#x27;s Blog"><meta data-saber-head="ssr" property="og:url" content="https://nevea.top/blog/ELK Stack 升级笔记"><meta data-saber-head="ssr" property="og:image" content="https://gbstatic.djyde.com/assets/Snapseed%203.jpg?x-oss-process=image/auto-orient,1/quality,q_80/bright,-10/resize,w_2560/contrast,-30/interlace,1"><meta data-saber-head="ssr" property="twitter:image" content="https://gbstatic.djyde.com/assets/Snapseed%203.jpg?x-oss-process=image/auto-orient,1/quality,q_80/bright,-10/resize,w_2560/contrast,-30/interlace,1"> <title>ELK Stack 升级 - Nevea&#x27;s Blog</title> <link data-saber-head="ssr" rel="stylesheet" href="//ppp.djyde.com/css?family=Noto+Serif+SC"><link rel="stylesheet" href="/_saber/css/styles.1903deb0.chunk.css">  </head><body><div id="_saber" data-server-rendered="true"><div><div data-v-9dd6d5de><nav class="bg-black flex text-white item-center font-serif" data-v-069cc566 data-v-9dd6d5de><div class="text font-bold mr-4 p-1 pl-4" data-v-069cc566><a href="/" class="router-link-active" data-v-069cc566>Nevea's Blog</a></div> <div class="flex item-center" data-v-069cc566><a href="/" class="mr-4 hover:bg-gray-300 hover:text-gray-900 p-1 router-link-active" data-v-069cc566>写作</a></div><div class="flex item-center" data-v-069cc566><a href="/readings" class="mr-4 hover:bg-gray-300 hover:text-gray-900 p-1" data-v-069cc566>我读</a></div><div class="flex item-center" data-v-069cc566><a href="/about" class="mr-4 hover:bg-gray-300 hover:text-gray-900 p-1" data-v-069cc566>关于我</a></div></nav> <!----> <div class="post container mx-auto lg:pl-48 lg:pr-48" data-v-9dd6d5de><h1 class="pl-4 pr-4" data-v-9dd6d5de>ELK Stack 升级</h1> <div class="mb-2 text-sm text-gray-500 pl-4 pr-4" data-v-9dd6d5de>June 11, 2019</div> <div class="content" data-v-9dd6d5de><h3 id="升级方案" data-v-9dd6d5de>升级方案</h3> <p data-v-9dd6d5de>比较常见的 ELK Stack 升级方式有一下 3 种</p> <ul data-v-9dd6d5de><li data-v-9dd6d5de>数据迁移升级：新建一套高版本 ES 集群，然后把老的 ES数据导入</li> <li data-v-9dd6d5de>滚动升级，5.0.0-&gt;5.6,5.6-&gt;6.8.2</li> <li data-v-9dd6d5de>集群重启升级，5.0.0-&gt;6.8.2</li></ul> <table data-v-9dd6d5de><thead data-v-9dd6d5de><tr data-v-9dd6d5de><th data-v-9dd6d5de>升级方式</th> <th data-v-9dd6d5de>优点</th> <th data-v-9dd6d5de>缺点</th></tr></thead> <tbody data-v-9dd6d5de><tr data-v-9dd6d5de><td data-v-9dd6d5de>数据迁移&amp;升级</td> <td data-v-9dd6d5de>可以跨大版本升级</td> <td data-v-9dd6d5de>升级过程中，旧集群写操作停止</td></tr></tbody></table> <p data-v-9dd6d5de>ES 版本之间有差异比较大，可能会有一些坑
+迁移时间较长 |
+| 滚动升级 | 升级过程中服务不中断 | 对ELK 源版本与目标版本有要求
+|
+| 集群重启升级 | 可以跨大版本升级
+迁移时间比较短 | ES 服务中断
+|</p> <p data-v-9dd6d5de>公司生产环境与测试环境的 ELK 技术栈版本是 5.0.0
+考虑先滚动升级到 5.6.16  然后确认没问题后，再从 5.6.16 滚动升级到 6.8.2
+升级一般很快，但是最麻烦的不是升级，而是保证 ES 中的索引正常。
+一般不建议跨大版本升级，而是小版本迭代。</p> <hr data-v-9dd6d5de> <h3 id="数据备份" data-v-9dd6d5de>数据备份</h3> <p data-v-9dd6d5de>备份方式：Elasticsearch snapshot
+IDC 测试环境可以考虑快照备份到本地 HDFS，磁盘
+生产环境 ES 可以快照备份到阿里云 OSS</p> <blockquote data-v-9dd6d5de><p data-v-9dd6d5de>需要安装对应的 ES 插件</p></blockquote> <p data-v-9dd6d5de>本次测试环境 ELK 集群升级，不备份</p> <h4 id="备份你的-kibana-数据-（生产环境中非常重要）" data-v-9dd6d5de>备份你的 Kibana 数据 （生产环境中非常重要）</h4> <p data-v-9dd6d5de>你的 Kibana 中的 index pattern 等数据都是存在 .Kibana 这个索引中的 
+具体备份&amp;升级可以参考官方文档
+<a rel="noopener noreferrer" target="_blank" href="https://www.elastic.co/guide/en/kibana/6.3/migrating-6.0-index.html" data-v-9dd6d5de>https://www.elastic.co/guide/en/kibana/6.3/migrating-6.0-index.html</a> <a rel="noopener noreferrer" target="_blank" href="https://www.elastic.co/guide/en/elasticsearch/reference/5.6/modules-snapshots.html" data-v-9dd6d5de>https://www.elastic.co/guide/en/elasticsearch/reference/5.6/modules-snapshots.html</a></p> <hr data-v-9dd6d5de> <h3 id="升级前准备" data-v-9dd6d5de>升级前准备</h3> <p data-v-9dd6d5de>升级Elasticsearch前，先停止Logstash（hangout）服务，不再消费 kafka 中消息（Filebeat服务无需关闭）</p> <h4 id="禁用集群的分片自动分配功能" data-v-9dd6d5de>禁用集群的分片自动分配功能</h4> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>PUT _cluster/settings
+{
+  &quot;persistent&quot;: {
+    &quot;cluster.routing.allocation.enable&quot;: &quot;none&quot;
+  }
+}</code></pre></div><p data-v-9dd6d5de>启动集群分片自动分配</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>PUT _cluster/settings
+{
+  &quot;persistent&quot;: {
+    &quot;cluster.routing.allocation.enable&quot;: null
+  }
+}</code></pre></div><h3 id="下面这个待确认" data-v-9dd6d5de>下面这个待确认</h3> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>PUT _cluster/settings
+{
+  &quot;persistent&quot;: {
+    &quot;cluster.routing.allocation.enable&quot;: &quot;primaries&quot;
+  }
+}</code></pre></div><h4 id="同步数据（强制刷新，尽可能将缓存中的数据，写入磁盘）" data-v-9dd6d5de>同步数据（强制刷新，尽可能将缓存中的数据，写入磁盘）</h4> <p data-v-9dd6d5de>通过 synced flush，可以在索引上放置一个 sync ID，这样可以提高这些分片Recovery的时间</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>POST _flush/synced</code></pre></div><hr data-v-9dd6d5de> <h3 id="升级-es" data-v-9dd6d5de>升级 ES</h3> <p data-v-9dd6d5de>注意，这里使用rpm安装时，不使用-Uvh选项升级，而是先卸载旧的版本，再使用-ivh安装。另外，旧的配置文件不建议继续使用，而是将所配置内容替换到新版的配置文件中，除了个别配置外大部分仍然兼容。</p> <p data-v-9dd6d5de>Elasticsearch节点，依次执行</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>#停止当前ES 节点
+service elasticsearch stop
+#卸载所有 ES 插件  进入/usr/share/elasticsearch目录
+#elasticsearch-plugin list
+#elasticsearch-plugin remove
+# 卸载旧版本注意，卸载后，旧的配置文件会以rpmsave后缀保留
+rpm -e elasticsearch</code></pre></div><h5 id="安装新版本" data-v-9dd6d5de>安装新版本</h5> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>rpm -ivh /usr/local/elasticsearch-5.6.16.rpm</code></pre></div><h5 id="替换配置文件" data-v-9dd6d5de>替换配置文件</h5> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>cat /etc/elasticsearch/elasticsearch.yml.rpmsave &gt; /etc/elasticsearch/elasticsearch.yml
+cat /etc/elasticsearch/jvm.options.rpmsave &gt; /etc/elasticsearch/jvm.options</code></pre></div><h5 id="启动elasticsearch" data-v-9dd6d5de>启动Elasticsearch</h5> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>service elasticsearch start</code></pre></div><h5 id="开启集群的分片自动分配功能" data-v-9dd6d5de>开启集群的分片自动分配功能</h5> <p data-v-9dd6d5de>**</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>PUT _cluster/settings
+{
+  &quot;persistent&quot;: {
+    &quot;cluster.routing.allocation.enable&quot;: null
+  }
+}</code></pre></div><h5 id="等待集群恢复完毕" data-v-9dd6d5de>等待集群恢复完毕</h5> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>GET _cat/health</code></pre></div><p data-v-9dd6d5de>查看集群状态，Green 则恢复正常，升级成功</p> <hr data-v-9dd6d5de> <h3 id="验证方式" data-v-9dd6d5de>验证方式</h3> <p data-v-9dd6d5de>API 验证集群状态
+Cerebro 中观察分片分配情况</p> <h3 id="升级es过程中可能会遇到的问题：" data-v-9dd6d5de>升级ES过程中可能会遇到的问题：</h3> <h5 id="启动失败" data-v-9dd6d5de>启动失败</h5> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>[2019-09-16T20:04:45,116][ERROR][o.e.b.Bootstrap          ] [node-1] node validation exception
+[1] bootstrap checks failed
+[1]: system call filters failed to install; check the logs and fix your configuration or disable system call filters at your own risk</code></pre></div><h5 id="etcelasticsearchelasticsearch-yml--添加一行配置" data-v-9dd6d5de>/etc/elasticsearch/elasticsearch.yml  添加一行配置</h5> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>bootstrap.system_call_filter: false</code></pre></div><blockquote data-v-9dd6d5de><p data-v-9dd6d5de>官方文档见：
+<a rel="noopener noreferrer" target="_blank" href="https://www.elastic.co/guide/en/elasticsearch/reference/5.6/system-call-filter-check.html" data-v-9dd6d5de>https://www.elastic.co/guide/en/elasticsearch/reference/5.6/system-call-filter-check.html</a></p></blockquote> <hr data-v-9dd6d5de> <h3 id="升级失败回滚降级" data-v-9dd6d5de>升级失败回滚降级</h3> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>#停止当前ES 节点
+service elasticsearch stop
+#卸载所有 ES 插件  进入/usr/share/elasticsearch目录
+#elasticsearch-plugin list
+#elasticsearch-plugin remove
+# 卸载当前版本 ES
+rpm -e elasticsearch
+#重新安装 5.0.0 版本 ES
+rpm install /usr/local/elasticsearch-5.0.0.rpm
+#拷贝之前备份的配置文件
+#启动 ES
+sevice elasticsearch start</code></pre></div><hr data-v-9dd6d5de> <h3 id="升级kibana" data-v-9dd6d5de>升级Kibana</h3> <blockquote data-v-9dd6d5de><p data-v-9dd6d5de>重点在升级配置
+手动（ansible 脚本）将旧的配置文件中的配置，替换到新版配置文件中的对应条目中，注意兼容</p></blockquote> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>#停止Kibana
+service kibana stop
+#卸载旧版本
+rpm -e kibana
+#安装新版本 Kibana
+rpm -ivh /usr/local/kibana-5.6.16-x86_64.rpm</code></pre></div><h4 id="升级配置" data-v-9dd6d5de>升级配置</h4> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>#启动Kibana
+service kibana start</code></pre></div><h5 id="固化脚本（见-ansible-脚本）" data-v-9dd6d5de>固化脚本（见 Ansible 脚本）</h5> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>#停止Kibana
+service kibana stop
+#卸载旧版本
+rpm -e kibana
+#安装新版本
+rpm -ivh XX.rpm
+#升级配置
+
+#启动Kibana
+service kibana start</code></pre></div><p data-v-9dd6d5de>迁移 Kibana 数据 <br data-v-9dd6d5de>
+Kibana 数据存储在   Elasticsearch   .Kibana 索引中
+比如下图中  生产环境 ELK 日志系统  有 4 个 kibana 实例，在 ES 集群中对应这有 4 个 .kibana 索引 
+<img src="https://cdn.nlark.com/yuque/0/2019/png/330515/1576133404676-29e785e5-1c83-4b9f-a688-7f46e9563c59.png#align=left&amp;display=inline&amp;height=530&amp;name=image.png&amp;originHeight=1060&amp;originWidth=2470&amp;size=205099&amp;status=done&amp;style=none&amp;width=1235" alt="image.png" data-v-9dd6d5de></p> <hr data-v-9dd6d5de> <h3 id="升级-filebeat" data-v-9dd6d5de>升级 Filebeat</h3> <p data-v-9dd6d5de>本次不升级 Filebeat</p> <hr data-v-9dd6d5de> <h3 id="升级的一些坑" data-v-9dd6d5de>升级的一些坑</h3> <p data-v-9dd6d5de>Kibana 偶现无法访问
+升级 Kibana 的一个小坑，从 6.3 之后
+server.rewriteBasePath 由默认的 false 改为了 true 这个值我们没配置过
+所以在 Kibana 前面有反向代理的情况下 ，会有重写代理请求的可能
+也就是我们访问 Kibana 没响应，但是Kibana服务其实还在</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de># This setting cannot end in a slash.
+#server.basePath: &quot;&quot;
+server.basePath: &quot;/anchang&quot;
+# Specifies whether Kibana should rewrite requests that are prefixed with
+# `server.basePath` or require that they are rewritten by your reverse proxy.
+# This setting was effectively always `false` before Kibana 6.3 and will
+# default to `true` starting in Kibana 7.0.
+server.rewriteBasePath: false</code></pre></div></div></div> <div class="post text-center text-sm" data-v-9dd6d5de><hr class="mt-12 mb-12" data-v-9dd6d5de> <p data-v-9dd6d5de>讨论请发邮件到 hichenxinyu@gmail.com</p> <p data-v-9dd6d5de>未经授权，禁止转载</p> <p data-v-9dd6d5de>通过赞赏码赞助此文</p> <br data-v-9dd6d5de> <p data-v-9dd6d5de><img src="https://blog-pic-1253367462.cos.ap-shanghai.myqcloud.com/20200323135043.png" class="w-auto sm:w-64 mx-auto" data-v-9dd6d5de></p></div></div> <div class="font-serif text-sm text-center p-12 sm:p-32 text-gray-500 font-bold"><div>
+      2017-2020
+      <a href="/" class="router-link-active">Nevea's Blog</a></div> <div class="mt-2">
+      可通过
+      <a href="/rss.xml" class="border-b-4">RSS</a>  订阅本博客
+    </div></div></div></div><script src="/_saber/js/styles.1903deb0.js" defer></script><script src="/_saber/js/page--_posts-ELK-Stack------md.19454efa.js" defer></script><script src="/_saber/js/client.fdf1ea11.js" defer></script></body></html>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://nevea.top/</id>
     <title/>
-    <updated>2020-03-23T12:38:35.977Z</updated>
+    <updated>2020-03-24T09:36:38.744Z</updated>
     <generator>Saber</generator>
     <author>
         <name>Nevea</name>
@@ -152,6 +152,399 @@ remote_write:
 remote_read:
   - url: &quot;http://influxdb:8086/api/v1/prom/read?db=prometheus&quot;</code></pre></div>]]></content>
         <published>2019-07-01T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[ELK Stack 升级]]></title>
+        <id>https://nevea.top/blog/ELK%20Stack%20%E5%8D%87%E7%BA%A7%E7%AC%94%E8%AE%B0</id>
+        <link href="https://nevea.top/blog/ELK%20Stack%20%E5%8D%87%E7%BA%A7%E7%AC%94%E8%AE%B0"/>
+        <updated>2020-03-24T02:52:32.420Z</updated>
+        <summary type="html"><![CDATA[比较常见的 ELK Stack 升级方式有一下 3 种
+]]></summary>
+        <content type="html"><![CDATA[<h3 id="升级方案">升级方案</h3> <p>比较常见的 ELK Stack 升级方式有一下 3 种</p> <ul><li>数据迁移升级：新建一套高版本 ES 集群，然后把老的 ES数据导入</li> <li>滚动升级，5.0.0-&gt;5.6,5.6-&gt;6.8.2</li> <li>集群重启升级，5.0.0-&gt;6.8.2</li></ul> <table><thead><tr><th>升级方式</th> <th>优点</th> <th>缺点</th></tr></thead> <tbody><tr><td>数据迁移&amp;升级</td> <td>可以跨大版本升级</td> <td>升级过程中，旧集群写操作停止</td></tr></tbody></table> <p>ES 版本之间有差异比较大，可能会有一些坑
+迁移时间较长 |
+| 滚动升级 | 升级过程中服务不中断 | 对ELK 源版本与目标版本有要求
+|
+| 集群重启升级 | 可以跨大版本升级
+迁移时间比较短 | ES 服务中断
+|</p> <p>公司生产环境与测试环境的 ELK 技术栈版本是 5.0.0
+考虑先滚动升级到 5.6.16  然后确认没问题后，再从 5.6.16 滚动升级到 6.8.2
+升级一般很快，但是最麻烦的不是升级，而是保证 ES 中的索引正常。
+一般不建议跨大版本升级，而是小版本迭代。</p> <hr> <h3 id="数据备份">数据备份</h3> <p>备份方式：Elasticsearch snapshot
+IDC 测试环境可以考虑快照备份到本地 HDFS，磁盘
+生产环境 ES 可以快照备份到阿里云 OSS</p> <blockquote><p>需要安装对应的 ES 插件</p></blockquote> <p>本次测试环境 ELK 集群升级，不备份</p> <h4 id="备份你的-kibana-数据-（生产环境中非常重要）">备份你的 Kibana 数据 （生产环境中非常重要）</h4> <p>你的 Kibana 中的 index pattern 等数据都是存在 .Kibana 这个索引中的 
+具体备份&amp;升级可以参考官方文档
+<a rel="noopener noreferrer" target="_blank" href="https://www.elastic.co/guide/en/kibana/6.3/migrating-6.0-index.html">https://www.elastic.co/guide/en/kibana/6.3/migrating-6.0-index.html</a> <a rel="noopener noreferrer" target="_blank" href="https://www.elastic.co/guide/en/elasticsearch/reference/5.6/modules-snapshots.html">https://www.elastic.co/guide/en/elasticsearch/reference/5.6/modules-snapshots.html</a></p> <hr> <h3 id="升级前准备">升级前准备</h3> <p>升级Elasticsearch前，先停止Logstash（hangout）服务，不再消费 kafka 中消息（Filebeat服务无需关闭）</p> <h4 id="禁用集群的分片自动分配功能">禁用集群的分片自动分配功能</h4> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">PUT _cluster/settings
+{
+  &quot;persistent&quot;: {
+    &quot;cluster.routing.allocation.enable&quot;: &quot;none&quot;
+  }
+}</code></pre></div><p>启动集群分片自动分配</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">PUT _cluster/settings
+{
+  &quot;persistent&quot;: {
+    &quot;cluster.routing.allocation.enable&quot;: null
+  }
+}</code></pre></div><h3 id="下面这个待确认">下面这个待确认</h3> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">PUT _cluster/settings
+{
+  &quot;persistent&quot;: {
+    &quot;cluster.routing.allocation.enable&quot;: &quot;primaries&quot;
+  }
+}</code></pre></div><h4 id="同步数据（强制刷新，尽可能将缓存中的数据，写入磁盘）">同步数据（强制刷新，尽可能将缓存中的数据，写入磁盘）</h4> <p>通过 synced flush，可以在索引上放置一个 sync ID，这样可以提高这些分片Recovery的时间</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">POST _flush/synced</code></pre></div><hr> <h3 id="升级-es">升级 ES</h3> <p>注意，这里使用rpm安装时，不使用-Uvh选项升级，而是先卸载旧的版本，再使用-ivh安装。另外，旧的配置文件不建议继续使用，而是将所配置内容替换到新版的配置文件中，除了个别配置外大部分仍然兼容。</p> <p>Elasticsearch节点，依次执行</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">#停止当前ES 节点
+service elasticsearch stop
+#卸载所有 ES 插件  进入/usr/share/elasticsearch目录
+#elasticsearch-plugin list
+#elasticsearch-plugin remove
+# 卸载旧版本注意，卸载后，旧的配置文件会以rpmsave后缀保留
+rpm -e elasticsearch</code></pre></div><h5 id="安装新版本">安装新版本</h5> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">rpm -ivh /usr/local/elasticsearch-5.6.16.rpm</code></pre></div><h5 id="替换配置文件">替换配置文件</h5> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">cat /etc/elasticsearch/elasticsearch.yml.rpmsave &gt; /etc/elasticsearch/elasticsearch.yml
+cat /etc/elasticsearch/jvm.options.rpmsave &gt; /etc/elasticsearch/jvm.options</code></pre></div><h5 id="启动elasticsearch">启动Elasticsearch</h5> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">service elasticsearch start</code></pre></div><h5 id="开启集群的分片自动分配功能">开启集群的分片自动分配功能</h5> <p>**</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">PUT _cluster/settings
+{
+  &quot;persistent&quot;: {
+    &quot;cluster.routing.allocation.enable&quot;: null
+  }
+}</code></pre></div><h5 id="等待集群恢复完毕">等待集群恢复完毕</h5> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">GET _cat/health</code></pre></div><p>查看集群状态，Green 则恢复正常，升级成功</p> <hr> <h3 id="验证方式">验证方式</h3> <p>API 验证集群状态
+Cerebro 中观察分片分配情况</p> <h3 id="升级es过程中可能会遇到的问题：">升级ES过程中可能会遇到的问题：</h3> <h5 id="启动失败">启动失败</h5> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">[2019-09-16T20:04:45,116][ERROR][o.e.b.Bootstrap          ] [node-1] node validation exception
+[1] bootstrap checks failed
+[1]: system call filters failed to install; check the logs and fix your configuration or disable system call filters at your own risk</code></pre></div><h5 id="etcelasticsearchelasticsearch-yml--添加一行配置">/etc/elasticsearch/elasticsearch.yml  添加一行配置</h5> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">bootstrap.system_call_filter: false</code></pre></div><blockquote><p>官方文档见：
+<a rel="noopener noreferrer" target="_blank" href="https://www.elastic.co/guide/en/elasticsearch/reference/5.6/system-call-filter-check.html">https://www.elastic.co/guide/en/elasticsearch/reference/5.6/system-call-filter-check.html</a></p></blockquote> <hr> <h3 id="升级失败回滚降级">升级失败回滚降级</h3> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">#停止当前ES 节点
+service elasticsearch stop
+#卸载所有 ES 插件  进入/usr/share/elasticsearch目录
+#elasticsearch-plugin list
+#elasticsearch-plugin remove
+# 卸载当前版本 ES
+rpm -e elasticsearch
+#重新安装 5.0.0 版本 ES
+rpm install /usr/local/elasticsearch-5.0.0.rpm
+#拷贝之前备份的配置文件
+#启动 ES
+sevice elasticsearch start</code></pre></div><hr> <h3 id="升级kibana">升级Kibana</h3> <blockquote><p>重点在升级配置
+手动（ansible 脚本）将旧的配置文件中的配置，替换到新版配置文件中的对应条目中，注意兼容</p></blockquote> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">#停止Kibana
+service kibana stop
+#卸载旧版本
+rpm -e kibana
+#安装新版本 Kibana
+rpm -ivh /usr/local/kibana-5.6.16-x86_64.rpm</code></pre></div><h4 id="升级配置">升级配置</h4> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">#启动Kibana
+service kibana start</code></pre></div><h5 id="固化脚本（见-ansible-脚本）">固化脚本（见 Ansible 脚本）</h5> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">#停止Kibana
+service kibana stop
+#卸载旧版本
+rpm -e kibana
+#安装新版本
+rpm -ivh XX.rpm
+#升级配置
+
+#启动Kibana
+service kibana start</code></pre></div><p>迁移 Kibana 数据 <br>
+Kibana 数据存储在   Elasticsearch   .Kibana 索引中
+比如下图中  生产环境 ELK 日志系统  有 4 个 kibana 实例，在 ES 集群中对应这有 4 个 .kibana 索引 
+<img src="https://cdn.nlark.com/yuque/0/2019/png/330515/1576133404676-29e785e5-1c83-4b9f-a688-7f46e9563c59.png#align=left&amp;display=inline&amp;height=530&amp;name=image.png&amp;originHeight=1060&amp;originWidth=2470&amp;size=205099&amp;status=done&amp;style=none&amp;width=1235" alt="image.png"></p> <hr> <h3 id="升级-filebeat">升级 Filebeat</h3> <p>本次不升级 Filebeat</p> <hr> <h3 id="升级的一些坑">升级的一些坑</h3> <p>Kibana 偶现无法访问
+升级 Kibana 的一个小坑，从 6.3 之后
+server.rewriteBasePath 由默认的 false 改为了 true 这个值我们没配置过
+所以在 Kibana 前面有反向代理的情况下 ，会有重写代理请求的可能
+也就是我们访问 Kibana 没响应，但是Kibana服务其实还在</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text"># This setting cannot end in a slash.
+#server.basePath: &quot;&quot;
+server.basePath: &quot;/anchang&quot;
+# Specifies whether Kibana should rewrite requests that are prefixed with
+# `server.basePath` or require that they are rewritten by your reverse proxy.
+# This setting was effectively always `false` before Kibana 6.3 and will
+# default to `true` starting in Kibana 7.0.
+server.rewriteBasePath: false</code></pre></div>]]></content>
+        <published>2019-06-11T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[ELK 问题排查]]></title>
+        <id>https://nevea.top/blog/ELK%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5</id>
+        <link href="https://nevea.top/blog/ELK%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5"/>
+        <updated>2020-03-24T02:51:20.810Z</updated>
+        <summary type="html"><![CDATA[为了完整的查看索引，分片，主分片和副分片情况，所以可直接使用自带 Api 查看，输入地址:
+]]></summary>
+        <content type="html"><![CDATA[<h3 id="集群-red">集群 Red</h3> <p>为了完整的查看索引，分片，主分片和副分片情况，所以可直接使用自带 Api 查看，输入地址:</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">GET /_cat/shards?h=index,shard,prirep,state,unassigned.reason</code></pre></div><p>查询索引有问题的原因</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">GET /_cluster/allocation/explain</code></pre></div><p>官网文档
+<a rel="noopener noreferrer" target="_blank" href="https://www.elastic.co/guide/en/elasticsearch/reference/master/cluster-allocation-explain.html">https://www.elastic.co/guide/en/elasticsearch/reference/master/cluster-allocation-explain.html</a></p> <p>可以查看结果，线上 ES 是12个分片，3个备份，但是每个备份都会出现一个 UNASSIGNED 的情况，我们从最后的原因 INDEX CREATED 可得知是由于创建索引的API导致未分配。</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">trackmodel-2019-01-02           8  r UNASSIGNED INDEX CREATED
+trackmodel-2019-01-02           8  r STARTED 
+trackmodel-2019-01-02           8  r STARTED 
+trackmodel-2019-01-02           8  p STARTED 
+trackmodel-2019-01-02           4  r STARTED 
+trackmodel-2019-01-02           4  p STARTED 
+trackmodel-2019-01-02           4  r STARTED 
+trackmodel-2019-01-02           4  r UNASSIGNED INDEX CREATED
+trackmodel-2019-01-02           7  r STARTED 
+trackmodel-2019-01-02           7  p STARTED 
+trackmodel-2019-01-02           7  r STARTED 
+trackmodel-2019-01-02           7  r UNASSIGNED INDEX CREATED
+.
+.
+.
+trackmodel-2019-01-02           1  r UNASSIGNED INDEX CREATED</code></pre></div><p>然后使用查看：
+然后使用查看：</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">GET /_cat/allocation?v</code></pre></div><p>可以从从结果中得知其实线上 ES 只有3个 node，但是由上面可知，我在创建索引时定义了3个副本，所以就是 node 数少于分片副本数导致的。</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">shards disk.indices disk.used disk.avail disk.total disk.percent host          ip            node
+   204      120.4gb   135.6gb       61gb    196.7gb           68 172.16.41.127 172.16.41.127 trace-es-node-3
+   204      121.9gb   139.3gb     57.4gb    196.7gb           70 172.16.41.125 172.16.41.125 trace-es-node-1
+   204      120.5gb   136.9gb     59.7gb    196.7gb           69 172.16.41.126 172.16.41.126 trace-es-node-2
+   204  unassinged</code></pre></div><p>所以这个问题就很好解决了，由于本身我的索引是按每天日期新建，使用别名来进行查询，会定时删除过期索引，所以直接修改创建索引时代码，将创建副本数改为2即可解决问题。不需要更改之前出现的 UNASSIGNED 分片的问题，但是如果要更改的话可以直接使用以下命令来调整对应日期索引的副本数</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">PUT /trackmodel-2019-01-02/_settings
+{  
+    &quot;number_of_replicas&quot; : 2 
+}</code></pre></div><h3 id="问题探讨">问题探讨</h3> <p>虽然这次的 UNASSIGNED 问题解决和问题原因非常简单，但是其实引起 UNASSIGNED 是有很多原因的，在 ES 开发中也经常会遇到这个问题，比如以下几种可能就都会引起 UNASSIGNED 的问题：</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">1. Shard allocation  过程中的延迟机制
+2. nodes 数小于分片副本数
+3. 检查是否开启 cluster.routing.allocation.enable 参数
+4. 分片的历史数据丢失了
+5. 磁盘不够用了
+6. es 的版本问题</code></pre></div><p>这些不同问题导致的 UNASSIGNED 都需要不同的方式去解决，所以在本文第一条命令中最后的 reason 列就相对比较重要了，是知道问题原因的初步思路来源，大概分为以下几种</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">1）INDEX_CREATED：由于创建索引的API导致未分配。
+2）CLUSTER_RECOVERED ：由于完全集群恢复导致未分配。
+3）INDEX_REOPENED ：由于打开open或关闭close一个索引导致未分配。
+4）DANGLING_INDEX_IMPORTED ：由于导入dangling索引的结果导致未分配。
+5）NEW_INDEX_RESTORED ：由于恢复到新索引导致未分配。
+6）EXISTING_INDEX_RESTORED ：由于恢复到已关闭的索引导致未分配。
+7）REPLICA_ADDED：由于显式添加副本分片导致未分配。
+8）ALLOCATION_FAILED ：由于分片分配失败导致未分配。
+9）NODE_LEFT ：由于承载该分片的节点离开集群导致未分配。
+10）REINITIALIZED ：由于当分片从开始移动到初始化时导致未分配（例如，使用影子shadow副本分片）。
+11）REROUTE_CANCELLED ：作为显式取消重新路由命令的结果取消分配。
+12）REALLOCATED_REPLICA ：确定更好的副本位置被标定使用，导致现有的副本分配被取消，出现未分配。</code></pre></div><p>设置单个索引在每个节点上最大分配分配数的设置是在索引模板 （index template）里设置</p> <p>index.routing.allocation.total_shards_per_node&quot;:3</p>]]></content>
+        <published>2019-06-03T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[ElasticSearch 压测]]></title>
+        <id>https://nevea.top/blog/ELK%E5%8E%8B%E6%B5%8B</id>
+        <link href="https://nevea.top/blog/ELK%E5%8E%8B%E6%B5%8B"/>
+        <updated>2020-03-24T02:51:25.874Z</updated>
+        <summary type="html"><![CDATA[测试集群读写性能 &amp; 为集群容量规划提供数据支撑]]></summary>
+        <content type="html"><![CDATA[<h4 id="本次压测目标：">本次压测目标：</h4> <ul><li>测试集群读写性能 &amp; 为集群容量规划提供数据支撑</li> <li>测试 ES 新版本，结合实际场景与老版本进行比较，评估是否进行升级</li> <li>性能优化&amp;性能问题诊断</li> <li>对 ES 配置参数进行修改，评估优化效果（长期）</li> <li>确定系统稳定性，考察系统功能极限与稳定性
+<h4 id=""></h4></li></ul> <h4 id="可选择的压测工具">可选择的压测工具</h4> <ul><li>Elastic 官方压测工具：rally</li> <li>基于HTTP 的压测第三方压测工具：JMeter 等</li></ul> <h4 id="压测流程如下">压测流程如下</h4> <ul><li>压测计划</li> <li>脚本开发</li> <li>压测环境搭建&amp;压测开始</li> <li>结果分析</li></ul> <hr> <ul><li>为方便对比，压测数据统一使用 geonames 数据集（大小3.2G，共11523468个文档）</li> <li>时间： 完整的一次压测过程，时间以小时计</li></ul> <h4 id="安装">安装</h4> <p>依赖</p> <ul><li>3.5+ including pip3</li> <li>git 1.9+</li> <li>JDK</li></ul> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">pip3 install esrally</code></pre></div><h4 id="elastic-官方压测结果链接">Elastic 官方压测结果<a rel="noopener noreferrer" target="_blank" href="https://elasticsearch-benchmarks.elastic.co/">链接</a></h4> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">https://elasticsearch-benchmarks.elastic.co/</code></pre></div><h4 id="配置">配置</h4> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">esrally configure --advanced-config</code></pre></div><p>只测试 1000 条数据</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">esrally --distribution-version=5.6.16 --test-mode</code></pre></div><p>开始测试各版本单机性能</p> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">esrally race --distribution-version=5.6.16 --track=geonames --challenge=append-no-conflicts --user-tag=&quot;version:5.6.16&quot;</code></pre></div><h4 id="-2"></h4> <h4 id="查看本地-tracks">查看本地 tracks</h4> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">esrally list tracks</code></pre></div><h4 id="-3"></h4> <h4 id="压测现有集群">压测现有集群</h4> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">esrally race --pipeline=benchmark-only --target-hosts=10.0.19.218:9200 --distribution-version=6.7.2  --track=geonames --challenge=append-no-conflicts</code></pre></div><h4 id="测试环境（10-0-19-218）先跑一遍">测试环境（10.0.19.218）先跑一遍</h4> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">esrally race --pipeline=benchmark-only --target-hosts=10.0.19.218:9200 --distribution-version=6.7.2  --track=geonames --challenge=append-no-conflicts</code></pre></div><h5 id="结果">结果</h5> <div class="saber-highlight" data-lang=""><pre class="saber-highlight-code language-text"><code class="language-text">|                                                         Metric |                   Task |    Value |    Unit |
+|---------------------------------------------------------------:|-----------------------:|---------:|--------:|
+|                     Cumulative indexing time of primary shards |                        |  157.082 |     min |
+|             Min cumulative indexing time across primary shards |                        |        0 |     min |
+|          Median cumulative indexing time across primary shards |                        | 0.256483 |     min |
+|             Max cumulative indexing time across primary shards |                        |  30.3196 |     min |
+|            Cumulative indexing throttle time of primary shards |                        |        0 |     min |
+|    Min cumulative indexing throttle time across primary shards |                        |        0 |     min |
+| Median cumulative indexing throttle time across primary shards |                        |        0 |     min |
+|    Max cumulative indexing throttle time across primary shards |                        |        0 |     min |
+|                        Cumulative merge time of primary shards |                        |  161.364 |     min |
+|                       Cumulative merge count of primary shards |                        |    23823 |         |
+|                Min cumulative merge time across primary shards |                        |        0 |     min |
+|             Median cumulative merge time across primary shards |                        |  1.43677 |     min |
+|                Max cumulative merge time across primary shards |                        |  23.3528 |     min |
+|               Cumulative merge throttle time of primary shards |                        | 0.933833 |     min |
+|       Min cumulative merge throttle time across primary shards |                        |        0 |     min |
+|    Median cumulative merge throttle time across primary shards |                        |        0 |     min |
+|       Max cumulative merge throttle time across primary shards |                        |   0.1983 |     min |
+|                      Cumulative refresh time of primary shards |                        |  59.8701 |     min |
+|                     Cumulative refresh count of primary shards |                        |   254455 |         |
+|              Min cumulative refresh time across primary shards |                        |        0 |     min |
+|           Median cumulative refresh time across primary shards |                        |  1.47577 |     min |
+|              Max cumulative refresh time across primary shards |                        |  7.86888 |     min |
+|                        Cumulative flush time of primary shards |                        |  1.82032 |     min |
+|                       Cumulative flush count of primary shards |                        |       76 |         |
+|                Min cumulative flush time across primary shards |                        |        0 |     min |
+|             Median cumulative flush time across primary shards |                        |  0.00315 |     min |
+|                Max cumulative flush time across primary shards |                        | 0.473867 |     min |
+|                                             Total Young Gen GC |                        |  156.258 |       s |
+|                                               Total Old Gen GC |                        |    0.504 |       s |
+|                                                     Store size |                        |  10.2503 |      GB |
+|                                                  Translog size |                        |  3.40687 |      GB |
+|                                         Heap used for segments |                        |  28.6233 |      MB |
+|                                       Heap used for doc values |                        |  1.08705 |      MB |
+|                                            Heap used for terms |                        |  25.1319 |      MB |
+|                                            Heap used for norms |                        | 0.283142 |      MB |
+|                                           Heap used for points |                        | 0.717692 |      MB |
+|                                    Heap used for stored fields |                        |  1.40359 |      MB |
+|                                                  Segment count |                        |      394 |         |
+|                                                 Min Throughput |           index-append |  13680.2 |  docs/s |
+|                                              Median Throughput |           index-append |  15924.4 |  docs/s |
+|                                                 Max Throughput |           index-append |  17251.8 |  docs/s |
+|                                        50th percentile latency |           index-append |  1917.34 |      ms |
+|                                        90th percentile latency |           index-append |  3282.31 |      ms |
+|                                        99th percentile latency |           index-append |  4744.88 |      ms |
+|                                      99.9th percentile latency |           index-append |  6111.59 |      ms |
+|                                       100th percentile latency |           index-append |   6868.8 |      ms |
+|                                   50th percentile service time |           index-append |  1917.34 |      ms |
+|                                   90th percentile service time |           index-append |  3282.31 |      ms |
+|                                   99th percentile service time |           index-append |  4744.88 |      ms |
+|                                 99.9th percentile service time |           index-append |  6111.59 |      ms |
+|                                  100th percentile service time |           index-append |   6868.8 |      ms |
+|                                                     error rate |           index-append |        0 |       % |
+|                                                 Min Throughput |            index-stats |    47.27 |   ops/s |
+|                                              Median Throughput |            index-stats |    47.77 |   ops/s |
+|                                                 Max Throughput |            index-stats |    47.88 |   ops/s |
+|                                        50th percentile latency |            index-stats |  9808.46 |      ms |
+|                                        90th percentile latency |            index-stats |  13753.5 |      ms |
+|                                        99th percentile latency |            index-stats |  14571.1 |      ms |
+|                                      99.9th percentile latency |            index-stats |  14645.1 |      ms |
+|                                       100th percentile latency |            index-stats |  14653.5 |      ms |
+|                                   50th percentile service time |            index-stats |   20.069 |      ms |
+|                                   90th percentile service time |            index-stats |  23.2235 |      ms |
+|                                   99th percentile service time |            index-stats |  28.6327 |      ms |
+|                                 99.9th percentile service time |            index-stats |  46.0017 |      ms |
+|                                  100th percentile service time |            index-stats |  48.4586 |      ms |
+|                                                     error rate |            index-stats |        0 |       % |
+|                                                 Min Throughput |             node-stats |    51.61 |   ops/s |
+|                                              Median Throughput |             node-stats |    54.58 |   ops/s |
+|                                                 Max Throughput |             node-stats |    54.95 |   ops/s |
+|                                        50th percentile latency |             node-stats |  4375.34 |      ms |
+|                                        90th percentile latency |             node-stats |  7131.76 |      ms |
+|                                        99th percentile latency |             node-stats |  7723.09 |      ms |
+|                                      99.9th percentile latency |             node-stats |  7780.35 |      ms |
+|                                       100th percentile latency |             node-stats |  7785.54 |      ms |
+|                                   50th percentile service time |             node-stats |  17.4001 |      ms |
+|                                   90th percentile service time |             node-stats |  21.1093 |      ms |
+|                                   99th percentile service time |             node-stats |  23.9763 |      ms |
+|                                 99.9th percentile service time |             node-stats |  34.4598 |      ms |
+|                                  100th percentile service time |             node-stats |  37.7474 |      ms |
+|                                                     error rate |             node-stats |        0 |       % |
+|                                                 Min Throughput |                default |    49.87 |   ops/s |
+|                                              Median Throughput |                default |    49.99 |   ops/s |
+|                                                 Max Throughput |                default |    50.02 |   ops/s |
+|                                        50th percentile latency |                default |  22.9061 |      ms |
+|                                        90th percentile latency |                default |  35.2368 |      ms |
+|                                        99th percentile latency |                default |  56.4199 |      ms |
+|                                      99.9th percentile latency |                default |  60.2163 |      ms |
+|                                       100th percentile latency |                default |  62.0121 |      ms |
+|                                   50th percentile service time |                default |  21.0608 |      ms |
+|                                   90th percentile service time |                default |  23.0526 |      ms |
+|                                   99th percentile service time |                default |  24.0483 |      ms |
+|                                 99.9th percentile service time |                default |   26.301 |      ms |
+|                                  100th percentile service time |                default |  27.9663 |      ms |
+|                                                     error rate |                default |        0 |       % |
+|                                                 Min Throughput |                   term |   200.07 |   ops/s |
+|                                              Median Throughput |                   term |   200.08 |   ops/s |
+|                                                 Max Throughput |                   term |   200.14 |   ops/s |
+|                                        50th percentile latency |                   term |  2.71801 |      ms |
+|                                        90th percentile latency |                   term |  3.03285 |      ms |
+|                                        99th percentile latency |                   term |  11.4885 |      ms |
+|                                      99.9th percentile latency |                   term |  26.8219 |      ms |
+|                                       100th percentile latency |                   term |  28.1828 |      ms |
+|                                   50th percentile service time |                   term |  2.56728 |      ms |
+|                                   90th percentile service time |                   term |  2.85599 |      ms |
+|                                   99th percentile service time |                   term |  3.55974 |      ms |
+|                                 99.9th percentile service time |                   term |  8.51489 |      ms |
+|                                  100th percentile service time |                   term |  26.6701 |      ms |
+|                                                     error rate |                   term |        0 |       % |
+|                                                 Min Throughput |                 phrase |   199.27 |   ops/s |
+|                                              Median Throughput |                 phrase |   200.03 |   ops/s |
+|                                                 Max Throughput |                 phrase |   200.06 |   ops/s |
+|                                        50th percentile latency |                 phrase |  4.25964 |      ms |
+|                                        90th percentile latency |                 phrase |  13.8712 |      ms |
+|                                        99th percentile latency |                 phrase |  35.8641 |      ms |
+|                                      99.9th percentile latency |                 phrase |  39.0226 |      ms |
+|                                       100th percentile latency |                 phrase |  39.8982 |      ms |
+|                                   50th percentile service time |                 phrase |   4.0484 |      ms |
+|                                   90th percentile service time |                 phrase |  4.60117 |      ms |
+|                                   99th percentile service time |                 phrase |  8.69007 |      ms |
+|                                 99.9th percentile service time |                 phrase |   33.045 |      ms |
+|                                  100th percentile service time |                 phrase |  38.8927 |      ms |
+|                                                     error rate |                 phrase |        0 |       % |
+|                                                 Min Throughput |   country_agg_uncached |     2.35 |   ops/s |
+|                                              Median Throughput |   country_agg_uncached |     2.36 |   ops/s |
+|                                                 Max Throughput |   country_agg_uncached |     2.37 |   ops/s |
+|                                        50th percentile latency |   country_agg_uncached |  43731.8 |      ms |
+|                                        90th percentile latency |   country_agg_uncached |    50463 |      ms |
+|                                        99th percentile latency |   country_agg_uncached |  52056.4 |      ms |
+|                                       100th percentile latency |   country_agg_uncached |  52232.7 |      ms |
+|                                   50th percentile service time |   country_agg_uncached |  407.051 |      ms |
+|                                   90th percentile service time |   country_agg_uncached |  520.447 |      ms |
+|                                   99th percentile service time |   country_agg_uncached |  588.956 |      ms |
+|                                  100th percentile service time |   country_agg_uncached |  650.993 |      ms |
+|                                                     error rate |   country_agg_uncached |        0 |       % |
+|                                                 Min Throughput |     country_agg_cached |    99.69 |   ops/s |
+|                                              Median Throughput |     country_agg_cached |   100.06 |   ops/s |
+|                                                 Max Throughput |     country_agg_cached |   100.13 |   ops/s |
+|                                        50th percentile latency |     country_agg_cached |  3.25071 |      ms |
+|                                        90th percentile latency |     country_agg_cached |  3.58457 |      ms |
+|                                        99th percentile latency |     country_agg_cached |  6.40293 |      ms |
+|                                      99.9th percentile latency |     country_agg_cached |  32.8548 |      ms |
+|                                       100th percentile latency |     country_agg_cached |  38.2042 |      ms |
+|                                   50th percentile service time |     country_agg_cached |  3.09234 |      ms |
+|                                   90th percentile service time |     country_agg_cached |  3.40055 |      ms |
+|                                   99th percentile service time |     country_agg_cached |  4.56434 |      ms |
+|                                 99.9th percentile service time |     country_agg_cached |  13.7336 |      ms |
+|                                  100th percentile service time |     country_agg_cached |  38.0936 |      ms |
+|                                                     error rate |     country_agg_cached |        0 |       % |
+|                                                 Min Throughput |                 scroll |    20.02 | pages/s |
+|                                              Median Throughput |                 scroll |    20.02 | pages/s |
+|                                                 Max Throughput |                 scroll |    20.03 | pages/s |
+|                                        50th percentile latency |                 scroll |  952.534 |      ms |
+|                                        90th percentile latency |                 scroll |  977.789 |      ms |
+|                                        99th percentile latency |                 scroll |  992.309 |      ms |
+|                                       100th percentile latency |                 scroll |  997.499 |      ms |
+|                                   50th percentile service time |                 scroll |   952.13 |      ms |
+|                                   90th percentile service time |                 scroll |  977.355 |      ms |
+|                                   99th percentile service time |                 scroll |  991.834 |      ms |
+|                                  100th percentile service time |                 scroll |  996.983 |      ms |
+|                                                     error rate |                 scroll |        0 |       % |
+|                                                 Min Throughput |             expression |      0.9 |   ops/s |
+|                                              Median Throughput |             expression |     0.91 |   ops/s |
+|                                                 Max Throughput |             expression |     0.91 |   ops/s |
+|                                        50th percentile latency |             expression |   150678 |      ms |
+|                                        90th percentile latency |             expression |   176840 |      ms |
+|                                        99th percentile latency |             expression |   182169 |      ms |
+|                                       100th percentile latency |             expression |   182646 |      ms |
+|                                   50th percentile service time |             expression |  1125.56 |      ms |
+|                                   90th percentile service time |             expression |  1286.03 |      ms |
+|                                   99th percentile service time |             expression |  1303.76 |      ms |
+|                                  100th percentile service time |             expression |  1332.52 |      ms |
+|                                                     error rate |             expression |        0 |       % |
+|                                                 Min Throughput |        painless_static |     0.94 |   ops/s |
+|                                              Median Throughput |        painless_static |     0.94 |   ops/s |
+|                                                 Max Throughput |        painless_static |     0.94 |   ops/s |
+|                                        50th percentile latency |        painless_static |   100312 |      ms |
+|                                        90th percentile latency |        painless_static |   116157 |      ms |
+|                                        99th percentile latency |        painless_static |   119962 |      ms |
+|                                       100th percentile latency |        painless_static |   120267 |      ms |
+|                                   50th percentile service time |        painless_static |  1051.41 |      ms |
+|                                   90th percentile service time |        painless_static |  1220.43 |      ms |
+|                                   99th percentile service time |        painless_static |  1354.25 |      ms |
+|                                  100th percentile service time |        painless_static |  1364.53 |      ms |
+|                                                     error rate |        painless_static |        0 |       % |
+|                                                 Min Throughput |       painless_dynamic |     0.85 |   ops/s |
+|                                              Median Throughput |       painless_dynamic |     0.85 |   ops/s |
+|                                                 Max Throughput |       painless_dynamic |     0.85 |   ops/s |
+|                                        50th percentile latency |       painless_dynamic |   127809 |      ms |
+|                                        90th percentile latency |       painless_dynamic |   147685 |      ms |
+|                                        99th percentile latency |       painless_dynamic |   152236 |      ms |
+|                                       100th percentile latency |       painless_dynamic |   152736 |      ms |
+|                                   50th percentile service time |       painless_dynamic |  1162.78 |      ms |
+|                                   90th percentile service time |       painless_dynamic |  1314.62 |      ms |
+|                                   99th percentile service time |       painless_dynamic |  1485.99 |      ms |
+|                                  100th percentile service time |       painless_dynamic |  1552.55 |      ms |
+|                                                     error rate |       painless_dynamic |        0 |       % |
+|                                                 Min Throughput |            large_terms |     0.73 |   ops/s |
+|                                              Median Throughput |            large_terms |     0.73 |   ops/s |
+|                                                 Max Throughput |            large_terms |     0.73 |   ops/s |
+|                                        50th percentile latency |            large_terms |   176892 |      ms |
+|                                        90th percentile latency |            large_terms |   204470 |      ms |
+|                                        99th percentile latency |            large_terms |   210667 |      ms |
+|                                       100th percentile latency |            large_terms |   211348 |      ms |
+|                                   50th percentile service time |            large_terms |  1359.82 |      ms |
+|                                   90th percentile service time |            large_terms |   1438.7 |      ms |
+|                                   99th percentile service time |            large_terms |  1510.96 |      ms |
+|                                  100th percentile service time |            large_terms |  1545.09 |      ms |
+|                                                     error rate |            large_terms |        0 |       % |
+|                                                 Min Throughput |   large_filtered_terms |     0.73 |   ops/s |
+|                                              Median Throughput |   large_filtered_terms |     0.73 |   ops/s |
+|                                                 Max Throughput |   large_filtered_terms |     0.73 |   ops/s |
+|                                        50th percentile latency |   large_filtered_terms |   176867 |      ms |
+|                                        90th percentile latency |   large_filtered_terms |   204577 |      ms |
+|                                        99th percentile latency |   large_filtered_terms |   210807 |      ms |
+|                                       100th percentile latency |   large_filtered_terms |   211565 |      ms |
+|                                   50th percentile service time |   large_filtered_terms |  1358.56 |      ms |
+|                                   90th percentile service time |   large_filtered_terms |  1443.66 |      ms |
+|                                   99th percentile service time |   large_filtered_terms |   1483.7 |      ms |
+|                                  100th percentile service time |   large_filtered_terms |  1497.43 |      ms |
+|                                                     error rate |   large_filtered_terms |        0 |       % |
+|                                                 Min Throughput | large_prohibited_terms |     0.75 |   ops/s |
+|                                              Median Throughput | large_prohibited_terms |     0.75 |   ops/s |
+|                                                 Max Throughput | large_prohibited_terms |     0.75 |   ops/s |
+|                                        50th percentile latency | large_prohibited_terms |   168425 |      ms |
+|                                        90th percentile latency | large_prohibited_terms |   194882 |      ms |
+|                                        99th percentile latency | large_prohibited_terms |   201165 |      ms |
+|                                       100th percentile latency | large_prohibited_terms |   202136 |      ms |
+|                                   50th percentile service time | large_prohibited_terms |  1339.58 |      ms |
+|                                   90th percentile service time | large_prohibited_terms |  1425.45 |      ms |
+|                                   99th percentile service time | large_prohibited_terms |  1568.95 |      ms |
+|                                  100th percentile service time | large_prohibited_terms |  1646.36 |      ms |
+|                                                     error rate | large_prohibited_terms |        0 |       % |
+
+
+----------------------------------
+[INFO] SUCCESS (took 3850 seconds)
+----------------------------------</code></pre></div><h4 id="参考：">参考：</h4> <p>[<a rel="noopener noreferrer" target="_blank" href="https://github.com/elastic/rally">https://github.com/elastic/rally</a>](</p>]]></content>
+        <published>2019-05-22T00:00:00.000Z</published>
     </entry>
     <entry>
         <title type="html"><![CDATA[VScode使用笔记]]></title>

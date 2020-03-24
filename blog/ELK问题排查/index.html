@@ -1,0 +1,49 @@
+<!DOCTYPE html><html data-saber-ssr><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta http-equiv="X-UA-Compatible" content="ie=edge" /><meta data-saber-head="ssr" name="generator" content="Saber v0.11.5"><meta data-saber-head="ssr" name="og:site_name" content="Nevea&#x27;s Blog"><meta data-saber-head="ssr" property="title" content="ELK 问题排查 - Nevea&#x27;s Blog"><meta data-saber-head="ssr" property="description" content="&lt;p&gt;为了完整的查看索引，分片，主分片和副分片情况，所以可直接使用自带 Api 查看，输入地址:&lt;/p&gt;
+"><meta data-saber-head="ssr" property="og:description" content="&lt;p&gt;为了完整的查看索引，分片，主分片和副分片情况，所以可直接使用自带 Api 查看，输入地址:&lt;/p&gt;
+"><meta data-saber-head="ssr" property="twitter:description" content="&lt;p&gt;为了完整的查看索引，分片，主分片和副分片情况，所以可直接使用自带 Api 查看，输入地址:&lt;/p&gt;
+"><meta data-saber-head="ssr" property="og:title" content="ELK 问题排查 - Nevea&#x27;s Blog"><meta data-saber-head="ssr" property="og:type" content="article"><meta data-saber-head="ssr" property="article:published_time" content="2019-06-03"><meta data-saber-head="ssr" property="twitter:title" content="ELK 问题排查 - Nevea&#x27;s Blog"><meta data-saber-head="ssr" property="og:url" content="https://nevea.top/blog/ELK问题排查"><meta data-saber-head="ssr" property="og:image" content="https://gbstatic.djyde.com/assets/Snapseed%203.jpg?x-oss-process=image/auto-orient,1/quality,q_80/bright,-10/resize,w_2560/contrast,-30/interlace,1"><meta data-saber-head="ssr" property="twitter:image" content="https://gbstatic.djyde.com/assets/Snapseed%203.jpg?x-oss-process=image/auto-orient,1/quality,q_80/bright,-10/resize,w_2560/contrast,-30/interlace,1"> <title>ELK 问题排查 - Nevea&#x27;s Blog</title> <link data-saber-head="ssr" rel="stylesheet" href="//ppp.djyde.com/css?family=Noto+Serif+SC"><link rel="stylesheet" href="/_saber/css/styles.1903deb0.chunk.css">  </head><body><div id="_saber" data-server-rendered="true"><div><div data-v-9dd6d5de><nav class="bg-black flex text-white item-center font-serif" data-v-069cc566 data-v-9dd6d5de><div class="text font-bold mr-4 p-1 pl-4" data-v-069cc566><a href="/" class="router-link-active" data-v-069cc566>Nevea's Blog</a></div> <div class="flex item-center" data-v-069cc566><a href="/" class="mr-4 hover:bg-gray-300 hover:text-gray-900 p-1 router-link-active" data-v-069cc566>写作</a></div><div class="flex item-center" data-v-069cc566><a href="/readings" class="mr-4 hover:bg-gray-300 hover:text-gray-900 p-1" data-v-069cc566>我读</a></div><div class="flex item-center" data-v-069cc566><a href="/about" class="mr-4 hover:bg-gray-300 hover:text-gray-900 p-1" data-v-069cc566>关于我</a></div></nav> <!----> <div class="post container mx-auto lg:pl-48 lg:pr-48" data-v-9dd6d5de><h1 class="pl-4 pr-4" data-v-9dd6d5de>ELK 问题排查</h1> <div class="mb-2 text-sm text-gray-500 pl-4 pr-4" data-v-9dd6d5de>June 03, 2019</div> <div class="content" data-v-9dd6d5de><h3 id="集群-red" data-v-9dd6d5de>集群 Red</h3> <p data-v-9dd6d5de>为了完整的查看索引，分片，主分片和副分片情况，所以可直接使用自带 Api 查看，输入地址:</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>GET /_cat/shards?h=index,shard,prirep,state,unassigned.reason</code></pre></div><p data-v-9dd6d5de>查询索引有问题的原因</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>GET /_cluster/allocation/explain</code></pre></div><p data-v-9dd6d5de>官网文档
+<a rel="noopener noreferrer" target="_blank" href="https://www.elastic.co/guide/en/elasticsearch/reference/master/cluster-allocation-explain.html" data-v-9dd6d5de>https://www.elastic.co/guide/en/elasticsearch/reference/master/cluster-allocation-explain.html</a></p> <p data-v-9dd6d5de>可以查看结果，线上 ES 是12个分片，3个备份，但是每个备份都会出现一个 UNASSIGNED 的情况，我们从最后的原因 INDEX CREATED 可得知是由于创建索引的API导致未分配。</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>trackmodel-2019-01-02           8  r UNASSIGNED INDEX CREATED
+trackmodel-2019-01-02           8  r STARTED 
+trackmodel-2019-01-02           8  r STARTED 
+trackmodel-2019-01-02           8  p STARTED 
+trackmodel-2019-01-02           4  r STARTED 
+trackmodel-2019-01-02           4  p STARTED 
+trackmodel-2019-01-02           4  r STARTED 
+trackmodel-2019-01-02           4  r UNASSIGNED INDEX CREATED
+trackmodel-2019-01-02           7  r STARTED 
+trackmodel-2019-01-02           7  p STARTED 
+trackmodel-2019-01-02           7  r STARTED 
+trackmodel-2019-01-02           7  r UNASSIGNED INDEX CREATED
+.
+.
+.
+trackmodel-2019-01-02           1  r UNASSIGNED INDEX CREATED</code></pre></div><p data-v-9dd6d5de>然后使用查看：
+然后使用查看：</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>GET /_cat/allocation?v</code></pre></div><p data-v-9dd6d5de>可以从从结果中得知其实线上 ES 只有3个 node，但是由上面可知，我在创建索引时定义了3个副本，所以就是 node 数少于分片副本数导致的。</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>shards disk.indices disk.used disk.avail disk.total disk.percent host          ip            node
+   204      120.4gb   135.6gb       61gb    196.7gb           68 172.16.41.127 172.16.41.127 trace-es-node-3
+   204      121.9gb   139.3gb     57.4gb    196.7gb           70 172.16.41.125 172.16.41.125 trace-es-node-1
+   204      120.5gb   136.9gb     59.7gb    196.7gb           69 172.16.41.126 172.16.41.126 trace-es-node-2
+   204  unassinged</code></pre></div><p data-v-9dd6d5de>所以这个问题就很好解决了，由于本身我的索引是按每天日期新建，使用别名来进行查询，会定时删除过期索引，所以直接修改创建索引时代码，将创建副本数改为2即可解决问题。不需要更改之前出现的 UNASSIGNED 分片的问题，但是如果要更改的话可以直接使用以下命令来调整对应日期索引的副本数</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>PUT /trackmodel-2019-01-02/_settings
+{  
+    &quot;number_of_replicas&quot; : 2 
+}</code></pre></div><h3 id="问题探讨" data-v-9dd6d5de>问题探讨</h3> <p data-v-9dd6d5de>虽然这次的 UNASSIGNED 问题解决和问题原因非常简单，但是其实引起 UNASSIGNED 是有很多原因的，在 ES 开发中也经常会遇到这个问题，比如以下几种可能就都会引起 UNASSIGNED 的问题：</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>1. Shard allocation  过程中的延迟机制
+2. nodes 数小于分片副本数
+3. 检查是否开启 cluster.routing.allocation.enable 参数
+4. 分片的历史数据丢失了
+5. 磁盘不够用了
+6. es 的版本问题</code></pre></div><p data-v-9dd6d5de>这些不同问题导致的 UNASSIGNED 都需要不同的方式去解决，所以在本文第一条命令中最后的 reason 列就相对比较重要了，是知道问题原因的初步思路来源，大概分为以下几种</p> <div class="saber-highlight" data-lang="" data-v-9dd6d5de><pre class="saber-highlight-code language-text" data-v-9dd6d5de><code class="language-text" data-v-9dd6d5de>1）INDEX_CREATED：由于创建索引的API导致未分配。
+2）CLUSTER_RECOVERED ：由于完全集群恢复导致未分配。
+3）INDEX_REOPENED ：由于打开open或关闭close一个索引导致未分配。
+4）DANGLING_INDEX_IMPORTED ：由于导入dangling索引的结果导致未分配。
+5）NEW_INDEX_RESTORED ：由于恢复到新索引导致未分配。
+6）EXISTING_INDEX_RESTORED ：由于恢复到已关闭的索引导致未分配。
+7）REPLICA_ADDED：由于显式添加副本分片导致未分配。
+8）ALLOCATION_FAILED ：由于分片分配失败导致未分配。
+9）NODE_LEFT ：由于承载该分片的节点离开集群导致未分配。
+10）REINITIALIZED ：由于当分片从开始移动到初始化时导致未分配（例如，使用影子shadow副本分片）。
+11）REROUTE_CANCELLED ：作为显式取消重新路由命令的结果取消分配。
+12）REALLOCATED_REPLICA ：确定更好的副本位置被标定使用，导致现有的副本分配被取消，出现未分配。</code></pre></div><p data-v-9dd6d5de>设置单个索引在每个节点上最大分配分配数的设置是在索引模板 （index template）里设置</p> <p data-v-9dd6d5de>index.routing.allocation.total_shards_per_node&quot;:3</p></div></div> <div class="post text-center text-sm" data-v-9dd6d5de><hr class="mt-12 mb-12" data-v-9dd6d5de> <p data-v-9dd6d5de>讨论请发邮件到 hichenxinyu@gmail.com</p> <p data-v-9dd6d5de>未经授权，禁止转载</p> <p data-v-9dd6d5de>通过赞赏码赞助此文</p> <br data-v-9dd6d5de> <p data-v-9dd6d5de><img src="https://blog-pic-1253367462.cos.ap-shanghai.myqcloud.com/20200323135043.png" class="w-auto sm:w-64 mx-auto" data-v-9dd6d5de></p></div></div> <div class="font-serif text-sm text-center p-12 sm:p-32 text-gray-500 font-bold"><div>
+      2017-2020
+      <a href="/" class="router-link-active">Nevea's Blog</a></div> <div class="mt-2">
+      可通过
+      <a href="/rss.xml" class="border-b-4">RSS</a>  订阅本博客
+    </div></div></div></div><script src="/_saber/js/styles.1903deb0.js" defer></script><script src="/_saber/js/page--_posts-ELK-----md.f394cfc9.js" defer></script><script src="/_saber/js/client.fdf1ea11.js" defer></script></body></html>
