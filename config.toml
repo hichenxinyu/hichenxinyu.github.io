@@ -2,7 +2,7 @@
 # 站点配置
 
 baseURL = "https://example.com/"
-title = "Hugo 主题 MemE"
+title = "Nevea's Blog"
 languageCode = "zh-CN"
 hasCJKLanguage = true
 # 版权信息（支持 Markdown）
@@ -37,7 +37,7 @@ enableGitInfo = false
 enableRobotsTXT = true
 
 # 每一分页的文章数（仅对「文章摘要」首页布局有效）
-paginate = 5
+paginate = 100
 
 # URL 相关
 disablePathToLower = false
@@ -92,17 +92,17 @@ uglyURLs = false
 # 作者信息
 [author]
     # 名字
-    name = "reuixiy"
+    name = "陈欣宇"
     # 邮箱
-    email = "reuixiy@gmail.com"
+    email = "hichenxinyu@gmail.com"
     # 座右铭或简介
-    motto = "Viva La Vida"
+    motto = ""
     # 头像
     avatar = "/icons/apple-touch-icon.png"
     # 网站（默认值：baseURL）
-    website = "https://io-oi.me/"
+    website = "https://nevea.top/"
     # 推特
-    twitter = "reuixiy"
+    #twitter = ""
 
 # 相关文章
 [related]
