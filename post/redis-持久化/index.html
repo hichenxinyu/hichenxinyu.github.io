@@ -1,0 +1,77 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>Redis 持久化 - Even - A super concise theme for Hugo</title><meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=theme-color content="#f8f5ec"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=author content="Nevea"><meta name=description content="Redis的读写性能俱佳，但由于是内存数据库，如果没有提前备份，Redis数据是掉电即失的。 Redis提供了两种方式进行持久化： RDB持久化"><meta name=keywords content="Hugo,theme,even"><meta name=generator content="Hugo 0.59.1 with theme even"><link rel=canonical href=http://localhost:1313/post/redis-%E6%8C%81%E4%B9%85%E5%8C%96/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link href=/dist/even.c2a46f00.min.css rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous><meta property="og:title" content="Redis 持久化"><meta property="og:description" content="Redis的读写性能俱佳，但由于是内存数据库，如果没有提前备份，Redis数据是掉电即失的。 Redis提供了两种方式进行持久化： RDB持久化"><meta property="og:type" content="article"><meta property="og:url" content="http://localhost:1313/post/redis-%E6%8C%81%E4%B9%85%E5%8C%96/"><meta property="article:published_time" content="2019-07-11T00:00:00+00:00"><meta property="article:modified_time" content="2019-07-11T00:00:00+00:00"><meta itemprop=name content="Redis 持久化"><meta itemprop=description content="Redis的读写性能俱佳，但由于是内存数据库，如果没有提前备份，Redis数据是掉电即失的。 Redis提供了两种方式进行持久化： RDB持久化"><meta itemprop=datePublished content="2019-07-11T00:00:00&#43;00:00"><meta itemprop=dateModified content="2019-07-11T00:00:00&#43;00:00"><meta itemprop=wordCount content="690"><meta itemprop=keywords content><meta name=twitter:card content="summary"><meta name=twitter:title content="Redis 持久化"><meta name=twitter:description content="Redis的读写性能俱佳，但由于是内存数据库，如果没有提前备份，Redis数据是掉电即失的。 Redis提供了两种方式进行持久化： RDB持久化"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=/ class=logo>Nevea&#39;s Blog</a></div><div class=mobile-navbar-icon><span></span><span></span><span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=/><li class=mobile-menu-item>Home</li></a><a href=/post/><li class=mobile-menu-item>Archives</li></a><a href=/tags/><li class=mobile-menu-item>Tags</li></a><a href=/categories/><li class=mobile-menu-item>Categories</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=/ class=logo>Nevea&#39;s Blog</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=/>Home</a></li><li class=menu-item><a class=menu-item-link href=/post/>Archives</a></li><li class=menu-item><a class=menu-item-link href=/tags/>Tags</a></li><li class=menu-item><a class=menu-item-link href=/categories/>Categories</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>Redis 持久化</h1><div class=post-meta><span class=post-time>2019-07-11</span></div></header><div class=post-toc id=post-toc><h2 class=post-toc-title>Contents</h2><div class="post-toc-content always-active"><nav id=TableOfContents><ul><li><ul><li><ul><li><a href=#原理>原理</a><ul><li><a href=#aof-持久化存储>AOF 持久化存储</a></li><li><a href=#备份脚本>备份脚本</a></li></ul></li></ul></li></ul></li></ul></nav></div></div><div class=post-content><p>Redis的读写性能俱佳，但由于是内存数据库，如果没有提前备份，Redis数据是掉电即失的。
+Redis提供了两种方式进行持久化：</p><ol><li>RDB持久化</li><li>AOF持久化</li></ol><h3 id=原理>原理</h3><p>将Redis在内存中的数据定时<code>dump</code>到磁盘上，实际操作过程是<code>fork</code>一个子进程，先将数据写入临时文件，写入成功后，再替换之前的文件，用二进制压缩存储
+打印rdb文件</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></pre></td><td class=lntd><pre class=chroma>root@pa6:/var/lib/redis# od -c dump.rdb
+0000000   R   E   D   I   S   0   0   0   6 376  \0  \0 003   k   e   y
+0000020 301 177   # 377   ]   } 362 366 313 362   n 020
+0000034</pre></td></tr></table></div></div><p><img src=https://blog-pic-1253367462.cos.ap-shanghai.myqcloud.com/1567665181186-fcf56c20-aed6-4cb4-b55b-edeff6d6c3a3.png alt=image.png></p><h4 id=aof-持久化存储>AOF 持久化存储</h4><p>AOF持久化：将Redis的操作日志以文件追加的方式写入文件，只记录写、删除操作，查询操作不会记录（类似于MySQL的Binlog日志）</p><p><img src=https://blog-pic-1253367462.cos.ap-shanghai.myqcloud.com/1567665214953-264e7ec5-2993-431b-9e38-6ccfd3206f57.png alt=image.png></p><p>因为BGSAVE命令可以在不阻塞服务器进程的情况下执行，所以Redis允许用户通过设置服务器配置的save选项，让服务器每隔一段时间自动执行一次BGSAVE命令
+用户可以通过save选项设置多个保存条件，但只要其中任意一个条件被满足，服务器就会执行BGSAVE命令 举个例子，如果我们向服务器提供以下配置
+vim redis.conf</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></pre></td><td class=lntd><pre class=chroma>save 900 1
+save 300 10
+save 60 10000</pre></td></tr></table></div></div><p>那么只要满足以下三个条件中的任意一个，BGSAVE命令就会被执行 服务器在900秒之内，对数据库进行了至少1次修改
+服务器在300秒之内，对数据库进行了至少10次修改
+服务器在60秒之内，对数据库进行了至少10000次修改。</p><h4 id=备份脚本>备份脚本</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></pre></td><td class=lntd><pre class=chroma><span class=cp>#!/bin/bash
+</span><span class=cp></span><span class=c1># 避免造成雪崩</span>
+<span class=nb>set</span> -e
+<span class=c1># bak 目录</span>
+<span class=nv>BACKUPDIR</span><span class=o>=</span>/data/redis/backup
+<span class=c1>#PASSWD=&#39;redis密码&#39;</span>
+<span class=c1>#DATADIR=`/usr/local/bin/redis-cli -p 端口 -a &#34;$PASSWD&#34; config get dir|grep -Ev &#39;dir|grep&#39;`</span>
+<span class=c1># 获取redis-cli 二进制文件</span>
+<span class=nv>REDIS_CMD</span><span class=o>=</span><span class=k>$(</span>which redis-cli<span class=k>)</span>
+<span class=nv>DATADIR</span><span class=o>=</span><span class=sb>`</span><span class=nv>$REDIS_CMD</span>  config get dir<span class=p>|</span>grep -Ev <span class=s1>&#39;dir|grep&#39;</span><span class=sb>`</span>
+<span class=nv>DATE</span><span class=o>=</span><span class=sb>`</span>date +<span class=s1>&#39;%Y-%m-%d-%H-%M&#39;</span><span class=sb>`</span>
+<span class=nv>BACKUPDIR_DATE</span><span class=o>=</span><span class=nv>$BACKUPDIR_$DATE</span>
+
+<span class=k>if</span> <span class=o>[</span> ! -d <span class=nv>$BACKUPDIR</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+        mkdir -p <span class=nv>$BACKUPDIR</span> <span class=se>\
+</span><span class=se></span>        <span class=o>||</span> <span class=nb>echo</span> <span class=s2>&#34;can&#39;t make dir !!!&#34;</span> <span class=se>\
+</span><span class=se></span>        <span class=o>&amp;&amp;</span> <span class=nb>exit</span> <span class=m>1</span>
+<span class=k>fi</span>
+<span class=c1>#以日期分类</span>
+mkdir -p <span class=nv>$BACKUPDIR</span>/<span class=nv>$BACKUPDIR_DATE</span>
+<span class=nv>$REDIS_CMD</span>  bgsave
+sleep <span class=m>3</span>
+cp -rf <span class=nv>$DATADIR</span>/* <span class=nv>$BACKUPDIR</span>/<span class=nv>$BACKUPDIR_DATE</span></pre></td></tr></table></div></div></div><div class=post-copyright><p class=copyright-item><span class=item-title>Author</span>
+<span class=item-content>Nevea</span></p><p class=copyright-item><span class=item-title>LastMod</span>
+<span class=item-content>2019-07-11</span></p></div><footer class=post-footer><nav class=post-nav><a class=prev href=/post/kafka-zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/><i class="iconfont icon-left"></i><span class="prev-text nav-default">Kafka &amp; ZooKeeper 集群搭建</span>
+<span class="prev-text nav-mobile">Prev</span></a>
+<a class=next href=/post/prometheus/><span class="next-text nav-default">Prometheus&#43;Grafana监控实践</span>
+<span class="next-text nav-mobile">Next</span>
+<i class="iconfont icon-right"></i></a></nav></footer></article></div></div></main><footer id=footer class=footer><div class=social-links><a href=http://localhost:1313/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a></div><div class=copyright><span class=power-by>Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a></span>
+<span class=division>|</span>
+<span class=theme-info>Theme -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a></span>
+<span class=copyright-year>&copy;
+2017 -
+2020
+<span class=heart><i class="iconfont icon-heart"></i></span><span class=author>Nevea</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script><script type=text/javascript src=/dist/even.26188efa.min.js></script></body></html>
