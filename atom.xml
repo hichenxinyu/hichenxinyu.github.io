@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><title type="text">Nevea&#39;s Blog</title><subtitle type="html">MemE 是一个强大且可高度定制的 GoHugo 博客主题，专为个人博客设计。</subtitle><updated>2020-04-05T04:23:11+00:00</updated><id>https://example.com/</id><link rel="alternate" type="text/html" href="https://example.com/"/><link rel="self" type="application/atom+xml" href="https://example.com/atom.xml"/><author><name>陈欣宇</name><uri>https://example.com/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><generator uri="https://gohugo.io/" version="0.59.1">Hugo</generator><entry><title type="text">我常用的 Mac 软件</title><link rel="alternate" type="text/html" href="https://example.com/posts/mac%E8%BD%AF%E4%BB%B6/"/><id>https://example.com/posts/mac%E8%BD%AF%E4%BB%B6/</id><updated>2020-04-05T04:23:08+00:00</updated><published>2020-03-23T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">选择软件的一些标准 跨平台 开源免费 简洁 无广告 Markdown编辑器：Typora+Pi……</summary><content type="html"><![CDATA[<p>选择软件的一些标准</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><title type="text">Nevea&#39;s Blog</title><subtitle type="html">MemE 是一个强大且可高度定制的 GoHugo 博客主题，专为个人博客设计。</subtitle><updated>2020-04-05T04:25:13+00:00</updated><id>https://example.com/</id><link rel="alternate" type="text/html" href="https://example.com/"/><link rel="self" type="application/atom+xml" href="https://example.com/atom.xml"/><author><name>陈欣宇</name><uri>https://example.com/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><generator uri="https://gohugo.io/" version="0.59.1">Hugo</generator><entry><title type="text">我常用的 Mac 软件</title><link rel="alternate" type="text/html" href="https://example.com/posts/mac%E8%BD%AF%E4%BB%B6/"/><id>https://example.com/posts/mac%E8%BD%AF%E4%BB%B6/</id><updated>2020-04-05T04:25:11+00:00</updated><published>2020-03-23T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">选择软件的一些标准 跨平台 开源免费 简洁 无广告 Markdown编辑器：Typora+Pi……</summary><content type="html"><![CDATA[<p>选择软件的一些标准</p>
 
 <ul>
 <li>跨平台</li>
@@ -29,7 +29,7 @@
 
 <p>快捷工具：AIfred3
 ​   日常搜索文件，搜索软件速度更快</p>
-]]></content></entry><entry><title type="text">Kubernetes集群安装</title><link rel="alternate" type="text/html" href="https://example.com/posts/kubernetes-%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85/"/><id>https://example.com/posts/kubernetes-%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85/</id><updated>2020-04-05T04:23:08+00:00</updated><published>2019-07-20T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">Master包含组件 Master 组件提供的集群控制，Master 组件对集群做出全局性决策(例如……</summary><content type="html"><![CDATA[
+]]></content></entry><entry><title type="text">Kubernetes集群安装</title><link rel="alternate" type="text/html" href="https://example.com/posts/kubernetes-%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85/"/><id>https://example.com/posts/kubernetes-%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85/</id><updated>2020-04-05T04:25:11+00:00</updated><published>2019-07-20T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">Master包含组件 Master 组件提供的集群控制，Master 组件对集群做出全局性决策(例如……</summary><content type="html"><![CDATA[
 
 <h3 id="master包含组件">Master包含组件</h3>
 
@@ -313,7 +313,7 @@ demo-master-a-1   Ready    master   5m3s    v1.17.x
 demo-worker-a-1   Ready    &lt;none&gt;   2m26s   v1.17.x
 demo-worker-a-2   Ready    &lt;none&gt;   3m56s   v1.17.x
 </code></pre>
-]]></content></entry><entry><title type="text">Kafka & ZooKeeper 集群搭建</title><link rel="alternate" type="text/html" href="https://example.com/posts/kafka-zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"/><id>https://example.com/posts/kafka-zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/</id><updated>2020-04-05T04:23:08+00:00</updated><published>2019-07-11T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">环境准备 三台机器 CentOS 7.4 10.0.19.218 10.0.19.216 10.0.19.142 kafka 集群搭建准备: Java环境 ZooKeeper 集群搭建 Zookeeper 集群搭建 server.1=10.0.19.218:2888:3888 server.2=10.0.19.216:2888:3888 server.3=10.0.19.142:2888:3888 echo &amp;quot;1&amp;quot;……</summary><content type="html"><![CDATA[
+]]></content></entry><entry><title type="text">Kafka & ZooKeeper 集群搭建</title><link rel="alternate" type="text/html" href="https://example.com/posts/kafka-zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"/><id>https://example.com/posts/kafka-zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/</id><updated>2020-04-05T04:25:11+00:00</updated><published>2019-07-11T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">环境准备 三台机器 CentOS 7.4 10.0.19.218 10.0.19.216 10.0.19.142 kafka 集群搭建准备: Java环境 ZooKeeper 集群搭建 Zookeeper 集群搭建 server.1=10.0.19.218:2888:3888 server.2=10.0.19.216:2888:3888 server.3=10.0.19.142:2888:3888 echo &amp;quot;1&amp;quot;……</summary><content type="html"><![CDATA[
 
 <h4 id="环境准备">环境准备</h4>
 
@@ -415,7 +415,7 @@ cd kafka_2.11-2.2.0
 <pre><code>./kafka-console-producer.sh --broker-list localhost:9092 --topic demo
 ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --from-beginning --topic demo
 </code></pre>
-]]></content></entry><entry><title type="text">Redis 持久化</title><link rel="alternate" type="text/html" href="https://example.com/posts/redis-%E6%8C%81%E4%B9%85%E5%8C%96/"/><id>https://example.com/posts/redis-%E6%8C%81%E4%B9%85%E5%8C%96/</id><updated>2020-04-05T04:23:08+00:00</updated><published>2019-07-11T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">Redis的读写性能俱佳，但由于是内存数据库，如果没有提前备份，Redis数据是掉电……</summary><content type="html"><![CDATA[
+]]></content></entry><entry><title type="text">Redis 持久化</title><link rel="alternate" type="text/html" href="https://example.com/posts/redis-%E6%8C%81%E4%B9%85%E5%8C%96/"/><id>https://example.com/posts/redis-%E6%8C%81%E4%B9%85%E5%8C%96/</id><updated>2020-04-05T04:25:11+00:00</updated><published>2019-07-11T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">Redis的读写性能俱佳，但由于是内存数据库，如果没有提前备份，Redis数据是掉电……</summary><content type="html"><![CDATA[
 
 <p>Redis的读写性能俱佳，但由于是内存数据库，如果没有提前备份，Redis数据是掉电即失的。
 Redis提供了两种方式进行持久化：</p>
@@ -483,7 +483,7 @@ $REDIS_CMD  bgsave
 sleep 3
 cp -rf $DATADIR/* $BACKUPDIR/$BACKUPDIR_DATE
 </code></pre>
-]]></content></entry><entry><title type="text">Prometheus&#43;Grafana监控实践</title><link rel="alternate" type="text/html" href="https://example.com/posts/prometheus/"/><id>https://example.com/posts/prometheus/</id><updated>2020-04-05T04:23:08+00:00</updated><published>2019-07-01T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">什么是Prometheus Prometheus 是由 SoundCloud 开源监控告警解决方案，从 2012 年开始编写代码，再到 2015 年……</summary><content type="html"><![CDATA[
+]]></content></entry><entry><title type="text">Prometheus&#43;Grafana监控实践</title><link rel="alternate" type="text/html" href="https://example.com/posts/prometheus/"/><id>https://example.com/posts/prometheus/</id><updated>2020-04-05T04:25:11+00:00</updated><published>2019-07-01T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">什么是Prometheus Prometheus 是由 SoundCloud 开源监控告警解决方案，从 2012 年开始编写代码，再到 2015 年……</summary><content type="html"><![CDATA[
 
 <h4 id="什么是prometheus">什么是Prometheus</h4>
 
@@ -715,7 +715,7 @@ remote_write:
 remote_read:
   - url: &quot;http://influxdb:8086/api/v1/prom/read?db=prometheus&quot;
 </code></pre>
-]]></content></entry><entry><title type="text">Gitlab CI/CD</title><link rel="alternate" type="text/html" href="https://example.com/posts/gitlab-ci/"/><id>https://example.com/posts/gitlab-ci/</id><updated>2020-04-05T04:23:08+00:00</updated><published>2019-06-12T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">GitLab CI/CD 是gitlab8.0之后自带的一个持续集成系统，中心思想是当每一次push到gi……</summary><content type="html"><![CDATA[
+]]></content></entry><entry><title type="text">Gitlab CI/CD</title><link rel="alternate" type="text/html" href="https://example.com/posts/gitlab-ci/"/><id>https://example.com/posts/gitlab-ci/</id><updated>2020-04-05T04:25:11+00:00</updated><published>2019-06-12T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">GitLab CI/CD 是gitlab8.0之后自带的一个持续集成系统，中心思想是当每一次push到gi……</summary><content type="html"><![CDATA[
 
 <p>GitLab CI/CD 是gitlab8.0之后自带的一个持续集成系统，中心思想是当每一次push到gitlab的时候，都会触发一次脚本执行，然后脚本的内容包括了测试，编译，部署等一系列自定义的内容。</p>
 
@@ -750,7 +750,7 @@ yum install gitlab-runner -y
 <pre><code>gitlab-ci-multi-runner register
 #然后依次填入  gitlab url，Token，Runner 类型
 </code></pre>
-]]></content></entry><entry><title type="text">ELK Stack 升级</title><link rel="alternate" type="text/html" href="https://example.com/posts/elk-stack-%E5%8D%87%E7%BA%A7%E7%AC%94%E8%AE%B0/"/><id>https://example.com/posts/elk-stack-%E5%8D%87%E7%BA%A7%E7%AC%94%E8%AE%B0/</id><updated>2020-04-05T04:23:08+00:00</updated><published>2019-06-11T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">升级方案 比较常见的 ELK Stack 升级方式有一下 3 种 数据迁移升级：新建一套高版本 ES 集群，然后把老……</summary><content type="html"><![CDATA[
+]]></content></entry><entry><title type="text">ELK Stack 升级</title><link rel="alternate" type="text/html" href="https://example.com/posts/elk-stack-%E5%8D%87%E7%BA%A7%E7%AC%94%E8%AE%B0/"/><id>https://example.com/posts/elk-stack-%E5%8D%87%E7%BA%A7%E7%AC%94%E8%AE%B0/</id><updated>2020-04-05T04:25:11+00:00</updated><published>2019-06-11T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">升级方案 比较常见的 ELK Stack 升级方式有一下 3 种 数据迁移升级：新建一套高版本 ES 集群，然后把老……</summary><content type="html"><![CDATA[
 
 <h3 id="升级方案">升级方案</h3>
 
@@ -1020,7 +1020,7 @@ server.basePath: &quot;/anchang&quot;
 # default to `true` starting in Kibana 7.0.
 server.rewriteBasePath: false
 </code></pre>
-]]></content></entry><entry><title type="text">ELK 问题排查</title><link rel="alternate" type="text/html" href="https://example.com/posts/elk%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/"/><id>https://example.com/posts/elk%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/</id><updated>2020-04-05T04:23:08+00:00</updated><published>2019-06-03T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">集群 Red 为了完整的查看索引，分片，主分片和副分片情况，所以可直接使用自带 Api 查看，输入地……</summary><content type="html"><![CDATA[
+]]></content></entry><entry><title type="text">ELK 问题排查</title><link rel="alternate" type="text/html" href="https://example.com/posts/elk%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/"/><id>https://example.com/posts/elk%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/</id><updated>2020-04-05T04:25:11+00:00</updated><published>2019-06-03T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">集群 Red 为了完整的查看索引，分片，主分片和副分片情况，所以可直接使用自带 Api 查看，输入地……</summary><content type="html"><![CDATA[
 
 <h3 id="集群-red">集群 Red</h3>
 
@@ -1111,7 +1111,7 @@ trackmodel-2019-01-02           1  r UNASSIGNED INDEX CREATED
 <p>设置单个索引在每个节点上最大分配分配数的设置是在索引模板 （index template）里设置</p>
 
 <p>index.routing.allocation.total_shards_per_node&rdquo;:3</p>
-]]></content></entry><entry><title type="text">ElasticSearch 压测</title><link rel="alternate" type="text/html" href="https://example.com/posts/elk%E5%8E%8B%E6%B5%8B/"/><id>https://example.com/posts/elk%E5%8E%8B%E6%B5%8B/</id><updated>2020-04-05T04:23:08+00:00</updated><published>2019-05-22T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">本次压测目标： 测试集群读写性能 &amp;amp; 为集群容量规划提供数据支撑 测试 ES 新版本，结合实际场景……</summary><content type="html"><![CDATA[
+]]></content></entry><entry><title type="text">ElasticSearch 压测</title><link rel="alternate" type="text/html" href="https://example.com/posts/elk%E5%8E%8B%E6%B5%8B/"/><id>https://example.com/posts/elk%E5%8E%8B%E6%B5%8B/</id><updated>2020-04-05T04:25:11+00:00</updated><published>2019-05-22T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">本次压测目标： 测试集群读写性能 &amp;amp; 为集群容量规划提供数据支撑 测试 ES 新版本，结合实际场景……</summary><content type="html"><![CDATA[
 
 <h4 id="本次压测目标">本次压测目标：</h4>
 
@@ -1442,7 +1442,7 @@ trackmodel-2019-01-02           1  r UNASSIGNED INDEX CREATED
 <h4 id="参考">参考：</h4>
 
 <p>[<a href="https://github.com/elastic/rally](">https://github.com/elastic/rally](</a></p>
-]]></content></entry><entry><title type="text">VScode使用笔记</title><link rel="alternate" type="text/html" href="https://example.com/posts/vscode%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"/><id>https://example.com/posts/vscode%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</id><updated>2020-04-05T04:23:08+00:00</updated><published>2019-01-14T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">电脑可能会换，系统可能会换，但是编辑器，可能会跟你很久. 推荐安装插件: Atom One Dark Theme #At……</summary><content type="html"><![CDATA[
+]]></content></entry><entry><title type="text">VScode使用笔记</title><link rel="alternate" type="text/html" href="https://example.com/posts/vscode%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"/><id>https://example.com/posts/vscode%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</id><updated>2020-04-05T04:25:11+00:00</updated><published>2019-01-14T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">电脑可能会换，系统可能会换，但是编辑器，可能会跟你很久. 推荐安装插件: Atom One Dark Theme #At……</summary><content type="html"><![CDATA[
 
 <blockquote>
 <p>电脑可能会换，系统可能会换，但是编辑器，可能会跟你很久.</p>
@@ -1463,7 +1463,7 @@ trackmodel-2019-01-02           1  r UNASSIGNED INDEX CREATED
 如果是是用python-autopep8的插件 则要在终端中使用brew install autopep8</p>
 
 <p>python虚拟环境:virtualenv</p>
-]]></content></entry><entry><title type="text">Nginx实战</title><link rel="alternate" type="text/html" href="https://example.com/posts/nginx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/><id>https://example.com/posts/nginx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</id><updated>2020-04-05T04:23:08+00:00</updated><published>2018-02-03T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">搭建一个简易的代理服务 nginx 常常用来作为代理服务器，这代表着服务器接收请求，然后将它们传……</summary><content type="html"><![CDATA[
+]]></content></entry><entry><title type="text">Nginx实战</title><link rel="alternate" type="text/html" href="https://example.com/posts/nginx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/><id>https://example.com/posts/nginx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</id><updated>2020-04-05T04:25:11+00:00</updated><published>2018-02-03T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">搭建一个简易的代理服务 nginx 常常用来作为代理服务器，这代表着服务器接收请求，然后将它们传……</summary><content type="html"><![CDATA[
 
 <h1 id="搭建一个简易的代理服务">搭建一个简易的代理服务</h1>
 
@@ -1530,7 +1530,7 @@ trackmodel-2019-01-02           1  r UNASSIGNED INDEX CREATED
  3. ~ 开头表示区分大小写的正则匹配;
  4. ~* 开头表示不区分大小写的正则匹配
  5. / 通用匹配, 如果没有其它匹配,任何请求都会匹配到</p>
-]]></content></entry><entry><title type="text">Centos更换yum源</title><link rel="alternate" type="text/html" href="https://example.com/posts/%E6%9B%B4%E6%8D%A2yum%E6%BA%90/"/><id>https://example.com/posts/%E6%9B%B4%E6%8D%A2yum%E6%BA%90/</id><updated>2020-04-05T04:23:08+00:00</updated><published>2018-02-02T11:12:48+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">第一步：备份你的原镜像文件，以免出错后可以恢复。 mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup 第二步：下载新的CentOS-……</summary><content type="html"><![CDATA[
+]]></content></entry><entry><title type="text">Centos更换yum源</title><link rel="alternate" type="text/html" href="https://example.com/posts/%E6%9B%B4%E6%8D%A2yum%E6%BA%90/"/><id>https://example.com/posts/%E6%9B%B4%E6%8D%A2yum%E6%BA%90/</id><updated>2020-04-05T04:25:11+00:00</updated><published>2018-02-02T11:12:48+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">第一步：备份你的原镜像文件，以免出错后可以恢复。 mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup 第二步：下载新的CentOS-……</summary><content type="html"><![CDATA[
 
 <h4 id="第一步-备份你的原镜像文件-以免出错后可以恢复">第一步：备份你的原镜像文件，以免出错后可以恢复。</h4>
 
@@ -1553,7 +1553,7 @@ wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-
 <pre><code>yum clean all
 yum makecache
 </code></pre>
-]]></content><category scheme="https://example.com/categories/life/" term="Life" label="Life"/></entry><entry><title type="text">Zabbix4.4安装</title><link rel="alternate" type="text/html" href="https://example.com/posts/zabbix4.4-%E5%AE%89%E8%A3%85%E6%96%87%E6%A1%A3/"/><id>https://example.com/posts/zabbix4.4-%E5%AE%89%E8%A3%85%E6%96%87%E6%A1%A3/</id><updated>2020-04-05T04:23:08+00:00</updated><published>2017-11-28T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">Zabbix介绍 Zabbix 是一个企业级的分布式开源监控方案。 zabbix server ，zabbix agent&amp;gt; 与可选组件z……</summary><content type="html"><![CDATA[
+]]></content><category scheme="https://example.com/categories/life/" term="Life" label="Life"/></entry><entry><title type="text">Zabbix4.4安装</title><link rel="alternate" type="text/html" href="https://example.com/posts/zabbix4.4-%E5%AE%89%E8%A3%85%E6%96%87%E6%A1%A3/"/><id>https://example.com/posts/zabbix4.4-%E5%AE%89%E8%A3%85%E6%96%87%E6%A1%A3/</id><updated>2020-04-05T04:25:11+00:00</updated><published>2017-11-28T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">Zabbix介绍 Zabbix 是一个企业级的分布式开源监控方案。 zabbix server ，zabbix agent&amp;gt; 与可选组件z……</summary><content type="html"><![CDATA[
 
 <h3 id="zabbix介绍">Zabbix介绍</h3>
 
@@ -1871,7 +1871,7 @@ netstat -lntup |grep zabbix_agent
 <p><img src="https://blog-pic-1253367462.cos.ap-shanghai.myqcloud.com/image-20200324215828877.png" alt="image-20200324215828877" /></p>
 
 <p>这样一台客户端Linux基本添加完成，过几分钟就能开到Zabbix图标变绿证明添加成功了。</p>
-]]></content></entry><entry><title type="text">Gerrit CodeReview代码审核工具搭建配置</title><link rel="alternate" type="text/html" href="https://example.com/posts/gerrit-codereview%E5%B7%A5%E5%85%B7%E6%90%AD%E5%BB%BA%E9%85%8D%E7%BD%AE/"/><id>https://example.com/posts/gerrit-codereview%E5%B7%A5%E5%85%B7%E6%90%AD%E5%BB%BA%E9%85%8D%E7%BD%AE/</id><updated>2020-04-05T04:23:08+00:00</updated><published>0001-01-01T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">一、环境准备 OS:centos6.8 gerrit依赖 (java&amp;amp;git) yum -y install java-1.8.0 安装git 2.14.1 (低版本git同步gitlab时……</summary><content type="html"><![CDATA[
+]]></content></entry><entry><title type="text">Gerrit CodeReview代码审核工具搭建配置</title><link rel="alternate" type="text/html" href="https://example.com/posts/gerrit-codereview%E5%B7%A5%E5%85%B7%E6%90%AD%E5%BB%BA%E9%85%8D%E7%BD%AE/"/><id>https://example.com/posts/gerrit-codereview%E5%B7%A5%E5%85%B7%E6%90%AD%E5%BB%BA%E9%85%8D%E7%BD%AE/</id><updated>2020-04-05T04:25:11+00:00</updated><published>0001-01-01T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">一、环境准备 OS:centos6.8 gerrit依赖 (java&amp;amp;git) yum -y install java-1.8.0 安装git 2.14.1 (低版本git同步gitlab时……</summary><content type="html"><![CDATA[
 
 <h3 id="一-环境准备">一、环境准备</h3>
 
@@ -2051,7 +2051,7 @@ git push origin HEAD:refs/for/master(branch),gerrit默认关闭非admin账号的
 <li>git配置的email一定要和gerrit里注册的email一致，否者push会出错</li>
 <li>gerrit数据库与gitlab同步，需要安装replication插件，并开启该功能</li>
 </ul>
-]]></content></entry><entry><title type="text">Yum 命令被锁</title><link rel="alternate" type="text/html" href="https://example.com/posts/yum%E5%91%BD%E4%BB%A4%E8%A2%AB%E9%94%81%E8%A7%A3%E5%86%B3/"/><id>https://example.com/posts/yum%E5%91%BD%E4%BB%A4%E8%A2%AB%E9%94%81%E8%A7%A3%E5%86%B3/</id><updated>2020-04-05T04:23:08+00:00</updated><published>0001-01-01T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">root@centos001 ~]# yum clean all //执行一个yum命令 已加载插件：fastestmirror Repodata is over 2 weeks old. Install……</summary><content type="html"><![CDATA[
+]]></content></entry><entry><title type="text">Yum 命令被锁</title><link rel="alternate" type="text/html" href="https://example.com/posts/yum%E5%91%BD%E4%BB%A4%E8%A2%AB%E9%94%81%E8%A7%A3%E5%86%B3/"/><id>https://example.com/posts/yum%E5%91%BD%E4%BB%A4%E8%A2%AB%E9%94%81%E8%A7%A3%E5%86%B3/</id><updated>2020-04-05T04:25:11+00:00</updated><published>0001-01-01T00:00:00+00:00</published><author><name>陈欣宇</name><uri>https://nevea.top/</uri><email>hichenxinyu@gmail.com</email></author><rights>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</rights><summary type="html">root@centos001 ~]# yum clean all //执行一个yum命令 已加载插件：fastestmirror Repodata is over 2 weeks old. Install……</summary><content type="html"><![CDATA[
 
 <pre><code>root@centos001 ~]# yum clean all      //执行一个yum命令
 已加载插件：fastestmirror
