@@ -30,6 +30,6 @@ jobs:
         uses: peaceiris/actions-gh-pages@v2.5.1
         env:
           ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY}}
-          EXTERNAL_REPOSITORY: https://e.coding.net/nevea/blog.git
+          EXTERNAL_REPOSITORY: git@e.coding.net:nevea/blog.git
           PUBLISH_BRANCH: master
           PUBLISH_DIR: ./public
