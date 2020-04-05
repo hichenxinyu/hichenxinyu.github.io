@@ -1,204 +1,12 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-  <meta http-equiv="content-type" content="text/html;charset=utf-8">
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noodp"/>
-  <meta name="author" content="Covey.Liu">
-  
-  
-  
-  <link rel="prev" href="https://example.com/2019/kafka-zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/" />
-  <link rel="next" href="https://example.com/2020/mac%E8%BD%AF%E4%BB%B6/" />
-  <link rel="canonical" href="https://example.com/2019/kubernetes-%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85/" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="manifest" href="/site.webmanifest">
-  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-  <meta name="msapplication-TileColor" content="#da532c">
-  <meta name="theme-color" content="#ffffff">
-  <title>
-       
-       
-           Kubernetes集群安装 | LeaveIt
-       
-  </title>
-  <meta name="title" content="Kubernetes集群安装 | LeaveIt">
-    
-  
-  <link rel="stylesheet" href="/font/iconfont.css">
-  <link rel="stylesheet" href="/css/main.min.css">
-
-
-  
-  
- 
-
-<script type="application/ld+json">
- "@context" : "http://schema.org",
-    "@type" : "BlogPosting",
-    "mainEntityOfPage": {
-         "@type": "WebPage",
-         "@id": "https:\/\/example.com"
-    },
-    "articleSection" : "posts",
-    "name" : "Kubernetes集群安装",
-    "headline" : "Kubernetes集群安装",
-    "description" : "Master包含组件 Master 组件提供的集群控制，Master 组件对集群做出全局性决策(例如：调度)等，负责维护集群的目标状态。\n   组件 说明     etcd 用于 Kubernetes 的后端数据存储，所有集群数据都存储在此处   kube-apiserver 对外暴露了 Kubernetes API，它是的 Kubernetes 前端控制层，只有 API Server 会与 etcd 通信，其它模块都必须通过 API Server 访问集群状态。   kube-controller-manager 处理集群中常规任务，它是单独的进程，内部包含多个控制器，包含节点控制器,副本控制器,端点控制器,服务帐户和令牌控制器   kube-scheduler 监视新创建的 Pod 为新创建的 POD 分配合适的 node 节点   addons（插件） 插件是实现集群功能的 Pod 和 Service，一般被创建于 kube-system 命名空间。例如：coreDNS    Node 包含组件 Node 节点实际负责实施，也就是运行 POD 的节点，上面运行的组件有\n   组件 说明     kubelet 它监测已经分配给自己的 Pod，为 POD 准备卷，下载 POD 所需的 Secret，下载镜像并运行，进行生命周期探测，上报 POD 和节点状态   kube-proxy 通过维护主机上的网络规则并执行连接转发，将 Kubernetes 提供的网络服务代理到每个节点上，实现了Kubernetes服务抽象   docker 用于运行容器    #!",
-    "inLanguage" : "en-us",
-    "author" : "Covey.Liu",
-    "creator" : "Covey.Liu",
-    "publisher": "Covey.Liu",
-    "accountablePerson" : "Covey.Liu",
-    "copyrightHolder" : "Covey.Liu",
-    "copyrightYear" : "2019",
-    "datePublished": "2019-07-20 00:00:00 \x2b0000 UTC",
-    "dateModified" : "2019-07-20 00:00:00 \x2b0000 UTC",
-    "url" : "https:\/\/example.com\/2019\/kubernetes-%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85\/",
-    "wordCount" : "631",
-    "keywords" : [  "LeaveIt"]
-}
-</script>
-
-</head>
-
-  
-
-
-  <body class="">
-    <div class="wrapper">
-        <nav class="navbar">
-    <div class="container">
-        <div class="navbar-header header-logo">
-        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://example.com">LeaveIt</a>
-        </div>
-        <div class="menu navbar-right">
-                
-                
-                <a class="menu-item" href="/posts/" title="">Blog</a>
-                
-                <a class="menu-item" href="/categories/" title="">Categories</a>
-                
-                <a class="menu-item" href="/tags/" title="">Tags</a>
-                
-                <a class="menu-item" href="/about/" title="">About</a>
-                
-        </div>
-    </div>
-</nav>
-<nav class="navbar-mobile" id="nav-mobile" style="display: none">
-     <div class="container">
-        <div class="navbar-header">
-            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://example.com">LeaveIt</a></div>
-            <div class="menu-toggle">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-     
-          <div class="menu" id="mobile-menu">
-                
-                
-                <a class="menu-item" href="/posts/" title="">Blog</a>
-                
-                <a class="menu-item" href="/categories/" title="">Categories</a>
-                
-                <a class="menu-item" href="/tags/" title="">Tags</a>
-                
-                <a class="menu-item" href="/about/" title="">About</a>
-                
-        </div>
-    </div>
-</nav>
-    	 <main class="main">
-          <div class="container">
-      		
-<article class="post-warp" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">Kubernetes集群安装</h1>
-        <div class="post-meta">
-                Written by <a itemprop="name" href="https://example.com" rel="author">Covey.Liu</a> with ♥ 
-                <span class="post-time">
-                on <time datetime=2019-07-20 itemprop="datePublished">July 20, 2019</time>
-                </span>
-                in
-                
-        </div>
-    </header>
-    <div class="post-content">
-        
-
-        
-
-        
-        
-     
-          
-          
-          
-
-          
-          
-          
-
-          <h3 id="master">Master包含组件</h3>
-<p>Master 组件提供的集群控制，Master 组件对集群做出全局性决策(例如：调度)等，负责维护集群的目标状态。</p>
-<table>
-<thead>
-<tr>
-<th>组件</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>etcd</td>
-<td>用于 Kubernetes 的后端数据存储，所有集群数据都存储在此处</td>
-</tr>
-<tr>
-<td>kube-apiserver</td>
-<td>对外暴露了 Kubernetes API，它是的 Kubernetes 前端控制层，只有 API Server 会与 etcd 通信，其它模块都必须通过 API Server 访问集群状态。</td>
-</tr>
-<tr>
-<td>kube-controller-manager</td>
-<td>处理集群中常规任务，它是单独的进程，内部包含多个控制器，包含节点控制器,副本控制器,端点控制器,服务帐户和令牌控制器</td>
-</tr>
-<tr>
-<td>kube-scheduler</td>
-<td>监视新创建的 Pod 为新创建的 POD 分配合适的 node 节点</td>
-</tr>
-<tr>
-<td>addons（插件）</td>
-<td>插件是实现集群功能的 Pod 和 Service，一般被创建于 kube-system 命名空间。例如：coreDNS</td>
-</tr>
-</tbody>
-</table>
-<h3 id="node--">Node  包含组件</h3>
-<p>Node 节点实际负责实施，也就是运行 POD 的节点，上面运行的组件有</p>
-<table>
-<thead>
-<tr>
-<th>组件</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>kubelet</td>
-<td>它监测已经分配给自己的 Pod，为 POD 准备卷，下载 POD 所需的 Secret，下载镜像并运行，进行生命周期探测，上报 POD 和节点状态</td>
-</tr>
-<tr>
-<td>kube-proxy</td>
-<td>通过维护主机上的网络规则并执行连接转发，将 Kubernetes 提供的网络服务代理到每个节点上，实现了Kubernetes服务抽象</td>
-</tr>
-<tr>
-<td>docker</td>
-<td>用于运行容器</td>
-</tr>
-</tbody>
-</table>
-<pre><code>#!/bin/bash
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="chrome=1"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta name=author content="Covey.Liu"><link rel=prev href=https://example.com/2019/kafka-zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/><link rel=next href=https://example.com/2020/mac%E8%BD%AF%E4%BB%B6/><link rel=canonical href=https://example.com/2019/kubernetes-%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><meta name=msapplication-TileColor content="#da532c"><meta name=theme-color content="#ffffff"><title>Kubernetes集群安装 | LeaveIt</title><meta name=title content="Kubernetes集群安装 | LeaveIt"><link rel=stylesheet href=/font/iconfont.css><link rel=stylesheet href=/css/main.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/example.com"},"articleSection":"posts","name":"Kubernetes集群安装","headline":"Kubernetes集群安装","description":"Master包含组件 Master 组件提供的集群控制，Master 组件对集群做出全局性决策(例如：调度)等，负责维护集群的目标状态。\n   组件 说明     etcd 用于 Kubernetes 的后端数据存储，所有集群数据都存储在此处   kube-apiserver 对外暴露了 Kubernetes API，它是的 Kubernetes 前端控制层，只有 API Server 会与 etcd 通信，其它模块都必须通过 API Server 访问集群状态。   kube-controller-manager 处理集群中常规任务，它是单独的进程，内部包含多个控制器，包含节点控制器,副本控制器,端点控制器,服务帐户和令牌控制器   kube-scheduler 监视新创建的 Pod 为新创建的 POD 分配合适的 node 节点   addons（插件） 插件是实现集群功能的 Pod 和 Service，一般被创建于 kube-system 命名空间。例如：coreDNS    Node 包含组件 Node 节点实际负责实施，也就是运行 POD 的节点，上面运行的组件有\n   组件 说明     kubelet 它监测已经分配给自己的 Pod，为 POD 准备卷，下载 POD 所需的 Secret，下载镜像并运行，进行生命周期探测，上报 POD 和节点状态   kube-proxy 通过维护主机上的网络规则并执行连接转发，将 Kubernetes 提供的网络服务代理到每个节点上，实现了Kubernetes服务抽象   docker 用于运行容器    #!","inLanguage":"en-us","author":"Covey.Liu","creator":"Covey.Liu","publisher":"Covey.Liu","accountablePerson":"Covey.Liu","copyrightHolder":"Covey.Liu","copyrightYear":"2019","datePublished":"2019-07-20 00:00:00 \x2b0000 UTC","dateModified":"2019-07-20 00:00:00 \x2b0000 UTC","url":"https:\/\/example.com\/2019\/kubernetes-%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85\/","wordCount":"631","keywords":["LeaveIt"]}</script></head><body><div class=wrapper><nav class=navbar><div class=container><div class="navbar-header header-logo"><a href=javascript:void(0); class=theme-switch><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href=https://example.com>LeaveIt</a></div><div class="menu navbar-right"><a class=menu-item href=/posts/>Blog</a>
+<a class=menu-item href=/categories/>Categories</a>
+<a class=menu-item href=/tags/>Tags</a>
+<a class=menu-item href=/about/>About</a></div></div></nav><nav class=navbar-mobile id=nav-mobile style=display:none><div class=container><div class=navbar-header><div><a href=javascript:void(0); class=theme-switch><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href=https://example.com>LeaveIt</a></div><div class=menu-toggle><span></span><span></span><span></span></div></div><div class=menu id=mobile-menu><a class=menu-item href=/posts/>Blog</a>
+<a class=menu-item href=/categories/>Categories</a>
+<a class=menu-item href=/tags/>Tags</a>
+<a class=menu-item href=/about/>About</a></div></div></nav><main class=main><div class=container><article class=post-warp itemscope itemtype=http://schema.org/Article><header class=post-header><h1 class=post-title itemprop="name headline">Kubernetes集群安装</h1><div class=post-meta>Written by <a itemprop=name href=https://example.com rel=author>Covey.Liu</a> with ♥
+<span class=post-time>on <time datetime=2019-07-20 itemprop=datePublished>July 20, 2019</time></span>
+in</div></header><div class=post-content><h3 id=master>Master包含组件</h3><p>Master 组件提供的集群控制，Master 组件对集群做出全局性决策(例如：调度)等，负责维护集群的目标状态。</p><table><thead><tr><th>组件</th><th>说明</th></tr></thead><tbody><tr><td>etcd</td><td>用于 Kubernetes 的后端数据存储，所有集群数据都存储在此处</td></tr><tr><td>kube-apiserver</td><td>对外暴露了 Kubernetes API，它是的 Kubernetes 前端控制层，只有 API Server 会与 etcd 通信，其它模块都必须通过 API Server 访问集群状态。</td></tr><tr><td>kube-controller-manager</td><td>处理集群中常规任务，它是单独的进程，内部包含多个控制器，包含节点控制器,副本控制器,端点控制器,服务帐户和令牌控制器</td></tr><tr><td>kube-scheduler</td><td>监视新创建的 Pod 为新创建的 POD 分配合适的 node 节点</td></tr><tr><td>addons（插件）</td><td>插件是实现集群功能的 Pod 和 Service，一般被创建于 kube-system 命名空间。例如：coreDNS</td></tr></tbody></table><h3 id=node-->Node 包含组件</h3><p>Node 节点实际负责实施，也就是运行 POD 的节点，上面运行的组件有</p><table><thead><tr><th>组件</th><th>说明</th></tr></thead><tbody><tr><td>kubelet</td><td>它监测已经分配给自己的 Pod，为 POD 准备卷，下载 POD 所需的 Secret，下载镜像并运行，进行生命周期探测，上报 POD 和节点状态</td></tr><tr><td>kube-proxy</td><td>通过维护主机上的网络规则并执行连接转发，将 Kubernetes 提供的网络服务代理到每个节点上，实现了Kubernetes服务抽象</td></tr><tr><td>docker</td><td>用于运行容器</td></tr></tbody></table><pre><code>#!/bin/bash
 #执行该脚本需要添加k8s版本号,作为参数 将脚本第79行（已高亮）的 ${1} 替换成您需要的版本号，例如 1.17.0
 # 在 master 节点和 worker 节点都要执行
 
@@ -296,9 +104,7 @@ systemctl restart docker
 systemctl enable kubelet &amp;&amp; systemctl start kubelet
 
 docker version
-</code></pre><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
-<h3 id="-master-">初始化 Master 节点</h3>
-<pre><code># 只在 master 节点执行
+</code></pre><p></p><h3 id=-master->初始化 Master 节点</h3><pre><code># 只在 master 节点执行
 # 替换 x.x.x.x 为 master 节点的内网IP
 # export 命令只在当前 shell 会话中有效，开启新的 shell 窗口后，如果要继续安装过程，请重新执行此处的 export 命令
 export MASTER_IP=x.x.x.x
@@ -307,8 +113,7 @@ export APISERVER_NAME=apiserver.demo
 # Kubernetes 容器组所在的网段，该网段安装完成后，由 kubernetes 创建，事先并不存在于您的物理网络中
 export POD_SUBNET=10.100.0.1/16
 echo &quot;${MASTER_IP}    ${APISERVER_NAME}&quot; &gt;&gt; /etc/hosts
-</code></pre><h3 id="21-1--1170">请将脚本第21行（已高亮）的 ${1} 替换成您需要的版本号，例如 1.17.0</h3>
-<pre><code>#!/bin/bash
+</code></pre><h3 id=21-1--1170>请将脚本第21行（已高亮）的 ${1} 替换成您需要的版本号，例如 1.17.0</h3><pre><code>#!/bin/bash
 
 # 只在 master 节点执行
 
@@ -353,18 +158,14 @@ rm -f calico-3.10.2.yaml
 wget https://kuboard.cn/install-script/calico/calico-3.10.2.yaml
 sed -i &quot;s#192\.168\.0\.0/16#${POD_SUBNET}#&quot; calico-3.10.2.yaml
 kubectl apply -f calico-3.10.2.yaml
-</code></pre><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
-<h4 id="master-">检查Master 初始化结果</h4>
-<pre><code># 只在 master 节点执行
+</code></pre><p></p><h4 id=master->检查Master 初始化结果</h4><pre><code># 只在 master 节点执行
 
 # 执行如下命令，等待 3-10 分钟，直到所有的容器组处于 Running 状态
 watch kubectl get pod -n kube-system -o wide
 
 # 查看 master 节点初始化结果
 kubectl get nodes -o wide
-</code></pre><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
-<h3 id="--work-">初始化  work 节点</h3>
-<pre><code># 只在 master 节点执行
+</code></pre><p></p><h3 id=--work->初始化 work 节点</h3><pre><code># 只在 master 节点执行
 kubeadm token create --print-join-command
 </code></pre><pre><code># 只在 worker 节点执行
 # 替换 x.x.x.x 为 master 节点的内网 IP
@@ -375,103 +176,18 @@ echo &quot;${MASTER_IP}    ${APISERVER_NAME}&quot; &gt;&gt; /etc/hosts
 
 # 替换为 master 节点上 kubeadm token create 命令的输出
 kubeadm join apiserver.demo:6443 --token mpfjma.4vjjg8flqihor4vt     --discovery-token-ca-cert-hash sha256:6f7a8e40a810323672de5eee6f4d19aa2dbdb38411845a1bf5dd63485c43d303
-</code></pre><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
-<h4 id="heading">检查初始化结果</h4>
-<pre><code># 只在 master 节点执行
+</code></pre><p></p><h4 id=heading>检查初始化结果</h4><pre><code># 只在 master 节点执行
 kubectl get nodes -o wide
-</code></pre><p>输出结果如下所示</p>
-<pre><code>[root@demo-master-a-1 ~]# kubectl get nodes
+</code></pre><p>输出结果如下所示</p><pre><code>[root@demo-master-a-1 ~]# kubectl get nodes
 NAME     STATUS   ROLES    AGE     VERSION
 demo-master-a-1   Ready    master   5m3s    v1.17.x
 demo-worker-a-1   Ready    &lt;none&gt;   2m26s   v1.17.x
 demo-worker-a-2   Ready    &lt;none&gt;   3m56s   v1.17.x
-</code></pre>
-    </div>
-
-    <div class="post-copyright">
-             
-            <p class="copyright-item">
-                <span>Author:</span>
-                <span>Covey.Liu </span>
-                </p>
-            
-           
-             
-            <p class="copyright-item">
-                    <span>Link:</span>
-                    <a href=https://example.com/2019/kubernetes-%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85/>https://example.com/2019/kubernetes-%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85/</span>
-            </p>
-            
-             
-            <p class="copyright-item lincese">
-                本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可
-            </p>
-            
-    </div>
-
-  
-    <div class="post-tags">
-        
-        <section>
-                <a href="javascript:window.history.back();">back</a></span> · 
-                <span><a href="https://example.com">home</a></span>
-        </section>
-    </div>
-
-    <div class="post-nav">
-        
-        <a href="https://example.com/2019/kafka-zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/" class="prev" rel="prev" title="Kafka &amp; ZooKeeper 集群搭建"><i class="iconfont icon-left"></i>&nbsp;Kafka &amp; ZooKeeper 集群搭建</a>
-         
-        
-        <a href="https://example.com/2020/mac%E8%BD%AF%E4%BB%B6/" class="next" rel="next" title="我常用的 Mac 软件">我常用的 Mac 软件&nbsp;<i class="iconfont icon-right"></i></a>
-        
-    </div>
-
-    <div class="post-comment">
-          
-                 
-          
-    </div>
-</article>
-          </div>
-		   </main>
-      <footer class="footer">
-    <div class="copyright">
-        &copy;
-        
-        <span itemprop="copyrightYear">2011 - 2020</span>
-        
-        <span class="with-love">
-    	 <i class="iconfont icon-love"></i> 
-         </span>
-         
-            <span class="author" itemprop="copyrightHolder"><a href="https://example.com">Covey.Liu</a> | </span> 
-         
-
-         
-		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
-    </div>
-</footer>
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-    <script src="/js/vendor_no_gallery.min.js" async=""></script>
-    
-  
-
-
-
-     </div>
-  </body>
-</html>
+</code></pre></div><div class=post-copyright><p class=copyright-item><span>Author:</span>
+<span>Covey.Liu</span></p><p class=copyright-item><span>Link:</span>
+<a href=https://example.com/2019/kubernetes-%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85/>https://example.com/2019/kubernetes-%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85/</span></p><p class="copyright-item lincese">本文采用<a rel=license href=http://creativecommons.org/licenses/by-nc/4.0/ target=_blank>知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p></div><div class=post-tags><section><a href=javascript:window.history.back();>back</a></span> ·
+<span><a href=https://example.com>home</a></span></section></div><div class=post-nav><a href=https://example.com/2019/kafka-zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/ class=prev rel=prev title="Kafka & ZooKeeper 集群搭建"><i class="iconfont icon-left"></i>&nbsp;Kafka & ZooKeeper 集群搭建</a>
+<a href=https://example.com/2020/mac%E8%BD%AF%E4%BB%B6/ class=next rel=next title="我常用的 Mac 软件">我常用的 Mac 软件&nbsp;<i class="iconfont icon-right"></i></a></div><div class=post-comment></div></article></div></main><footer class=footer><div class=copyright>&copy;
+<span itemprop=copyrightYear>2011 - 2020</span>
+<span class=with-love><i class="iconfont icon-love"></i></span><span class=author itemprop=copyrightHolder><a href=https://example.com>Covey.Liu</a> |</span>
+<span>Powered by <a href=https://gohugo.io/ target=_blank rel="external nofollow">Hugo</a> & <a href=https://github.com/liuzc/leaveit target=_blank rel="external nofollow">LeaveIt</a></span></div></footer><script src=/js/vendor_no_gallery.min.js async></script></div></body></html>

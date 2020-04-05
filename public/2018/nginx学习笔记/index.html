@@ -1,159 +1,19 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-  <meta http-equiv="content-type" content="text/html;charset=utf-8">
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noodp"/>
-  <meta name="author" content="Covey.Liu">
-  
-  
-  
-  <link rel="prev" href="https://example.com/2018/%E6%9B%B4%E6%8D%A2yum%E6%BA%90/" />
-  <link rel="next" href="https://example.com/2019/vscode%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" />
-  <link rel="canonical" href="https://example.com/2018/nginx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="manifest" href="/site.webmanifest">
-  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-  <meta name="msapplication-TileColor" content="#da532c">
-  <meta name="theme-color" content="#ffffff">
-  <title>
-       
-       
-           Nginx实战 | LeaveIt
-       
-  </title>
-  <meta name="title" content="Nginx实战 | LeaveIt">
-    
-  
-  <link rel="stylesheet" href="/font/iconfont.css">
-  <link rel="stylesheet" href="/css/main.min.css">
-
-
-  
-  
- 
-
-<script type="application/ld+json">
- "@context" : "http://schema.org",
-    "@type" : "BlogPosting",
-    "mainEntityOfPage": {
-         "@type": "WebPage",
-         "@id": "https:\/\/example.com"
-    },
-    "articleSection" : "posts",
-    "name" : "Nginx实战",
-    "headline" : "Nginx实战",
-    "description" : "搭建一个简易的代理服务 nginx 常常用来作为代理服务器，这代表着服务器接收请求，然后将它们传递给被代理服务器，得到请求的响应，再将它们发送给客户端。 我们将配置一个基本的代理服务器，它会处理本地图片文件的请求并返回其他的请求给被代理的服务器。在这个例子中，两个服务器都会定义在一个 nginx 实例中。 首先，通过在 nginx 配置文件中添加另一个 server 区块，来定义一个被代理的服务器，像下面的配置：\nserver { listen 8080; root \/data\/up1; location \/ { } } 上面就是一个简单的服务器，它监听在 8080 端口（之前，listen 并没被定义，是因为默认监听的 80 端口）并且会映射所有的请求给 本地文件目录 \/data\/up1。创建该目录，然后添加 index.html 文件。注意，root 指令是放在 server 上下文中。当响应请求的 location 区块中，没有自己的 root 指令，上述的 root 指令才会被使用。 接着，使用前面章节中的 server 配置，然后将它改为一个代理服务配置。在第一个 location 区块中，放置已经添加被代理服务器的协议，名字和端口等参数的 proxy_pass 指令（在这里，就是 http:\/\/localhost:8080）:\nserver { location \/ { proxy_pass http:\/\/localhost:8080; } location \/images\/ { root \/data; } } location相关 我们将修改第二个 location 区块，使他返回一些典型后缀的图片文件请求， 现在它只会映射带有 \/images\/ 前缀的请求到 \/data\/images 目录下。 修改后的 location 指令如下：",
-    "inLanguage" : "en-us",
-    "author" : "Covey.Liu",
-    "creator" : "Covey.Liu",
-    "publisher": "Covey.Liu",
-    "accountablePerson" : "Covey.Liu",
-    "copyrightHolder" : "Covey.Liu",
-    "copyrightYear" : "2018",
-    "datePublished": "2018-02-03 00:00:00 \x2b0000 UTC",
-    "dateModified" : "2018-02-03 00:00:00 \x2b0000 UTC",
-    "url" : "https:\/\/example.com\/2018\/nginx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0\/",
-    "wordCount" : "150",
-    "keywords" : [  "LeaveIt"]
-}
-</script>
-
-</head>
-
-  
-
-
-  <body class="">
-    <div class="wrapper">
-        <nav class="navbar">
-    <div class="container">
-        <div class="navbar-header header-logo">
-        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://example.com">LeaveIt</a>
-        </div>
-        <div class="menu navbar-right">
-                
-                
-                <a class="menu-item" href="/posts/" title="">Blog</a>
-                
-                <a class="menu-item" href="/categories/" title="">Categories</a>
-                
-                <a class="menu-item" href="/tags/" title="">Tags</a>
-                
-                <a class="menu-item" href="/about/" title="">About</a>
-                
-        </div>
-    </div>
-</nav>
-<nav class="navbar-mobile" id="nav-mobile" style="display: none">
-     <div class="container">
-        <div class="navbar-header">
-            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://example.com">LeaveIt</a></div>
-            <div class="menu-toggle">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-     
-          <div class="menu" id="mobile-menu">
-                
-                
-                <a class="menu-item" href="/posts/" title="">Blog</a>
-                
-                <a class="menu-item" href="/categories/" title="">Categories</a>
-                
-                <a class="menu-item" href="/tags/" title="">Tags</a>
-                
-                <a class="menu-item" href="/about/" title="">About</a>
-                
-        </div>
-    </div>
-</nav>
-    	 <main class="main">
-          <div class="container">
-      		
-<article class="post-warp" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">Nginx实战</h1>
-        <div class="post-meta">
-                Written by <a itemprop="name" href="https://example.com" rel="author">Covey.Liu</a> with ♥ 
-                <span class="post-time">
-                on <time datetime=2018-02-03 itemprop="datePublished">February 3, 2018</time>
-                </span>
-                in
-                
-        </div>
-    </header>
-    <div class="post-content">
-        
-
-        
-
-        
-        
-     
-          
-          
-          
-
-          
-          
-          
-
-          <h1 id="heading">搭建一个简易的代理服务</h1>
-<p>nginx 常常用来作为代理服务器，这代表着服务器接收请求，然后将它们传递给被代理服务器，得到请求的响应，再将它们发送给客户端。 我们将配置一个基本的代理服务器，它会处理本地图片文件的请求并返回其他的请求给被代理的服务器。在这个例子中，两个服务器都会定义在一个 nginx 实例中。 首先，通过在 nginx 配置文件中添加另一个 server 区块，来定义一个被代理的服务器，像下面的配置：</p>
-<pre><code>server {
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="chrome=1"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta name=author content="Covey.Liu"><link rel=prev href=https://example.com/2018/%E6%9B%B4%E6%8D%A2yum%E6%BA%90/><link rel=next href=https://example.com/2019/vscode%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/><link rel=canonical href=https://example.com/2018/nginx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><meta name=msapplication-TileColor content="#da532c"><meta name=theme-color content="#ffffff"><title>Nginx实战 | LeaveIt</title><meta name=title content="Nginx实战 | LeaveIt"><link rel=stylesheet href=/font/iconfont.css><link rel=stylesheet href=/css/main.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/example.com"},"articleSection":"posts","name":"Nginx实战","headline":"Nginx实战","description":"搭建一个简易的代理服务 nginx 常常用来作为代理服务器，这代表着服务器接收请求，然后将它们传递给被代理服务器，得到请求的响应，再将它们发送给客户端。 我们将配置一个基本的代理服务器，它会处理本地图片文件的请求并返回其他的请求给被代理的服务器。在这个例子中，两个服务器都会定义在一个 nginx 实例中。 首先，通过在 nginx 配置文件中添加另一个 server 区块，来定义一个被代理的服务器，像下面的配置：\nserver { listen 8080; root \/data\/up1; location \/ { } } 上面就是一个简单的服务器，它监听在 8080 端口（之前，listen 并没被定义，是因为默认监听的 80 端口）并且会映射所有的请求给 本地文件目录 \/data\/up1。创建该目录，然后添加 index.html 文件。注意，root 指令是放在 server 上下文中。当响应请求的 location 区块中，没有自己的 root 指令，上述的 root 指令才会被使用。 接着，使用前面章节中的 server 配置，然后将它改为一个代理服务配置。在第一个 location 区块中，放置已经添加被代理服务器的协议，名字和端口等参数的 proxy_pass 指令（在这里，就是 http:\/\/localhost:8080）:\nserver { location \/ { proxy_pass http:\/\/localhost:8080; } location \/images\/ { root \/data; } } location相关 我们将修改第二个 location 区块，使他返回一些典型后缀的图片文件请求， 现在它只会映射带有 \/images\/ 前缀的请求到 \/data\/images 目录下。 修改后的 location 指令如下：","inLanguage":"en-us","author":"Covey.Liu","creator":"Covey.Liu","publisher":"Covey.Liu","accountablePerson":"Covey.Liu","copyrightHolder":"Covey.Liu","copyrightYear":"2018","datePublished":"2018-02-03 00:00:00 \x2b0000 UTC","dateModified":"2018-02-03 00:00:00 \x2b0000 UTC","url":"https:\/\/example.com\/2018\/nginx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0\/","wordCount":"150","keywords":["LeaveIt"]}</script></head><body><div class=wrapper><nav class=navbar><div class=container><div class="navbar-header header-logo"><a href=javascript:void(0); class=theme-switch><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href=https://example.com>LeaveIt</a></div><div class="menu navbar-right"><a class=menu-item href=/posts/>Blog</a>
+<a class=menu-item href=/categories/>Categories</a>
+<a class=menu-item href=/tags/>Tags</a>
+<a class=menu-item href=/about/>About</a></div></div></nav><nav class=navbar-mobile id=nav-mobile style=display:none><div class=container><div class=navbar-header><div><a href=javascript:void(0); class=theme-switch><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href=https://example.com>LeaveIt</a></div><div class=menu-toggle><span></span><span></span><span></span></div></div><div class=menu id=mobile-menu><a class=menu-item href=/posts/>Blog</a>
+<a class=menu-item href=/categories/>Categories</a>
+<a class=menu-item href=/tags/>Tags</a>
+<a class=menu-item href=/about/>About</a></div></div></nav><main class=main><div class=container><article class=post-warp itemscope itemtype=http://schema.org/Article><header class=post-header><h1 class=post-title itemprop="name headline">Nginx实战</h1><div class=post-meta>Written by <a itemprop=name href=https://example.com rel=author>Covey.Liu</a> with ♥
+<span class=post-time>on <time datetime=2018-02-03 itemprop=datePublished>February 3, 2018</time></span>
+in</div></header><div class=post-content><h1 id=heading>搭建一个简易的代理服务</h1><p>nginx 常常用来作为代理服务器，这代表着服务器接收请求，然后将它们传递给被代理服务器，得到请求的响应，再将它们发送给客户端。 我们将配置一个基本的代理服务器，它会处理本地图片文件的请求并返回其他的请求给被代理的服务器。在这个例子中，两个服务器都会定义在一个 nginx 实例中。 首先，通过在 nginx 配置文件中添加另一个 server 区块，来定义一个被代理的服务器，像下面的配置：</p><pre><code>server {
     listen 8080;
     root /data/up1;
 
     location / {
     }
 }
-</code></pre><!-- raw HTML omitted -->
-<p>上面就是一个简单的服务器，它监听在 8080 端口（之前，listen 并没被定义，是因为默认监听的 80 端口）并且会映射所有的请求给 本地文件目录 /data/up1。创建该目录，然后添加 index.html 文件。注意，root 指令是放在 server 上下文中。当响应请求的 location 区块中，没有自己的 root 指令，上述的 root 指令才会被使用。 接着，使用前面章节中的 server 配置，然后将它改为一个代理服务配置。在第一个 location 区块中，放置已经添加被代理服务器的协议，名字和端口等参数的 proxy_pass 指令（在这里，就是 http://localhost:8080）:</p>
-<pre><code>server {
+</code></pre><p>上面就是一个简单的服务器，它监听在 8080 端口（之前，listen 并没被定义，是因为默认监听的 80 端口）并且会映射所有的请求给 本地文件目录 /data/up1。创建该目录，然后添加 index.html 文件。注意，root 指令是放在 server 上下文中。当响应请求的 location 区块中，没有自己的 root 指令，上述的 root 指令才会被使用。 接着，使用前面章节中的 server 配置，然后将它改为一个代理服务配置。在第一个 location 区块中，放置已经添加被代理服务器的协议，名字和端口等参数的 proxy_pass 指令（在这里，就是 http://localhost:8080）:</p><pre><code>server {
     location / {
         proxy_pass http://localhost:8080;
     }
@@ -162,18 +22,15 @@
         root /data;
     }
 }
-</code></pre><h2 id="location">location相关</h2>
-<p>我们将修改第二个 location 区块，使他返回一些典型后缀的图片文件请求，
+</code></pre><h2 id=location>location相关</h2><p>我们将修改第二个 location 区块，使他返回一些典型后缀的图片文件请求，
 现在它只会映射带有 /images/ 前缀的请求到 /data/images 目录下。
-修改后的 location 指令如下：</p>
-<pre><code>location ~ \.(gif|jpg|png)$ {
+修改后的 location 指令如下：</p><pre><code>location ~ \.(gif|jpg|png)$ {
     root /data/images;
 }
 </code></pre><p>该参数是一个正则表达式，它会匹配所有以 .gif，.jpg 或者 .png 结尾的 URIs。
 一个正则表达式需要以 ~ 开头。匹配到的请求会被映射到 /data/images 目录下。
 当 nginx 在选择 location 去响应一个请求时，它会先检测带有前缀的 location 指令，记住先是检测带有最长前缀的 location，然后检测正则表达式。
-如果有一个正则的匹配的规则，nginx 会选择该 location，否则，会选择之前缓存的规则。 最终，一个代理服务器的配置结果如下：</p>
-<pre><code> server {
+如果有一个正则的匹配的规则，nginx 会选择该 location，否则，会选择之前缓存的规则。 最终，一个代理服务器的配置结果如下：</p><pre><code> server {
     location / {
         proxy_pass http://localhost:8080/;
     }
@@ -184,102 +41,11 @@
 }
 </code></pre><p>该服务器会选择以 .gif，.jpg，或者 .png 结束的请求并且映射到 /data/images 目录（通过添加 URI 给 root 指令的参数），
 接着将其他所有的请求映射到上述被代理的服务器。 为了使用新的配置，像前几个章节描述的一样，需要向 nginx 发送重载信号。
-这还有很多其他的指令，可以用于进一步配置代理连接。</p>
-<h3 id="location-">location 配置</h3>
-<ol>
-<li>= 开头表示精确匹配</li>
-<li>^~ 开头表示uri以某个常规字符串开头，不是正则匹配</li>
-<li>~ 开头表示区分大小写的正则匹配;</li>
-<li>~* 开头表示不区分大小写的正则匹配</li>
-<li>/ 通用匹配, 如果没有其它匹配,任何请求都会匹配到</li>
-</ol>
-
-    </div>
-
-    <div class="post-copyright">
-             
-            <p class="copyright-item">
-                <span>Author:</span>
-                <span>Covey.Liu </span>
-                </p>
-            
-           
-             
-            <p class="copyright-item">
-                    <span>Link:</span>
-                    <a href=https://example.com/2018/nginx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/>https://example.com/2018/nginx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</span>
-            </p>
-            
-             
-            <p class="copyright-item lincese">
-                本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可
-            </p>
-            
-    </div>
-
-  
-    <div class="post-tags">
-        
-        <section>
-                <a href="javascript:window.history.back();">back</a></span> · 
-                <span><a href="https://example.com">home</a></span>
-        </section>
-    </div>
-
-    <div class="post-nav">
-        
-        <a href="https://example.com/2018/%E6%9B%B4%E6%8D%A2yum%E6%BA%90/" class="prev" rel="prev" title="Centos更换yum源"><i class="iconfont icon-left"></i>&nbsp;Centos更换yum源</a>
-         
-        
-        <a href="https://example.com/2019/vscode%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" class="next" rel="next" title="VScode使用笔记">VScode使用笔记&nbsp;<i class="iconfont icon-right"></i></a>
-        
-    </div>
-
-    <div class="post-comment">
-          
-                 
-          
-    </div>
-</article>
-          </div>
-		   </main>
-      <footer class="footer">
-    <div class="copyright">
-        &copy;
-        
-        <span itemprop="copyrightYear">2011 - 2020</span>
-        
-        <span class="with-love">
-    	 <i class="iconfont icon-love"></i> 
-         </span>
-         
-            <span class="author" itemprop="copyrightHolder"><a href="https://example.com">Covey.Liu</a> | </span> 
-         
-
-         
-		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
-    </div>
-</footer>
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-    <script src="/js/vendor_no_gallery.min.js" async=""></script>
-    
-  
-
-
-
-     </div>
-  </body>
-</html>
+这还有很多其他的指令，可以用于进一步配置代理连接。</p><h3 id=location->location 配置</h3><ol><li>= 开头表示精确匹配</li><li>^~ 开头表示uri以某个常规字符串开头，不是正则匹配</li><li>~ 开头表示区分大小写的正则匹配;</li><li>~* 开头表示不区分大小写的正则匹配</li><li>/ 通用匹配, 如果没有其它匹配,任何请求都会匹配到</li></ol></div><div class=post-copyright><p class=copyright-item><span>Author:</span>
+<span>Covey.Liu</span></p><p class=copyright-item><span>Link:</span>
+<a href=https://example.com/2018/nginx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/>https://example.com/2018/nginx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</span></p><p class="copyright-item lincese">本文采用<a rel=license href=http://creativecommons.org/licenses/by-nc/4.0/ target=_blank>知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p></div><div class=post-tags><section><a href=javascript:window.history.back();>back</a></span> ·
+<span><a href=https://example.com>home</a></span></section></div><div class=post-nav><a href=https://example.com/2018/%E6%9B%B4%E6%8D%A2yum%E6%BA%90/ class=prev rel=prev title=Centos更换yum源><i class="iconfont icon-left"></i>&nbsp;Centos更换yum源</a>
+<a href=https://example.com/2019/vscode%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/ class=next rel=next title=VScode使用笔记>VScode使用笔记&nbsp;<i class="iconfont icon-right"></i></a></div><div class=post-comment></div></article></div></main><footer class=footer><div class=copyright>&copy;
+<span itemprop=copyrightYear>2011 - 2020</span>
+<span class=with-love><i class="iconfont icon-love"></i></span><span class=author itemprop=copyrightHolder><a href=https://example.com>Covey.Liu</a> |</span>
+<span>Powered by <a href=https://gohugo.io/ target=_blank rel="external nofollow">Hugo</a> & <a href=https://github.com/liuzc/leaveit target=_blank rel="external nofollow">LeaveIt</a></span></div></footer><script src=/js/vendor_no_gallery.min.js async></script></div></body></html>
