@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="Covey.Liu">
+  
+  
+  
+  <link rel="prev" href="https://example.com/2019/redis-%E6%8C%81%E4%B9%85%E5%8C%96/" />
+  <link rel="next" href="https://example.com/2019/kubernetes-%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85/" />
+  <link rel="canonical" href="https://example.com/2019/kafka-zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           Kafka &amp; ZooKeeper 集群搭建 | LeaveIt
+       
+  </title>
+  <meta name="title" content="Kafka &amp; ZooKeeper 集群搭建 | LeaveIt">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/example.com"
+    },
+    "articleSection" : "posts",
+    "name" : "Kafka \x26 ZooKeeper 集群搭建",
+    "headline" : "Kafka \x26 ZooKeeper 集群搭建",
+    "description" : "环境准备 三台机器 CentOS 7.4 10.0.19.218 10.0.19.216 10.0.19.142\nkafka 集群搭建准备:\n Java环境 ZooKeeper 集群搭建  Zookeeper 集群搭建 server.1=10.0.19.218:2888:3888 server.2=10.0.19.216:2888:3888 server.3=10.0.19.142:2888:3888 echo \x26quot;1\x26quot; \x26gt;\/tmp\/zookeeper\/myid ##生成ID，这里需要注意， myid对应的zoo.cfg的server.ID，比如第二台zookeeper主机对应的myid应该是2 启动ZooKeeper\ncd \/usr\/local\/zookeeper-3.4.9\/bin .\/zkServer.sh start 停止Zookeeper\ncd \/usr\/local\/zookeeper-3.4.9\/bin .\/zkServer.sh stop 附美味测试环境Zookeeper 集群配置\n[root@rdpops_server-146-199 conf]# cat zoo.cfg # The number of milliseconds of each tick tickTime=2000 # The number of ticks that the initial # synchronization phase can take initLimit=10 # The number of ticks that can pass between # sending a request and getting an acknowledgement syncLimit=5 # the directory where the snapshot is stored.",
+    "inLanguage" : "en-us",
+    "author" : "Covey.Liu",
+    "creator" : "Covey.Liu",
+    "publisher": "Covey.Liu",
+    "accountablePerson" : "Covey.Liu",
+    "copyrightHolder" : "Covey.Liu",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-07-11 00:00:00 \x2b0000 UTC",
+    "dateModified" : "2019-07-11 00:00:00 \x2b0000 UTC",
+    "url" : "https:\/\/example.com\/2019\/kafka-zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA\/",
+    "wordCount" : "217",
+    "keywords" : [  "LeaveIt"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://example.com">LeaveIt</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://example.com">LeaveIt</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Kafka &amp; ZooKeeper 集群搭建</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://example.com" rel="author">Covey.Liu</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-07-11 itemprop="datePublished">July 11, 2019</time>
+                </span>
+                in
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <h4 id="heading">环境准备</h4>
+<p>三台机器 CentOS 7.4
+10.0.19.218
+10.0.19.216
+10.0.19.142</p>
+<p>kafka 集群搭建准备:</p>
+<ul>
+<li>Java环境</li>
+<li>ZooKeeper 集群搭建</li>
+</ul>
+<h4 id="zookeeper-">Zookeeper 集群搭建</h4>
+<pre><code>server.1=10.0.19.218:2888:3888
+server.2=10.0.19.216:2888:3888
+server.3=10.0.19.142:2888:3888
+</code></pre><pre><code>echo &quot;1&quot; &gt;/tmp/zookeeper/myid ##生成ID，这里需要注意， myid对应的zoo.cfg的server.ID，比如第二台zookeeper主机对应的myid应该是2
+</code></pre><p>启动ZooKeeper</p>
+<pre><code>cd /usr/local/zookeeper-3.4.9/bin
+./zkServer.sh start
+</code></pre><p>停止Zookeeper</p>
+<pre><code>cd /usr/local/zookeeper-3.4.9/bin
+./zkServer.sh stop
+</code></pre><p>附美味测试环境Zookeeper 集群配置</p>
+<pre><code>[root@rdpops_server-146-199 conf]# cat zoo.cfg
+# The number of milliseconds of each tick
+tickTime=2000
+# The number of ticks that the initial
+# synchronization phase can take
+initLimit=10
+# The number of ticks that can pass between
+# sending a request and getting an acknowledgement
+syncLimit=5
+# the directory where the snapshot is stored.
+# do not use /tmp for storage, /tmp here is just
+# example sakes.
+dataDir=/var/zookeeper/
+dataLogDir=/var/zookeeper/datalog/
+# the port at which the clients will connect
+clientPort=2181
+# the maximum number of client connections.
+# increase this if you need to handle more clients
+maxClientCnxns=0
+#
+# Be sure to read the maintenance section of the
+# administrator guide before turning on autopurge.
+#
+# http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance
+#
+# The number of snapshots to retain in dataDir
+autopurge.snapRetainCount=30
+# Purge task interval in hours
+# Set to &quot;0&quot; to disable auto purge feature
+#autopurge.purgeInterval=1
+server.1=10.0.146.126:2888:3888
+server.2=10.0.146.150:2888:3888
+server.3=10.0.146.199:2888:3888
+</code></pre><hr>
+<h4 id="kafka-">Kafka  集群搭建</h4>
+<p>下载安装包</p>
+<pre><code>wget http://apache.claz.org/kafka/2.2.0/kafka_2.11-2.2.0.tgz
+tar -xzf kafka_2.11-2.2.0.tgz
+cd kafka_2.11-2.2.0
+</code></pre><h4 id="heading-1">启动服务</h4>
+<h5 id="kafka--zookeeper">kafka 依赖 zookeeper</h5>
+<h5 id="-kafka-server">启动 Kafka server:</h5>
+<pre><code>./kafka-server-start.sh -daemon ../config/server.properties 
+</code></pre><h4 id="kafka-web-kafka-manager">Kafka Web管理工具-Kafka-manager</h4>
+<h4 id="-">消息生产 测试</h4>
+<pre><code>./kafka-console-producer.sh --broker-list localhost:9092 --topic demo
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --from-beginning --topic demo
+</code></pre>
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>Covey.Liu </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://example.com/2019/kafka-zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/>https://example.com/2019/kafka-zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/</span>
+            </p>
+            
+             
+            <p class="copyright-item lincese">
+                本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可
+            </p>
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://example.com">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://example.com/2019/redis-%E6%8C%81%E4%B9%85%E5%8C%96/" class="prev" rel="prev" title="Redis 持久化"><i class="iconfont icon-left"></i>&nbsp;Redis 持久化</a>
+         
+        
+        <a href="https://example.com/2019/kubernetes-%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85/" class="next" rel="next" title="Kubernetes集群安装">Kubernetes集群安装&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2011 - 2020</span>
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://example.com">Covey.Liu</a> | </span> 
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

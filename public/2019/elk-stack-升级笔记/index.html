@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="Covey.Liu">
+  
+  
+  
+  <link rel="prev" href="https://example.com/2019/elk%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" />
+  <link rel="next" href="https://example.com/2019/gitlab-ci/" />
+  <link rel="canonical" href="https://example.com/2019/elk-stack-%E5%8D%87%E7%BA%A7%E7%AC%94%E8%AE%B0/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           ELK Stack 升级 | LeaveIt
+       
+  </title>
+  <meta name="title" content="ELK Stack 升级 | LeaveIt">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/example.com"
+    },
+    "articleSection" : "posts",
+    "name" : "ELK Stack 升级",
+    "headline" : "ELK Stack 升级",
+    "description" : "升级方案 比较常见的 ELK Stack 升级方式有一下 3 种\n 数据迁移升级：新建一套高版本 ES 集群，然后把老的 ES数据导入  滚动升级，5.0.0-\x26gt;5.6,5.6-\x26gt;6.8.2 集群重启升级，5.0.0-\x26gt;6.8.2     升级方式 优点 缺点     数据迁移\x26amp;升级 可以跨大版本升级 升级过程中，旧集群写操作停止   ES 版本之间有差异比较大，可能会有一些坑     迁移时间较长     滚动升级 升级过程中服务不中断 对ELK 源版本与目标版本有要求        集群重启升级 可以跨大版本升级    迁移时间比较短 ES 服务中断          公司生产环境与测试环境的 ELK 技术栈版本是 5.",
+    "inLanguage" : "en-us",
+    "author" : "Covey.Liu",
+    "creator" : "Covey.Liu",
+    "publisher": "Covey.Liu",
+    "accountablePerson" : "Covey.Liu",
+    "copyrightHolder" : "Covey.Liu",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-06-11 00:00:00 \x2b0000 UTC",
+    "dateModified" : "2019-06-11 00:00:00 \x2b0000 UTC",
+    "url" : "https:\/\/example.com\/2019\/elk-stack-%E5%8D%87%E7%BA%A7%E7%AC%94%E8%AE%B0\/",
+    "wordCount" : "399",
+    "keywords" : [  "LeaveIt"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://example.com">LeaveIt</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://example.com">LeaveIt</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">ELK Stack 升级</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://example.com" rel="author">Covey.Liu</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-06-11 itemprop="datePublished">June 11, 2019</time>
+                </span>
+                in
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <h3 id="heading">升级方案</h3>
+<p>比较常见的 ELK Stack 升级方式有一下 3 种</p>
+<ul>
+<li>数据迁移升级：新建一套高版本 ES 集群，然后把老的 ES数据导入 </li>
+<li>滚动升级，5.0.0-&gt;5.6,5.6-&gt;6.8.2</li>
+<li>集群重启升级，5.0.0-&gt;6.8.2</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>升级方式</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据迁移&amp;升级</td>
+<td>可以跨大版本升级</td>
+<td>升级过程中，旧集群写操作停止</td>
+</tr>
+<tr>
+<td>ES 版本之间有差异比较大，可能会有一些坑</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>迁移时间较长</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>滚动升级</td>
+<td>升级过程中服务不中断</td>
+<td>对ELK 源版本与目标版本有要求</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>集群重启升级</td>
+<td>可以跨大版本升级</td>
+<td></td>
+</tr>
+<tr>
+<td>迁移时间比较短</td>
+<td>ES 服务中断</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>公司生产环境与测试环境的 ELK 技术栈版本是 5.0.0
+考虑先滚动升级到 5.6.16  然后确认没问题后，再从 5.6.16 滚动升级到 6.8.2
+升级一般很快，但是最麻烦的不是升级，而是保证 ES 中的索引正常。
+一般不建议跨大版本升级，而是小版本迭代。</p>
+<hr>
+<h3 id="heading-1">数据备份</h3>
+<p>备份方式：Elasticsearch snapshot
+IDC 测试环境可以考虑快照备份到本地 HDFS，磁盘
+生产环境 ES 可以快照备份到阿里云 OSS</p>
+<blockquote>
+<p>需要安装对应的 ES 插件</p>
+</blockquote>
+<p>本次测试环境 ELK 集群升级，不备份</p>
+<h4 id="-kibana--">备份你的 Kibana 数据 （生产环境中非常重要）</h4>
+<p>你的 Kibana 中的 index pattern 等数据都是存在 .Kibana 这个索引中的 
+具体备份&amp;升级可以参考官方文档
+<a href="https://www.elastic.co/guide/en/kibana/6.3/migrating-6.0-index.html">https://www.elastic.co/guide/en/kibana/6.3/migrating-6.0-index.html</a>
+<a href="https://www.elastic.co/guide/en/elasticsearch/reference/5.6/modules-snapshots.html">https://www.elastic.co/guide/en/elasticsearch/reference/5.6/modules-snapshots.html</a></p>
+<hr>
+<h3 id="heading-2">升级前准备</h3>
+<p>升级Elasticsearch前，先停止Logstash（hangout）服务，不再消费 kafka 中消息（Filebeat服务无需关闭）</p>
+<h4 id="heading-3">禁用集群的分片自动分配功能</h4>
+<pre><code>PUT _cluster/settings
+{
+  &quot;persistent&quot;: {
+    &quot;cluster.routing.allocation.enable&quot;: &quot;none&quot;
+  }
+}
+</code></pre><p>启动集群分片自动分配</p>
+<pre><code>PUT _cluster/settings
+{
+  &quot;persistent&quot;: {
+    &quot;cluster.routing.allocation.enable&quot;: null
+  }
+}
+</code></pre><h3 id="heading-4">下面这个待确认</h3>
+<pre><code>PUT _cluster/settings
+{
+  &quot;persistent&quot;: {
+    &quot;cluster.routing.allocation.enable&quot;: &quot;primaries&quot;
+  }
+}
+</code></pre><h4 id="heading-5">同步数据（强制刷新，尽可能将缓存中的数据，写入磁盘）</h4>
+<p>通过 synced flush，可以在索引上放置一个 sync ID，这样可以提高这些分片Recovery的时间</p>
+<pre><code>POST _flush/synced
+</code></pre><hr>
+<h3 id="-es">升级 ES</h3>
+<p>注意，这里使用rpm安装时，不使用-Uvh选项升级，而是先卸载旧的版本，再使用-ivh安装。另外，旧的配置文件不建议继续使用，而是将所配置内容替换到新版的配置文件中，除了个别配置外大部分仍然兼容。</p>
+<p>Elasticsearch节点，依次执行</p>
+<pre><code>#停止当前ES 节点
+service elasticsearch stop
+#卸载所有 ES 插件  进入/usr/share/elasticsearch目录
+#elasticsearch-plugin list
+#elasticsearch-plugin remove
+# 卸载旧版本注意，卸载后，旧的配置文件会以rpmsave后缀保留
+rpm -e elasticsearch
+</code></pre><h5 id="heading-6">安装新版本</h5>
+<pre><code>rpm -ivh /usr/local/elasticsearch-5.6.16.rpm
+</code></pre><h5 id="heading-7">替换配置文件</h5>
+<pre><code>cat /etc/elasticsearch/elasticsearch.yml.rpmsave &gt; /etc/elasticsearch/elasticsearch.yml
+cat /etc/elasticsearch/jvm.options.rpmsave &gt; /etc/elasticsearch/jvm.options
+</code></pre><h5 id="elasticsearch">启动Elasticsearch</h5>
+<pre><code>service elasticsearch start
+</code></pre><h5 id="heading-8">开启集群的分片自动分配功能</h5>
+<p>**</p>
+<pre><code>PUT _cluster/settings
+{
+  &quot;persistent&quot;: {
+    &quot;cluster.routing.allocation.enable&quot;: null
+  }
+}
+</code></pre><h5 id="heading-9">等待集群恢复完毕</h5>
+<pre><code>GET _cat/health
+</code></pre><p>查看集群状态，Green 则恢复正常，升级成功</p>
+<hr>
+<h3 id="heading-10">验证方式</h3>
+<p>API 验证集群状态
+Cerebro 中观察分片分配情况</p>
+<h3 id="es">升级ES过程中可能会遇到的问题：</h3>
+<h5 id="heading-11">启动失败 </h5>
+<pre><code>[2019-09-16T20:04:45,116][ERROR][o.e.b.Bootstrap          ] [node-1] node validation exception
+[1] bootstrap checks failed
+[1]: system call filters failed to install; check the logs and fix your configuration or disable system call filters at your own risk
+</code></pre><h5 id="etcelasticsearchelasticsearchyml-">/etc/elasticsearch/elasticsearch.yml  添加一行配置</h5>
+<pre><code>bootstrap.system_call_filter: false
+</code></pre><blockquote>
+<p>官方文档见：
+<a href="https://www.elastic.co/guide/en/elasticsearch/reference/5.6/system-call-filter-check.html">https://www.elastic.co/guide/en/elasticsearch/reference/5.6/system-call-filter-check.html</a></p>
+</blockquote>
+<hr>
+<h3 id="heading-12">升级失败回滚降级</h3>
+<pre><code>#停止当前ES 节点
+service elasticsearch stop
+#卸载所有 ES 插件  进入/usr/share/elasticsearch目录
+#elasticsearch-plugin list
+#elasticsearch-plugin remove
+# 卸载当前版本 ES
+rpm -e elasticsearch
+#重新安装 5.0.0 版本 ES
+rpm install /usr/local/elasticsearch-5.0.0.rpm
+#拷贝之前备份的配置文件
+#启动 ES
+sevice elasticsearch start
+</code></pre><hr>
+<h3 id="kibana">升级Kibana</h3>
+<blockquote>
+<p>重点在升级配置
+手动（ansible 脚本）将旧的配置文件中的配置，替换到新版配置文件中的对应条目中，注意兼容</p>
+</blockquote>
+<pre><code>#停止Kibana
+service kibana stop
+#卸载旧版本
+rpm -e kibana
+#安装新版本 Kibana
+rpm -ivh /usr/local/kibana-5.6.16-x86_64.rpm
+</code></pre><h4 id="heading-13">升级配置</h4>
+<pre><code>#启动Kibana
+service kibana start 
+</code></pre><h5 id="-ansible-">固化脚本（见 Ansible 脚本）</h5>
+<pre><code>#停止Kibana
+service kibana stop
+#卸载旧版本
+rpm -e kibana
+#安装新版本
+rpm -ivh XX.rpm
+#升级配置
+
+#启动Kibana
+service kibana start
+</code></pre><p>迁移 Kibana 数据 <br>
+Kibana 数据存储在   Elasticsearch   .Kibana 索引中
+比如下图中  生产环境 ELK 日志系统  有 4 个 kibana 实例，在 ES 集群中对应这有 4 个 .kibana 索引 
+<img src="https://cdn.nlark.com/yuque/0/2019/png/330515/1576133404676-29e785e5-1c83-4b9f-a688-7f46e9563c59.png#align=left&amp;display=inline&amp;height=530&amp;name=image.png&amp;originHeight=1060&amp;originWidth=2470&amp;size=205099&amp;status=done&amp;style=none&amp;width=1235" alt="image.png">   </p>
+<hr>
+<h3 id="-filebeat">升级 Filebeat</h3>
+<p>本次不升级 Filebeat</p>
+<hr>
+<h3 id="heading-14">升级的一些坑</h3>
+<p>Kibana 偶现无法访问
+升级 Kibana 的一个小坑，从 6.3 之后
+server.rewriteBasePath 由默认的 false 改为了 true 这个值我们没配置过
+所以在 Kibana 前面有反向代理的情况下 ，会有重写代理请求的可能
+也就是我们访问 Kibana 没响应，但是Kibana服务其实还在</p>
+<pre><code># This setting cannot end in a slash.
+#server.basePath: &quot;&quot;
+server.basePath: &quot;/anchang&quot;
+# Specifies whether Kibana should rewrite requests that are prefixed with
+# `server.basePath` or require that they are rewritten by your reverse proxy.
+# This setting was effectively always `false` before Kibana 6.3 and will
+# default to `true` starting in Kibana 7.0.
+server.rewriteBasePath: false
+</code></pre>
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>Covey.Liu </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://example.com/2019/elk-stack-%E5%8D%87%E7%BA%A7%E7%AC%94%E8%AE%B0/>https://example.com/2019/elk-stack-%E5%8D%87%E7%BA%A7%E7%AC%94%E8%AE%B0/</span>
+            </p>
+            
+             
+            <p class="copyright-item lincese">
+                本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可
+            </p>
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://example.com">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://example.com/2019/elk%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" class="prev" rel="prev" title="ELK 问题排查"><i class="iconfont icon-left"></i>&nbsp;ELK 问题排查</a>
+         
+        
+        <a href="https://example.com/2019/gitlab-ci/" class="next" rel="next" title="Gitlab CI/CD">Gitlab CI/CD&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2011 - 2020</span>
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://example.com">Covey.Liu</a> | </span> 
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+     <link href="//lib.baomitu.com/lightgallery/1.6.11/css/lightgallery.min.css" rel="stylesheet">  
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

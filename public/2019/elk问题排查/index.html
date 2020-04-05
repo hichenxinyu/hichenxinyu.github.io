@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="Covey.Liu">
+  
+  
+  
+  <link rel="prev" href="https://example.com/2019/elk%E5%8E%8B%E6%B5%8B/" />
+  <link rel="next" href="https://example.com/2019/elk-stack-%E5%8D%87%E7%BA%A7%E7%AC%94%E8%AE%B0/" />
+  <link rel="canonical" href="https://example.com/2019/elk%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           ELK 问题排查 | LeaveIt
+       
+  </title>
+  <meta name="title" content="ELK 问题排查 | LeaveIt">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/example.com"
+    },
+    "articleSection" : "posts",
+    "name" : "ELK 问题排查",
+    "headline" : "ELK 问题排查",
+    "description" : "集群 Red 为了完整的查看索引，分片，主分片和副分片情况，所以可直接使用自带 Api 查看，输入地址:\nGET \/_cat\/shards?h=index,shard,prirep,state,unassigned.reason  查询索引有问题的原因\nGET \/_cluster\/allocation\/explain 官网文档 https:\/\/www.elastic.co\/guide\/en\/elasticsearch\/reference\/master\/cluster-allocation-explain.html\n可以查看结果，线上 ES 是12个分片，3个备份，但是每个备份都会出现一个 UNASSIGNED 的情况，我们从最后的原因 INDEX CREATED 可得知是由于创建索引的API导致未分配。\ntrackmodel-2019-01-02 8 r UNASSIGNED INDEX CREATED trackmodel-2019-01-02 8 r STARTED trackmodel-2019-01-02 8 r STARTED trackmodel-2019-01-02 8 p STARTED trackmodel-2019-01-02 4 r STARTED trackmodel-2019-01-02 4 p STARTED trackmodel-2019-01-02 4 r STARTED trackmodel-2019-01-02 4 r UNASSIGNED INDEX CREATED trackmodel-2019-01-02 7 r STARTED trackmodel-2019-01-02 7 p STARTED trackmodel-2019-01-02 7 r STARTED trackmodel-2019-01-02 7 r UNASSIGNED INDEX CREATED .",
+    "inLanguage" : "en-us",
+    "author" : "Covey.Liu",
+    "creator" : "Covey.Liu",
+    "publisher": "Covey.Liu",
+    "accountablePerson" : "Covey.Liu",
+    "copyrightHolder" : "Covey.Liu",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-06-03 00:00:00 \x2b0000 UTC",
+    "dateModified" : "2019-06-03 00:00:00 \x2b0000 UTC",
+    "url" : "https:\/\/example.com\/2019\/elk%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5\/",
+    "wordCount" : "200",
+    "keywords" : [  "LeaveIt"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://example.com">LeaveIt</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://example.com">LeaveIt</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">ELK 问题排查</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://example.com" rel="author">Covey.Liu</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-06-03 itemprop="datePublished">June 3, 2019</time>
+                </span>
+                in
+                
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          <h3 id="-red">集群 Red</h3>
+<p>为了完整的查看索引，分片，主分片和副分片情况，所以可直接使用自带 Api 查看，输入地址:</p>
+<pre><code>GET /_cat/shards?h=index,shard,prirep,state,unassigned.reason
+</code></pre><p>  查询索引有问题的原因</p>
+<pre><code>GET /_cluster/allocation/explain
+</code></pre><p>官网文档
+<a href="https://www.elastic.co/guide/en/elasticsearch/reference/master/cluster-allocation-explain.html">https://www.elastic.co/guide/en/elasticsearch/reference/master/cluster-allocation-explain.html</a></p>
+<p>可以查看结果，线上 ES 是12个分片，3个备份，但是每个备份都会出现一个 UNASSIGNED 的情况，我们从最后的原因 INDEX CREATED 可得知是由于创建索引的API导致未分配。</p>
+<pre><code>trackmodel-2019-01-02           8  r UNASSIGNED INDEX CREATED
+trackmodel-2019-01-02           8  r STARTED 
+trackmodel-2019-01-02           8  r STARTED 
+trackmodel-2019-01-02           8  p STARTED 
+trackmodel-2019-01-02           4  r STARTED 
+trackmodel-2019-01-02           4  p STARTED 
+trackmodel-2019-01-02           4  r STARTED 
+trackmodel-2019-01-02           4  r UNASSIGNED INDEX CREATED
+trackmodel-2019-01-02           7  r STARTED 
+trackmodel-2019-01-02           7  p STARTED 
+trackmodel-2019-01-02           7  r STARTED 
+trackmodel-2019-01-02           7  r UNASSIGNED INDEX CREATED
+.
+.
+.
+trackmodel-2019-01-02           1  r UNASSIGNED INDEX CREATED
+</code></pre><p>然后使用查看：
+然后使用查看：</p>
+<pre><code>GET /_cat/allocation?v
+</code></pre><p>可以从从结果中得知其实线上 ES 只有3个 node，但是由上面可知，我在创建索引时定义了3个副本，所以就是 node 数少于分片副本数导致的。</p>
+<pre><code>shards disk.indices disk.used disk.avail disk.total disk.percent host          ip            node
+   204      120.4gb   135.6gb       61gb    196.7gb           68 172.16.41.127 172.16.41.127 trace-es-node-3
+   204      121.9gb   139.3gb     57.4gb    196.7gb           70 172.16.41.125 172.16.41.125 trace-es-node-1
+   204      120.5gb   136.9gb     59.7gb    196.7gb           69 172.16.41.126 172.16.41.126 trace-es-node-2
+   204  unassinged
+</code></pre><p>所以这个问题就很好解决了，由于本身我的索引是按每天日期新建，使用别名来进行查询，会定时删除过期索引，所以直接修改创建索引时代码，将创建副本数改为2即可解决问题。不需要更改之前出现的 UNASSIGNED 分片的问题，但是如果要更改的话可以直接使用以下命令来调整对应日期索引的副本数</p>
+<pre><code>PUT /trackmodel-2019-01-02/_settings
+{  
+    &quot;number_of_replicas&quot; : 2 
+}
+</code></pre><h3 id="heading">问题探讨</h3>
+<p>虽然这次的 UNASSIGNED 问题解决和问题原因非常简单，但是其实引起 UNASSIGNED 是有很多原因的，在 ES 开发中也经常会遇到这个问题，比如以下几种可能就都会引起 UNASSIGNED 的问题：</p>
+<pre><code>1. Shard allocation  过程中的延迟机制
+2. nodes 数小于分片副本数
+3. 检查是否开启 cluster.routing.allocation.enable 参数
+4. 分片的历史数据丢失了
+5. 磁盘不够用了
+6. es 的版本问题
+</code></pre><p>这些不同问题导致的 UNASSIGNED 都需要不同的方式去解决，所以在本文第一条命令中最后的 reason 列就相对比较重要了，是知道问题原因的初步思路来源，大概分为以下几种</p>
+<pre><code>1）INDEX_CREATED：由于创建索引的API导致未分配。
+2）CLUSTER_RECOVERED ：由于完全集群恢复导致未分配。
+3）INDEX_REOPENED ：由于打开open或关闭close一个索引导致未分配。
+4）DANGLING_INDEX_IMPORTED ：由于导入dangling索引的结果导致未分配。
+5）NEW_INDEX_RESTORED ：由于恢复到新索引导致未分配。
+6）EXISTING_INDEX_RESTORED ：由于恢复到已关闭的索引导致未分配。
+7）REPLICA_ADDED：由于显式添加副本分片导致未分配。
+8）ALLOCATION_FAILED ：由于分片分配失败导致未分配。
+9）NODE_LEFT ：由于承载该分片的节点离开集群导致未分配。
+10）REINITIALIZED ：由于当分片从开始移动到初始化时导致未分配（例如，使用影子shadow副本分片）。
+11）REROUTE_CANCELLED ：作为显式取消重新路由命令的结果取消分配。
+12）REALLOCATED_REPLICA ：确定更好的副本位置被标定使用，导致现有的副本分配被取消，出现未分配。
+</code></pre><p>设置单个索引在每个节点上最大分配分配数的设置是在索引模板 （index template）里设置</p>
+<p>index.routing.allocation.total_shards_per_node&rdquo;:3</p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>Covey.Liu </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://example.com/2019/elk%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/>https://example.com/2019/elk%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/</span>
+            </p>
+            
+             
+            <p class="copyright-item lincese">
+                本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可
+            </p>
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://example.com">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://example.com/2019/elk%E5%8E%8B%E6%B5%8B/" class="prev" rel="prev" title="ElasticSearch 压测"><i class="iconfont icon-left"></i>&nbsp;ElasticSearch 压测</a>
+         
+        
+        <a href="https://example.com/2019/elk-stack-%E5%8D%87%E7%BA%A7%E7%AC%94%E8%AE%B0/" class="next" rel="next" title="ELK Stack 升级">ELK Stack 升级&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2011 - 2020</span>
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://example.com">Covey.Liu</a> | </span> 
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>
