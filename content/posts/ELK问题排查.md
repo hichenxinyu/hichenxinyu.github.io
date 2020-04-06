@@ -1,6 +1,8 @@
 ---
 title: ELK 问题排查
 date: 2019-06-03
+categories:
+  - ELK
 layout: post
 ---
 

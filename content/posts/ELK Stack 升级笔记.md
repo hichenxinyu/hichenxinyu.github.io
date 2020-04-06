@@ -1,6 +1,8 @@
 ---
 title: ELK Stack 升级
 date: 2019-06-11
+categories:
+  - ELK
 layout: post
 ---
 

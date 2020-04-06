@@ -1,6 +1,8 @@
 ---
 title: ElasticSearch 压测
 date: 2019-05-22
+categories:
+  - ELK
 layout: post
 ---
 
