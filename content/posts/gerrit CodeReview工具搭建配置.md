@@ -1,5 +1,5 @@
 ---
-title: Gerrit CodeReview代码审核工具搭建配置
+title: CodeReview工具: Gerrit 搭建配置
 date: 2018-04-18
 layout: post
 ---
