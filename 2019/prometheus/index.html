@@ -5,7 +5,7 @@
 <a class=menu-item href=/categories/>Categories</a>
 <a class=menu-item href=/tags/>Tags</a>
 <a class=menu-item href=/about/>About</a></div></div></nav><main class=main><div class=container><article class=post-warp itemscope itemtype=http://schema.org/Article><header class=post-header><h1 class=post-title itemprop="name headline">Prometheus+Grafana监控实践</h1><div class=post-meta>Written by <a itemprop=name href=https://hichenxinyu.github.io/ rel=author>Neava Chan</a> with ♥
-<span class=post-time>on <time datetime=2019-07-01 itemprop=datePublished>July 1, 2019</time></span>
+<span class=post-time>on <time datetime=2019-07-01 itemprop=datePublished>2019-07-01</time></span>
 in</div></header><div class=post-content><h4 id=什么是prometheus>什么是Prometheus</h4><blockquote><p>Prometheus 是由 SoundCloud 开源监控告警解决方案，从 2012 年开始编写代码，再到 2015 年 github 上开源以来，已经吸引了 9k+ 关注，以及很多大公司的使用；2016 年 Prometheus 成为继 k8s 后，第二名 CNCF(Cloud Native Computing Foundation) 成员。</p></blockquote><p>作为新一代开源解决方案，很多理念与 Google SRE 运维之道不谋而合。</p><h4 id=为什么选择prometheus>为什么选择prometheus：</h4><ul><li>Prometheus 是按照 Google SRE 运维之道的理念构建的，具有实用性和前瞻性。</li><li>Prometheus 社区非常活跃，基本稳定在 1个月1个版本的迭代速度，从 2016 年 v1.01 开始接触使用以来，到目前发布的 v1.8.2 以及最新最新的 v2.1 ，你会发现 Prometheus 一直在进步、在优化。</li><li>Go 语言开发，性能不错，安装部署简单，多平台部署兼容性好。</li><li>丰富的数据收集客户端，官方提供了各种常用 exporter。</li><li>丰富强大的查询能力,内置更强大的统计函数。</li><li>Prometheus 属于一站式监控告警平台，依赖少，功能齐全。</li><li>Prometheus支持对云或容器的监控，其他监控系统主要对主机监控。</li></ul><p>Prometheus 在数据存储扩展性以及持久性上没有 InfluxDB，OpenTSDB，Sensu 好。</p><h4 id=安装prometheus>安装prometheus</h4><ol><li>下载二进制包</li></ol><pre><code>在这个页面https://prometheus.io/download
 找到最新的二进制包
 wget https://github.com/prometheus/prometheus/releases/download/v2.7.2/prometheus-2.7.2.linux-amd64.tar.gz

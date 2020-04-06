@@ -5,7 +5,7 @@
 <a class=menu-item href=/categories/>Categories</a>
 <a class=menu-item href=/tags/>Tags</a>
 <a class=menu-item href=/about/>About</a></div></div></nav><main class=main><div class=container><article class=post-warp itemscope itemtype=http://schema.org/Article><header class=post-header><h1 class=post-title itemprop="name headline">Gitlab CI/CD</h1><div class=post-meta>Written by <a itemprop=name href=https://hichenxinyu.github.io/ rel=author>Neava Chan</a> with ♥
-<span class=post-time>on <time datetime=2019-06-12 itemprop=datePublished>June 12, 2019</time></span>
+<span class=post-time>on <time datetime=2019-06-12 itemprop=datePublished>2019-06-12</time></span>
 in</div></header><div class=post-content><p>GitLab CI/CD 是gitlab8.0之后自带的一个持续集成系统，中心思想是当每一次push到gitlab的时候，都会触发一次脚本执行，然后脚本的内容包括了测试，编译，部署等一系列自定义的内容。</p><p>GitLab CI/CD的脚本执行，需要自定义安装对应gitlab-runner来执行，代码push之后，webhook检测到代码变化，就会触发gitlab-CI，分配到各个Runner来运行相应的脚本script。这些脚本有的是测试项目用的，有的是部署用的。</p><h3 id=gitlab-cicd-优势>GitLab CI/CD 优势</h3><ul><li>轻量级，不需要复杂的安装手段。</li><li>配置简单，与gitlab可直接适配。</li><li>实时构建日志十分清晰，UI交互体验很好</li><li>使用 YAML 进行配置，任何人都可以很方便的使用。</li></ul><h3 id=gitlab-cicd-劣势>GitLab CI/CD 劣势</h3><ul><li>没有统一的管理界面，无法统筹管理所有项目</li><li>配置依赖于代码仓库，耦合度没有Jenkins低</li></ul><p>gitlab-runner 安装(个人比较喜欢 yum or rpm 安装软件)</p><pre><code>#添加官方 yum 源
 curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | sudo bash
 #安装 gitlab-runner 

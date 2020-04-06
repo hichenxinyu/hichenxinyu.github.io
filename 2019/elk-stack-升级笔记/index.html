@@ -5,7 +5,7 @@
 <a class=menu-item href=/categories/>Categories</a>
 <a class=menu-item href=/tags/>Tags</a>
 <a class=menu-item href=/about/>About</a></div></div></nav><main class=main><div class=container><article class=post-warp itemscope itemtype=http://schema.org/Article><header class=post-header><h1 class=post-title itemprop="name headline">ELK Stack 升级</h1><div class=post-meta>Written by <a itemprop=name href=https://hichenxinyu.github.io/ rel=author>Neava Chan</a> with ♥
-<span class=post-time>on <time datetime=2019-06-11 itemprop=datePublished>June 11, 2019</time></span>
+<span class=post-time>on <time datetime=2019-06-11 itemprop=datePublished>2019-06-11</time></span>
 in
 <i class="iconfont icon-folder"></i><span class=post-category><a href=https://hichenxinyu.github.io/categories/elk/>ELK</a></span></div></header><div class=post-content><h3 id=升级方案>升级方案</h3><p>比较常见的 ELK Stack 升级方式有一下 3 种</p><ul><li>数据迁移升级：新建一套高版本 ES 集群，然后把老的 ES数据导入 </li><li>滚动升级，5.0.0->5.6,5.6->6.8.2</li><li>集群重启升级，5.0.0->6.8.2</li></ul><table><thead><tr><th>升级方式</th><th>优点</th><th>缺点</th></tr></thead><tbody><tr><td>数据迁移&升级</td><td>可以跨大版本升级</td><td>升级过程中，旧集群写操作停止</td></tr><tr><td>ES 版本之间有差异比较大，可能会有一些坑</td><td></td><td></td></tr><tr><td>迁移时间较长</td><td></td><td></td></tr><tr><td>滚动升级</td><td>升级过程中服务不中断</td><td>对ELK 源版本与目标版本有要求</td></tr><tr><td></td><td></td><td></td></tr><tr><td>集群重启升级</td><td>可以跨大版本升级</td><td></td></tr><tr><td>迁移时间比较短</td><td>ES 服务中断</td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><p>公司生产环境与测试环境的 ELK 技术栈版本是 5.0.0
 考虑先滚动升级到 5.6.16  然后确认没问题后，再从 5.6.16 滚动升级到 6.8.2

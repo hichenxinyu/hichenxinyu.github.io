@@ -5,7 +5,7 @@
 <a class=menu-item href=/categories/>Categories</a>
 <a class=menu-item href=/tags/>Tags</a>
 <a class=menu-item href=/about/>About</a></div></div></nav><main class=main><div class=container><article class=post-warp itemscope itemtype=http://schema.org/Article><header class=post-header><h1 class=post-title itemprop="name headline">Nginx实战</h1><div class=post-meta>Written by <a itemprop=name href=https://hichenxinyu.github.io/ rel=author>Neava Chan</a> with ♥
-<span class=post-time>on <time datetime=2018-02-03 itemprop=datePublished>February 3, 2018</time></span>
+<span class=post-time>on <time datetime=2018-02-03 itemprop=datePublished>2018-02-03</time></span>
 in</div></header><div class=post-content><h1 id=搭建一个简易的代理服务>搭建一个简易的代理服务</h1><p>nginx 常常用来作为代理服务器，这代表着服务器接收请求，然后将它们传递给被代理服务器，得到请求的响应，再将它们发送给客户端。 我们将配置一个基本的代理服务器，它会处理本地图片文件的请求并返回其他的请求给被代理的服务器。在这个例子中，两个服务器都会定义在一个 nginx 实例中。 首先，通过在 nginx 配置文件中添加另一个 server 区块，来定义一个被代理的服务器，像下面的配置：</p><pre><code>server {
     listen 8080;
     root /data/up1;

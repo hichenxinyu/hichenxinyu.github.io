@@ -5,7 +5,7 @@
 <a class=menu-item href=/categories/>Categories</a>
 <a class=menu-item href=/tags/>Tags</a>
 <a class=menu-item href=/about/>About</a></div></div></nav><main class=main><div class=container><article class=post-warp itemscope itemtype=http://schema.org/Article><header class=post-header><h1 class=post-title itemprop="name headline">ELK 问题排查</h1><div class=post-meta>Written by <a itemprop=name href=https://hichenxinyu.github.io/ rel=author>Neava Chan</a> with ♥
-<span class=post-time>on <time datetime=2019-06-03 itemprop=datePublished>June 3, 2019</time></span>
+<span class=post-time>on <time datetime=2019-06-03 itemprop=datePublished>2019-06-03</time></span>
 in
 <i class="iconfont icon-folder"></i><span class=post-category><a href=https://hichenxinyu.github.io/categories/elk/>ELK</a></span></div></header><div class=post-content><h3 id=集群-red>集群 Red</h3><p>为了完整的查看索引，分片，主分片和副分片情况，所以可直接使用自带 Api 查看，输入地址:</p><pre><code>GET /_cat/shards?h=index,shard,prirep,state,unassigned.reason
 </code></pre><p>  查询索引有问题的原因</p><pre><code>GET /_cluster/allocation/explain
