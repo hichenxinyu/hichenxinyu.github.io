@@ -1,6 +1,6 @@
 ---
 title: Yum 命令被锁
-date: 2018-02-015
+date: 2018-02-15
 layout: post
 ---
 
