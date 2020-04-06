@@ -42,7 +42,7 @@ preserveTaxonomyNames = true
 [params]
     since = 2017
     author = "Neava Chan"                           # Author's name
-    avatar = "/images/shanzhi.jpg"           # Author's avatar
+    avatar = "https://blog-pic-1253367462.cos.ap-shanghai.myqcloud.com/shanzhi.jpg"           # Author's avatar
     subtitle = "我会更好，因为我没有停止"         # Subtitle
     cdn_url = ""           # Base CDN URL
     home_mode = "" # post or other
