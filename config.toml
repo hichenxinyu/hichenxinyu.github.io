@@ -1,6 +1,6 @@
 baseURL = "https://hichenxinyu.github.io/"
 languageCode = "en-us"
-title = "Nevea's Chan"
+title = "Nevea's Blog"
 theme = "LeaveIt"
 
 paginate = 10000
