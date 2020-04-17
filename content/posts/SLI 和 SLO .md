@@ -2,7 +2,6 @@
 title: SLI，SLO，SLA 总结
 date: 2020-04-17
 layout: post
-tags: SRE
 ---
 
 先来说一下这三个单词SLI，SLO，SLA分别是什么
