@@ -1,6 +1,6 @@
 ---
 title: Nginx 优化总结
-date: 2018-04-21
+date: 2020-04-21
 layout: post
 ---
 
