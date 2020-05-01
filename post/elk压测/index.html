@@ -1,0 +1,508 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>ElasticSearch 压测 - Even - A super concise theme for Hugo</title><meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=theme-color content="#f8f5ec"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=author content="Nevea Chan"><meta name=description content="本次压测目标： 测试集群读写性能 &amp;amp; 为集群容量规划提供数据支撑 测试 ES 新版本，结合实际场景与老版本进行比较，评估是否进行升级 性能优化&amp;amp;性能"><meta name=keywords content="Hugo,theme,even"><meta name=generator content="Hugo 0.68.1 with theme even"><link rel=canonical href=http://localhost:1313/post/elk%E5%8E%8B%E6%B5%8B/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link href=/sass/main.min.064b507514536e4805a5684f4e337bed1bbe1d01d738415a7b0b51fdecd956e3.css rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous><meta property="og:title" content="ElasticSearch 压测"><meta property="og:description" content="本次压测目标： 测试集群读写性能 & 为集群容量规划提供数据支撑 测试 ES 新版本，结合实际场景与老版本进行比较，评估是否进行升级 性能优化&性能"><meta property="og:type" content="article"><meta property="og:url" content="http://localhost:1313/post/elk%E5%8E%8B%E6%B5%8B/"><meta property="article:published_time" content="2019-05-22T00:00:00+00:00"><meta property="article:modified_time" content="2019-05-22T00:00:00+00:00"><meta itemprop=name content="ElasticSearch 压测"><meta itemprop=description content="本次压测目标： 测试集群读写性能 & 为集群容量规划提供数据支撑 测试 ES 新版本，结合实际场景与老版本进行比较，评估是否进行升级 性能优化&性能"><meta itemprop=datePublished content="2019-05-22T00:00:00+00:00"><meta itemprop=dateModified content="2019-05-22T00:00:00+00:00"><meta itemprop=wordCount content="3256"><meta itemprop=keywords content><meta name=twitter:card content="summary"><meta name=twitter:title content="ElasticSearch 压测"><meta name=twitter:description content="本次压测目标： 测试集群读写性能 & 为集群容量规划提供数据支撑 测试 ES 新版本，结合实际场景与老版本进行比较，评估是否进行升级 性能优化&性能"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=/ class=logo>陈欣宇的博客</a></div><div class=mobile-navbar-icon><span></span><span></span><span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=/post/><li class=mobile-menu-item>Archives</li></a><a href=/tags/><li class=mobile-menu-item>Tags</li></a><a href=/about/><li class=mobile-menu-item>About</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=/ class=logo>陈欣宇的博客</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=/post/>Archives</a></li><li class=menu-item><a class=menu-item-link href=/tags/>Tags</a></li><li class=menu-item><a class=menu-item-link href=/about/>About</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>ElasticSearch 压测</h1><div class=post-meta><span class=post-time>2019-05-22</span><div class=post-category><a href=/categories/elk/>ELK</a></div></div></header><div class=post-toc id=post-toc><h2 class=post-toc-title>Contents</h2><div class="post-toc-content always-active"><nav id=TableOfContents><ul><li><ul><li></li></ul></li></ul></nav></div></div><div class=post-content><h4 id=本次压测目标>本次压测目标：</h4><ul><li>测试集群读写性能 & 为集群容量规划提供数据支撑</li><li>测试 ES 新版本，结合实际场景与老版本进行比较，评估是否进行升级</li><li>性能优化&性能问题诊断</li><li>对 ES 配置参数进行修改，评估优化效果（长期）</li><li>确定系统稳定性，考察系统功能极限与稳定性<h4 id=heading></h4></li></ul><h4 id=可选择的压测工具>可选择的压测工具</h4><ul><li>Elastic 官方压测工具：rally</li><li>基于HTTP 的压测第三方压测工具：JMeter 等</li></ul><h4 id=压测流程如下>压测流程如下</h4><ul><li>压测计划</li><li>脚本开发</li><li>压测环境搭建&压测开始</li><li>结果分析</li></ul><hr><ul><li>为方便对比，压测数据统一使用 geonames 数据集（大小3.2G，共11523468个文档）</li><li>时间： 完整的一次压测过程，时间以小时计</li></ul><h4 id=安装>安装</h4><p>依赖</p><ul><li>3.5+ including pip3 </li><li>git 1.9+</li><li>JDK </li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>pip3 install esrally
+</code></pre></td></tr></table></div></div><h4 id=elastic-官方压测结果链接httpselasticsearch-benchmarkselasticco>Elastic 官方压测结果<a href=https://elasticsearch-benchmarks.elastic.co/>链接</a></h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>https://elasticsearch-benchmarks.elastic.co/
+</code></pre></td></tr></table></div></div><h4 id=配置>配置</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback> esrally configure --advanced-config
+</code></pre></td></tr></table></div></div><p>只测试 1000 条数据</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>esrally --distribution-version=5.6.16 --test-mode
+</code></pre></td></tr></table></div></div><p>开始测试各版本单机性能</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>esrally race --distribution-version=5.6.16 --track=geonames --challenge=append-no-conflicts --user-tag=&#34;version:5.6.16&#34;
+</code></pre></td></tr></table></div></div><h4 id=heading-1></h4><h4 id=查看本地-tracks>查看本地 tracks</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>esrally list tracks
+</code></pre></td></tr></table></div></div><h4 id=heading-2></h4><h4 id=压测现有集群>压测现有集群</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>esrally race --pipeline=benchmark-only --target-hosts=10.0.19.218:9200 --distribution-version=6.7.2  --track=geonames --challenge=append-no-conflicts
+</code></pre></td></tr></table></div></div><h4 id=测试环境10019218先跑一遍>测试环境（10.0.19.218）先跑一遍</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>esrally race --pipeline=benchmark-only --target-hosts=10.0.19.218:9200 --distribution-version=6.7.2  --track=geonames --challenge=append-no-conflicts
+</code></pre></td></tr></table></div></div><h5 id=结果>结果</h5><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span><span class=lnt>156
+</span><span class=lnt>157
+</span><span class=lnt>158
+</span><span class=lnt>159
+</span><span class=lnt>160
+</span><span class=lnt>161
+</span><span class=lnt>162
+</span><span class=lnt>163
+</span><span class=lnt>164
+</span><span class=lnt>165
+</span><span class=lnt>166
+</span><span class=lnt>167
+</span><span class=lnt>168
+</span><span class=lnt>169
+</span><span class=lnt>170
+</span><span class=lnt>171
+</span><span class=lnt>172
+</span><span class=lnt>173
+</span><span class=lnt>174
+</span><span class=lnt>175
+</span><span class=lnt>176
+</span><span class=lnt>177
+</span><span class=lnt>178
+</span><span class=lnt>179
+</span><span class=lnt>180
+</span><span class=lnt>181
+</span><span class=lnt>182
+</span><span class=lnt>183
+</span><span class=lnt>184
+</span><span class=lnt>185
+</span><span class=lnt>186
+</span><span class=lnt>187
+</span><span class=lnt>188
+</span><span class=lnt>189
+</span><span class=lnt>190
+</span><span class=lnt>191
+</span><span class=lnt>192
+</span><span class=lnt>193
+</span><span class=lnt>194
+</span><span class=lnt>195
+</span><span class=lnt>196
+</span><span class=lnt>197
+</span><span class=lnt>198
+</span><span class=lnt>199
+</span><span class=lnt>200
+</span><span class=lnt>201
+</span><span class=lnt>202
+</span><span class=lnt>203
+</span><span class=lnt>204
+</span><span class=lnt>205
+</span><span class=lnt>206
+</span><span class=lnt>207
+</span><span class=lnt>208
+</span><span class=lnt>209
+</span><span class=lnt>210
+</span><span class=lnt>211
+</span><span class=lnt>212
+</span><span class=lnt>213
+</span><span class=lnt>214
+</span><span class=lnt>215
+</span><span class=lnt>216
+</span><span class=lnt>217
+</span><span class=lnt>218
+</span><span class=lnt>219
+</span><span class=lnt>220
+</span><span class=lnt>221
+</span><span class=lnt>222
+</span><span class=lnt>223
+</span><span class=lnt>224
+</span><span class=lnt>225
+</span><span class=lnt>226
+</span><span class=lnt>227
+</span><span class=lnt>228
+</span><span class=lnt>229
+</span><span class=lnt>230
+</span><span class=lnt>231
+</span><span class=lnt>232
+</span><span class=lnt>233
+</span><span class=lnt>234
+</span><span class=lnt>235
+</span><span class=lnt>236
+</span><span class=lnt>237
+</span><span class=lnt>238
+</span><span class=lnt>239
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>|                                                         Metric |                   Task |    Value |    Unit |
+|---------------------------------------------------------------:|-----------------------:|---------:|--------:|
+|                     Cumulative indexing time of primary shards |                        |  157.082 |     min |
+|             Min cumulative indexing time across primary shards |                        |        0 |     min |
+|          Median cumulative indexing time across primary shards |                        | 0.256483 |     min |
+|             Max cumulative indexing time across primary shards |                        |  30.3196 |     min |
+|            Cumulative indexing throttle time of primary shards |                        |        0 |     min |
+|    Min cumulative indexing throttle time across primary shards |                        |        0 |     min |
+| Median cumulative indexing throttle time across primary shards |                        |        0 |     min |
+|    Max cumulative indexing throttle time across primary shards |                        |        0 |     min |
+|                        Cumulative merge time of primary shards |                        |  161.364 |     min |
+|                       Cumulative merge count of primary shards |                        |    23823 |         |
+|                Min cumulative merge time across primary shards |                        |        0 |     min |
+|             Median cumulative merge time across primary shards |                        |  1.43677 |     min |
+|                Max cumulative merge time across primary shards |                        |  23.3528 |     min |
+|               Cumulative merge throttle time of primary shards |                        | 0.933833 |     min |
+|       Min cumulative merge throttle time across primary shards |                        |        0 |     min |
+|    Median cumulative merge throttle time across primary shards |                        |        0 |     min |
+|       Max cumulative merge throttle time across primary shards |                        |   0.1983 |     min |
+|                      Cumulative refresh time of primary shards |                        |  59.8701 |     min |
+|                     Cumulative refresh count of primary shards |                        |   254455 |         |
+|              Min cumulative refresh time across primary shards |                        |        0 |     min |
+|           Median cumulative refresh time across primary shards |                        |  1.47577 |     min |
+|              Max cumulative refresh time across primary shards |                        |  7.86888 |     min |
+|                        Cumulative flush time of primary shards |                        |  1.82032 |     min |
+|                       Cumulative flush count of primary shards |                        |       76 |         |
+|                Min cumulative flush time across primary shards |                        |        0 |     min |
+|             Median cumulative flush time across primary shards |                        |  0.00315 |     min |
+|                Max cumulative flush time across primary shards |                        | 0.473867 |     min |
+|                                             Total Young Gen GC |                        |  156.258 |       s |
+|                                               Total Old Gen GC |                        |    0.504 |       s |
+|                                                     Store size |                        |  10.2503 |      GB |
+|                                                  Translog size |                        |  3.40687 |      GB |
+|                                         Heap used for segments |                        |  28.6233 |      MB |
+|                                       Heap used for doc values |                        |  1.08705 |      MB |
+|                                            Heap used for terms |                        |  25.1319 |      MB |
+|                                            Heap used for norms |                        | 0.283142 |      MB |
+|                                           Heap used for points |                        | 0.717692 |      MB |
+|                                    Heap used for stored fields |                        |  1.40359 |      MB |
+|                                                  Segment count |                        |      394 |         |
+|                                                 Min Throughput |           index-append |  13680.2 |  docs/s |
+|                                              Median Throughput |           index-append |  15924.4 |  docs/s |
+|                                                 Max Throughput |           index-append |  17251.8 |  docs/s |
+|                                        50th percentile latency |           index-append |  1917.34 |      ms |
+|                                        90th percentile latency |           index-append |  3282.31 |      ms |
+|                                        99th percentile latency |           index-append |  4744.88 |      ms |
+|                                      99.9th percentile latency |           index-append |  6111.59 |      ms |
+|                                       100th percentile latency |           index-append |   6868.8 |      ms |
+|                                   50th percentile service time |           index-append |  1917.34 |      ms |
+|                                   90th percentile service time |           index-append |  3282.31 |      ms |
+|                                   99th percentile service time |           index-append |  4744.88 |      ms |
+|                                 99.9th percentile service time |           index-append |  6111.59 |      ms |
+|                                  100th percentile service time |           index-append |   6868.8 |      ms |
+|                                                     error rate |           index-append |        0 |       % |
+|                                                 Min Throughput |            index-stats |    47.27 |   ops/s |
+|                                              Median Throughput |            index-stats |    47.77 |   ops/s |
+|                                                 Max Throughput |            index-stats |    47.88 |   ops/s |
+|                                        50th percentile latency |            index-stats |  9808.46 |      ms |
+|                                        90th percentile latency |            index-stats |  13753.5 |      ms |
+|                                        99th percentile latency |            index-stats |  14571.1 |      ms |
+|                                      99.9th percentile latency |            index-stats |  14645.1 |      ms |
+|                                       100th percentile latency |            index-stats |  14653.5 |      ms |
+|                                   50th percentile service time |            index-stats |   20.069 |      ms |
+|                                   90th percentile service time |            index-stats |  23.2235 |      ms |
+|                                   99th percentile service time |            index-stats |  28.6327 |      ms |
+|                                 99.9th percentile service time |            index-stats |  46.0017 |      ms |
+|                                  100th percentile service time |            index-stats |  48.4586 |      ms |
+|                                                     error rate |            index-stats |        0 |       % |
+|                                                 Min Throughput |             node-stats |    51.61 |   ops/s |
+|                                              Median Throughput |             node-stats |    54.58 |   ops/s |
+|                                                 Max Throughput |             node-stats |    54.95 |   ops/s |
+|                                        50th percentile latency |             node-stats |  4375.34 |      ms |
+|                                        90th percentile latency |             node-stats |  7131.76 |      ms |
+|                                        99th percentile latency |             node-stats |  7723.09 |      ms |
+|                                      99.9th percentile latency |             node-stats |  7780.35 |      ms |
+|                                       100th percentile latency |             node-stats |  7785.54 |      ms |
+|                                   50th percentile service time |             node-stats |  17.4001 |      ms |
+|                                   90th percentile service time |             node-stats |  21.1093 |      ms |
+|                                   99th percentile service time |             node-stats |  23.9763 |      ms |
+|                                 99.9th percentile service time |             node-stats |  34.4598 |      ms |
+|                                  100th percentile service time |             node-stats |  37.7474 |      ms |
+|                                                     error rate |             node-stats |        0 |       % |
+|                                                 Min Throughput |                default |    49.87 |   ops/s |
+|                                              Median Throughput |                default |    49.99 |   ops/s |
+|                                                 Max Throughput |                default |    50.02 |   ops/s |
+|                                        50th percentile latency |                default |  22.9061 |      ms |
+|                                        90th percentile latency |                default |  35.2368 |      ms |
+|                                        99th percentile latency |                default |  56.4199 |      ms |
+|                                      99.9th percentile latency |                default |  60.2163 |      ms |
+|                                       100th percentile latency |                default |  62.0121 |      ms |
+|                                   50th percentile service time |                default |  21.0608 |      ms |
+|                                   90th percentile service time |                default |  23.0526 |      ms |
+|                                   99th percentile service time |                default |  24.0483 |      ms |
+|                                 99.9th percentile service time |                default |   26.301 |      ms |
+|                                  100th percentile service time |                default |  27.9663 |      ms |
+|                                                     error rate |                default |        0 |       % |
+|                                                 Min Throughput |                   term |   200.07 |   ops/s |
+|                                              Median Throughput |                   term |   200.08 |   ops/s |
+|                                                 Max Throughput |                   term |   200.14 |   ops/s |
+|                                        50th percentile latency |                   term |  2.71801 |      ms |
+|                                        90th percentile latency |                   term |  3.03285 |      ms |
+|                                        99th percentile latency |                   term |  11.4885 |      ms |
+|                                      99.9th percentile latency |                   term |  26.8219 |      ms |
+|                                       100th percentile latency |                   term |  28.1828 |      ms |
+|                                   50th percentile service time |                   term |  2.56728 |      ms |
+|                                   90th percentile service time |                   term |  2.85599 |      ms |
+|                                   99th percentile service time |                   term |  3.55974 |      ms |
+|                                 99.9th percentile service time |                   term |  8.51489 |      ms |
+|                                  100th percentile service time |                   term |  26.6701 |      ms |
+|                                                     error rate |                   term |        0 |       % |
+|                                                 Min Throughput |                 phrase |   199.27 |   ops/s |
+|                                              Median Throughput |                 phrase |   200.03 |   ops/s |
+|                                                 Max Throughput |                 phrase |   200.06 |   ops/s |
+|                                        50th percentile latency |                 phrase |  4.25964 |      ms |
+|                                        90th percentile latency |                 phrase |  13.8712 |      ms |
+|                                        99th percentile latency |                 phrase |  35.8641 |      ms |
+|                                      99.9th percentile latency |                 phrase |  39.0226 |      ms |
+|                                       100th percentile latency |                 phrase |  39.8982 |      ms |
+|                                   50th percentile service time |                 phrase |   4.0484 |      ms |
+|                                   90th percentile service time |                 phrase |  4.60117 |      ms |
+|                                   99th percentile service time |                 phrase |  8.69007 |      ms |
+|                                 99.9th percentile service time |                 phrase |   33.045 |      ms |
+|                                  100th percentile service time |                 phrase |  38.8927 |      ms |
+|                                                     error rate |                 phrase |        0 |       % |
+|                                                 Min Throughput |   country_agg_uncached |     2.35 |   ops/s |
+|                                              Median Throughput |   country_agg_uncached |     2.36 |   ops/s |
+|                                                 Max Throughput |   country_agg_uncached |     2.37 |   ops/s |
+|                                        50th percentile latency |   country_agg_uncached |  43731.8 |      ms |
+|                                        90th percentile latency |   country_agg_uncached |    50463 |      ms |
+|                                        99th percentile latency |   country_agg_uncached |  52056.4 |      ms |
+|                                       100th percentile latency |   country_agg_uncached |  52232.7 |      ms |
+|                                   50th percentile service time |   country_agg_uncached |  407.051 |      ms |
+|                                   90th percentile service time |   country_agg_uncached |  520.447 |      ms |
+|                                   99th percentile service time |   country_agg_uncached |  588.956 |      ms |
+|                                  100th percentile service time |   country_agg_uncached |  650.993 |      ms |
+|                                                     error rate |   country_agg_uncached |        0 |       % |
+|                                                 Min Throughput |     country_agg_cached |    99.69 |   ops/s |
+|                                              Median Throughput |     country_agg_cached |   100.06 |   ops/s |
+|                                                 Max Throughput |     country_agg_cached |   100.13 |   ops/s |
+|                                        50th percentile latency |     country_agg_cached |  3.25071 |      ms |
+|                                        90th percentile latency |     country_agg_cached |  3.58457 |      ms |
+|                                        99th percentile latency |     country_agg_cached |  6.40293 |      ms |
+|                                      99.9th percentile latency |     country_agg_cached |  32.8548 |      ms |
+|                                       100th percentile latency |     country_agg_cached |  38.2042 |      ms |
+|                                   50th percentile service time |     country_agg_cached |  3.09234 |      ms |
+|                                   90th percentile service time |     country_agg_cached |  3.40055 |      ms |
+|                                   99th percentile service time |     country_agg_cached |  4.56434 |      ms |
+|                                 99.9th percentile service time |     country_agg_cached |  13.7336 |      ms |
+|                                  100th percentile service time |     country_agg_cached |  38.0936 |      ms |
+|                                                     error rate |     country_agg_cached |        0 |       % |
+|                                                 Min Throughput |                 scroll |    20.02 | pages/s |
+|                                              Median Throughput |                 scroll |    20.02 | pages/s |
+|                                                 Max Throughput |                 scroll |    20.03 | pages/s |
+|                                        50th percentile latency |                 scroll |  952.534 |      ms |
+|                                        90th percentile latency |                 scroll |  977.789 |      ms |
+|                                        99th percentile latency |                 scroll |  992.309 |      ms |
+|                                       100th percentile latency |                 scroll |  997.499 |      ms |
+|                                   50th percentile service time |                 scroll |   952.13 |      ms |
+|                                   90th percentile service time |                 scroll |  977.355 |      ms |
+|                                   99th percentile service time |                 scroll |  991.834 |      ms |
+|                                  100th percentile service time |                 scroll |  996.983 |      ms |
+|                                                     error rate |                 scroll |        0 |       % |
+|                                                 Min Throughput |             expression |      0.9 |   ops/s |
+|                                              Median Throughput |             expression |     0.91 |   ops/s |
+|                                                 Max Throughput |             expression |     0.91 |   ops/s |
+|                                        50th percentile latency |             expression |   150678 |      ms |
+|                                        90th percentile latency |             expression |   176840 |      ms |
+|                                        99th percentile latency |             expression |   182169 |      ms |
+|                                       100th percentile latency |             expression |   182646 |      ms |
+|                                   50th percentile service time |             expression |  1125.56 |      ms |
+|                                   90th percentile service time |             expression |  1286.03 |      ms |
+|                                   99th percentile service time |             expression |  1303.76 |      ms |
+|                                  100th percentile service time |             expression |  1332.52 |      ms |
+|                                                     error rate |             expression |        0 |       % |
+|                                                 Min Throughput |        painless_static |     0.94 |   ops/s |
+|                                              Median Throughput |        painless_static |     0.94 |   ops/s |
+|                                                 Max Throughput |        painless_static |     0.94 |   ops/s |
+|                                        50th percentile latency |        painless_static |   100312 |      ms |
+|                                        90th percentile latency |        painless_static |   116157 |      ms |
+|                                        99th percentile latency |        painless_static |   119962 |      ms |
+|                                       100th percentile latency |        painless_static |   120267 |      ms |
+|                                   50th percentile service time |        painless_static |  1051.41 |      ms |
+|                                   90th percentile service time |        painless_static |  1220.43 |      ms |
+|                                   99th percentile service time |        painless_static |  1354.25 |      ms |
+|                                  100th percentile service time |        painless_static |  1364.53 |      ms |
+|                                                     error rate |        painless_static |        0 |       % |
+|                                                 Min Throughput |       painless_dynamic |     0.85 |   ops/s |
+|                                              Median Throughput |       painless_dynamic |     0.85 |   ops/s |
+|                                                 Max Throughput |       painless_dynamic |     0.85 |   ops/s |
+|                                        50th percentile latency |       painless_dynamic |   127809 |      ms |
+|                                        90th percentile latency |       painless_dynamic |   147685 |      ms |
+|                                        99th percentile latency |       painless_dynamic |   152236 |      ms |
+|                                       100th percentile latency |       painless_dynamic |   152736 |      ms |
+|                                   50th percentile service time |       painless_dynamic |  1162.78 |      ms |
+|                                   90th percentile service time |       painless_dynamic |  1314.62 |      ms |
+|                                   99th percentile service time |       painless_dynamic |  1485.99 |      ms |
+|                                  100th percentile service time |       painless_dynamic |  1552.55 |      ms |
+|                                                     error rate |       painless_dynamic |        0 |       % |
+|                                                 Min Throughput |            large_terms |     0.73 |   ops/s |
+|                                              Median Throughput |            large_terms |     0.73 |   ops/s |
+|                                                 Max Throughput |            large_terms |     0.73 |   ops/s |
+|                                        50th percentile latency |            large_terms |   176892 |      ms |
+|                                        90th percentile latency |            large_terms |   204470 |      ms |
+|                                        99th percentile latency |            large_terms |   210667 |      ms |
+|                                       100th percentile latency |            large_terms |   211348 |      ms |
+|                                   50th percentile service time |            large_terms |  1359.82 |      ms |
+|                                   90th percentile service time |            large_terms |   1438.7 |      ms |
+|                                   99th percentile service time |            large_terms |  1510.96 |      ms |
+|                                  100th percentile service time |            large_terms |  1545.09 |      ms |
+|                                                     error rate |            large_terms |        0 |       % |
+|                                                 Min Throughput |   large_filtered_terms |     0.73 |   ops/s |
+|                                              Median Throughput |   large_filtered_terms |     0.73 |   ops/s |
+|                                                 Max Throughput |   large_filtered_terms |     0.73 |   ops/s |
+|                                        50th percentile latency |   large_filtered_terms |   176867 |      ms |
+|                                        90th percentile latency |   large_filtered_terms |   204577 |      ms |
+|                                        99th percentile latency |   large_filtered_terms |   210807 |      ms |
+|                                       100th percentile latency |   large_filtered_terms |   211565 |      ms |
+|                                   50th percentile service time |   large_filtered_terms |  1358.56 |      ms |
+|                                   90th percentile service time |   large_filtered_terms |  1443.66 |      ms |
+|                                   99th percentile service time |   large_filtered_terms |   1483.7 |      ms |
+|                                  100th percentile service time |   large_filtered_terms |  1497.43 |      ms |
+|                                                     error rate |   large_filtered_terms |        0 |       % |
+|                                                 Min Throughput | large_prohibited_terms |     0.75 |   ops/s |
+|                                              Median Throughput | large_prohibited_terms |     0.75 |   ops/s |
+|                                                 Max Throughput | large_prohibited_terms |     0.75 |   ops/s |
+|                                        50th percentile latency | large_prohibited_terms |   168425 |      ms |
+|                                        90th percentile latency | large_prohibited_terms |   194882 |      ms |
+|                                        99th percentile latency | large_prohibited_terms |   201165 |      ms |
+|                                       100th percentile latency | large_prohibited_terms |   202136 |      ms |
+|                                   50th percentile service time | large_prohibited_terms |  1339.58 |      ms |
+|                                   90th percentile service time | large_prohibited_terms |  1425.45 |      ms |
+|                                   99th percentile service time | large_prohibited_terms |  1568.95 |      ms |
+|                                  100th percentile service time | large_prohibited_terms |  1646.36 |      ms |
+|                                                     error rate | large_prohibited_terms |        0 |       % |
+
+
+----------------------------------
+[INFO] SUCCESS (took 3850 seconds)
+----------------------------------
+</code></pre></td></tr></table></div></div><h4 id=参考>参考：</h4><p>[https://github.com/elastic/rally](</p></div><div class=post-copyright><p class=copyright-item><span class=item-title>Author</span>
+<span class=item-content>Nevea Chan</span></p><p class=copyright-item><span class=item-title>LastMod</span>
+<span class=item-content>2019-05-22</span></p></div><footer class=post-footer><nav class=post-nav><a class=prev href=/post/elk%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/><i class="iconfont icon-left"></i><span class="prev-text nav-default">ELK 问题排查</span>
+<span class="prev-text nav-mobile">Prev</span></a>
+<a class=next href=/post/vscode%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/><span class="next-text nav-default">VScode使用笔记</span>
+<span class="next-text nav-mobile">Next</span>
+<i class="iconfont icon-right"></i></a></nav></footer></article></div></div></main><footer id=footer class=footer><div class=social-links><a href=mailto:your@email.com class="iconfont icon-email" title=email></a><a href=http://localhost:1313/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a></div><div class=copyright><span class=power-by>Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a></span>
+<span class=division>|</span>
+<span class=theme-info>Theme -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a></span>
+<span class=copyright-year>&copy;
+2017 -
+2020
+<span class=heart><i class="iconfont icon-heart"></i></span><span class=author>Nevea Chan</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script><script type=text/javascript src=/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js></script></body></html>

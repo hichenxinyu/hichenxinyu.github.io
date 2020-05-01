@@ -1,0 +1,111 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>Kafka & ZooKeeper 集群搭建 - Even - A super concise theme for Hugo</title><meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=theme-color content="#f8f5ec"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=author content="Nevea Chan"><meta name=description content="环境准备 三台机器 CentOS 7.4 10.0.19.218 10.0.19.216 10.0.19.142 kafka 集群搭建准备: Java环境 ZooKeeper 集群搭建 Zookeeper 集群搭建 1 2 3 server.1=10.0.19.218:2888:3888 server.2=10.0.19.216:2888:3888 server.3=10.0.19.142:2888:3888 1 echo &amp;#34;1&amp;#34; &amp;gt;/tmp/zookeeper/myid ##生成ID，这里需要注意， myid对应的zo"><meta name=keywords content="Hugo,theme,even"><meta name=generator content="Hugo 0.68.1 with theme even"><link rel=canonical href=http://localhost:1313/post/kafka-zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link href=/sass/main.min.064b507514536e4805a5684f4e337bed1bbe1d01d738415a7b0b51fdecd956e3.css rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous><meta property="og:title" content="Kafka & ZooKeeper 集群搭建"><meta property="og:description" content="环境准备 三台机器 CentOS 7.4 10.0.19.218 10.0.19.216 10.0.19.142 kafka 集群搭建准备: Java环境 ZooKeeper 集群搭建 Zookeeper 集群搭建 1 2 3 server.1=10.0.19.218:2888:3888 server.2=10.0.19.216:2888:3888 server.3=10.0.19.142:2888:3888 1 echo &#34;1&#34; >/tmp/zookeeper/myid ##生成ID，这里需要注意， myid对应的zo"><meta property="og:type" content="article"><meta property="og:url" content="http://localhost:1313/post/kafka-zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"><meta property="article:published_time" content="2019-07-11T00:00:00+00:00"><meta property="article:modified_time" content="2019-07-11T00:00:00+00:00"><meta itemprop=name content="Kafka & ZooKeeper 集群搭建"><meta itemprop=description content="环境准备 三台机器 CentOS 7.4 10.0.19.218 10.0.19.216 10.0.19.142 kafka 集群搭建准备: Java环境 ZooKeeper 集群搭建 Zookeeper 集群搭建 1 2 3 server.1=10.0.19.218:2888:3888 server.2=10.0.19.216:2888:3888 server.3=10.0.19.142:2888:3888 1 echo &#34;1&#34; >/tmp/zookeeper/myid ##生成ID，这里需要注意， myid对应的zo"><meta itemprop=datePublished content="2019-07-11T00:00:00+00:00"><meta itemprop=dateModified content="2019-07-11T00:00:00+00:00"><meta itemprop=wordCount content="425"><meta itemprop=keywords content><meta name=twitter:card content="summary"><meta name=twitter:title content="Kafka & ZooKeeper 集群搭建"><meta name=twitter:description content="环境准备 三台机器 CentOS 7.4 10.0.19.218 10.0.19.216 10.0.19.142 kafka 集群搭建准备: Java环境 ZooKeeper 集群搭建 Zookeeper 集群搭建 1 2 3 server.1=10.0.19.218:2888:3888 server.2=10.0.19.216:2888:3888 server.3=10.0.19.142:2888:3888 1 echo &#34;1&#34; >/tmp/zookeeper/myid ##生成ID，这里需要注意， myid对应的zo"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=/ class=logo>陈欣宇的博客</a></div><div class=mobile-navbar-icon><span></span><span></span><span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=/post/><li class=mobile-menu-item>Archives</li></a><a href=/tags/><li class=mobile-menu-item>Tags</li></a><a href=/about/><li class=mobile-menu-item>About</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=/ class=logo>陈欣宇的博客</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=/post/>Archives</a></li><li class=menu-item><a class=menu-item-link href=/tags/>Tags</a></li><li class=menu-item><a class=menu-item-link href=/about/>About</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>Kafka & ZooKeeper 集群搭建</h1><div class=post-meta><span class=post-time>2019-07-11</span></div></header><div class=post-toc id=post-toc><h2 class=post-toc-title>Contents</h2><div class="post-toc-content always-active"><nav id=TableOfContents><ul><li><ul><li></li></ul></li></ul></nav></div></div><div class=post-content><h4 id=环境准备>环境准备</h4><p>三台机器 CentOS 7.4
+10.0.19.218
+10.0.19.216
+10.0.19.142</p><p>kafka 集群搭建准备:</p><ul><li>Java环境</li><li>ZooKeeper 集群搭建</li></ul><h4 id=zookeeper-集群搭建>Zookeeper 集群搭建</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>server.1=10.0.19.218:2888:3888
+server.2=10.0.19.216:2888:3888
+server.3=10.0.19.142:2888:3888
+</code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>echo &#34;1&#34; &gt;/tmp/zookeeper/myid ##生成ID，这里需要注意， myid对应的zoo.cfg的server.ID，比如第二台zookeeper主机对应的myid应该是2
+</code></pre></td></tr></table></div></div><p>启动ZooKeeper</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>cd /usr/local/zookeeper-3.4.9/bin
+./zkServer.sh start
+</code></pre></td></tr></table></div></div><p>停止Zookeeper</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>cd /usr/local/zookeeper-3.4.9/bin
+./zkServer.sh stop
+</code></pre></td></tr></table></div></div><p>附美味测试环境Zookeeper 集群配置</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[root@rdpops_server-146-199 conf]# cat zoo.cfg
+# The number of milliseconds of each tick
+tickTime=2000
+# The number of ticks that the initial
+# synchronization phase can take
+initLimit=10
+# The number of ticks that can pass between
+# sending a request and getting an acknowledgement
+syncLimit=5
+# the directory where the snapshot is stored.
+# do not use /tmp for storage, /tmp here is just
+# example sakes.
+dataDir=/var/zookeeper/
+dataLogDir=/var/zookeeper/datalog/
+# the port at which the clients will connect
+clientPort=2181
+# the maximum number of client connections.
+# increase this if you need to handle more clients
+maxClientCnxns=0
+#
+# Be sure to read the maintenance section of the
+# administrator guide before turning on autopurge.
+#
+# http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance
+#
+# The number of snapshots to retain in dataDir
+autopurge.snapRetainCount=30
+# Purge task interval in hours
+# Set to &#34;0&#34; to disable auto purge feature
+#autopurge.purgeInterval=1
+server.1=10.0.146.126:2888:3888
+server.2=10.0.146.150:2888:3888
+server.3=10.0.146.199:2888:3888
+</code></pre></td></tr></table></div></div><hr><h4 id=kafka-集群搭建>Kafka  集群搭建</h4><p>下载安装包</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>wget http://apache.claz.org/kafka/2.2.0/kafka_2.11-2.2.0.tgz
+tar -xzf kafka_2.11-2.2.0.tgz
+cd kafka_2.11-2.2.0
+</code></pre></td></tr></table></div></div><h4 id=启动服务>启动服务</h4><h5 id=kafka-依赖-zookeeper>kafka 依赖 zookeeper</h5><h5 id=启动-kafka-server>启动 Kafka server:</h5><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>./kafka-server-start.sh -daemon ../config/server.properties 
+</code></pre></td></tr></table></div></div><h4 id=kafka-web管理工具-kafka-manager>Kafka Web管理工具-Kafka-manager</h4><h4 id=消息生产-测试>消息生产 测试</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>./kafka-console-producer.sh --broker-list localhost:9092 --topic demo
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --from-beginning --topic demo
+</code></pre></td></tr></table></div></div></div><div class=post-copyright><p class=copyright-item><span class=item-title>Author</span>
+<span class=item-content>Nevea Chan</span></p><p class=copyright-item><span class=item-title>LastMod</span>
+<span class=item-content>2019-07-11</span></p></div><footer class=post-footer><nav class=post-nav><a class=prev href=/post/kubernetes-%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85/><i class="iconfont icon-left"></i><span class="prev-text nav-default">Kubernetes集群安装</span>
+<span class="prev-text nav-mobile">Prev</span></a>
+<a class=next href=/post/redis-%E6%8C%81%E4%B9%85%E5%8C%96/><span class="next-text nav-default">Redis 持久化</span>
+<span class="next-text nav-mobile">Next</span>
+<i class="iconfont icon-right"></i></a></nav></footer></article></div></div></main><footer id=footer class=footer><div class=social-links><a href=mailto:your@email.com class="iconfont icon-email" title=email></a><a href=http://localhost:1313/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a></div><div class=copyright><span class=power-by>Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a></span>
+<span class=division>|</span>
+<span class=theme-info>Theme -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a></span>
+<span class=copyright-year>&copy;
+2017 -
+2020
+<span class=heart><i class="iconfont icon-heart"></i></span><span class=author>Nevea Chan</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script><script type=text/javascript src=/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js></script></body></html>

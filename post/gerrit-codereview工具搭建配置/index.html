@@ -1,0 +1,158 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>CodeReview工具:Gerrit 搭建配置 - Even - A super concise theme for Hugo</title><meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=theme-color content="#f8f5ec"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=author content="Nevea Chan"><meta name=description content="一、环境准备 OS:centos6.8 gerrit依赖 (java&amp;amp;git) yum -y install java-1.8.0 安装git 2.14.1 (低版本git同步gitlab时会出问题) yum install -y http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm yum install -y git yum -y install epel-release &amp;amp;&amp;amp; yum -y install nginx httpd-tools gerri"><meta name=keywords content="Hugo,theme,even"><meta name=generator content="Hugo 0.68.1 with theme even"><link rel=canonical href=http://localhost:1313/post/gerrit-codereview%E5%B7%A5%E5%85%B7%E6%90%AD%E5%BB%BA%E9%85%8D%E7%BD%AE/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link href=/sass/main.min.064b507514536e4805a5684f4e337bed1bbe1d01d738415a7b0b51fdecd956e3.css rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous><meta property="og:title" content="CodeReview工具:Gerrit 搭建配置"><meta property="og:description" content="一、环境准备 OS:centos6.8 gerrit依赖 (java&git) yum -y install java-1.8.0 安装git 2.14.1 (低版本git同步gitlab时会出问题) yum install -y http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm yum install -y git yum -y install epel-release && yum -y install nginx httpd-tools gerri"><meta property="og:type" content="article"><meta property="og:url" content="http://localhost:1313/post/gerrit-codereview%E5%B7%A5%E5%85%B7%E6%90%AD%E5%BB%BA%E9%85%8D%E7%BD%AE/"><meta property="article:published_time" content="2018-04-18T00:00:00+00:00"><meta property="article:modified_time" content="2018-04-18T00:00:00+00:00"><meta itemprop=name content="CodeReview工具:Gerrit 搭建配置"><meta itemprop=description content="一、环境准备 OS:centos6.8 gerrit依赖 (java&git) yum -y install java-1.8.0 安装git 2.14.1 (低版本git同步gitlab时会出问题) yum install -y http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm yum install -y git yum -y install epel-release && yum -y install nginx httpd-tools gerri"><meta itemprop=datePublished content="2018-04-18T00:00:00+00:00"><meta itemprop=dateModified content="2018-04-18T00:00:00+00:00"><meta itemprop=wordCount content="1820"><meta itemprop=keywords content><meta name=twitter:card content="summary"><meta name=twitter:title content="CodeReview工具:Gerrit 搭建配置"><meta name=twitter:description content="一、环境准备 OS:centos6.8 gerrit依赖 (java&git) yum -y install java-1.8.0 安装git 2.14.1 (低版本git同步gitlab时会出问题) yum install -y http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm yum install -y git yum -y install epel-release && yum -y install nginx httpd-tools gerri"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=/ class=logo>陈欣宇的博客</a></div><div class=mobile-navbar-icon><span></span><span></span><span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=/post/><li class=mobile-menu-item>Archives</li></a><a href=/tags/><li class=mobile-menu-item>Tags</li></a><a href=/about/><li class=mobile-menu-item>About</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=/ class=logo>陈欣宇的博客</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=/post/>Archives</a></li><li class=menu-item><a class=menu-item-link href=/tags/>Tags</a></li><li class=menu-item><a class=menu-item-link href=/about/>About</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>CodeReview工具:Gerrit 搭建配置</h1><div class=post-meta><span class=post-time>2018-04-18</span></div></header><div class=post-toc id=post-toc><h2 class=post-toc-title>Contents</h2><div class="post-toc-content always-active"><nav id=TableOfContents><ul><li><ul><li><a href=#一环境准备>一、环境准备</a></li><li><a href=#二-安装与配置gerrit>二. 安装与配置gerrit</a></li><li><a href=#三如何使用gerrit>三、如何使用gerrit</a></li><li><a href=#四使用gerrit-website完成code-review>四.使用gerrit website完成code review</a></li><li><a href=#五gerrit注意事项>五.gerrit注意事项</a></li></ul></li></ul></nav></div></div><div class=post-content><h3 id=一环境准备>一、环境准备</h3><ol><li><p>OS:centos6.8
+gerrit依赖 (java&git)
+yum -y install java-1.8.0
+安装git 2.14.1 (低版本git同步gitlab时会出问题)
+yum install -y <a href=http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm>http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm</a>
+yum install -y git
+yum -y install epel-release && yum -y install nginx httpd-tools</p></li><li><p>gerrit环境
+下载：Gerrit 2.15.1 wget <a href=https://www.gerritcodereview.com/download/gerrit-2.15.1.war>https://www.gerritcodereview.com/download/gerrit-2.15.1.war</a></p></li></ol><ol start=3><li>gerrit管理帐号(可选，使用独立账号配置gerrit)
+gerrit依赖，用来管理gerrit。
+sudo adduser gerrit
+sudo passwd gerrit
+并将gerrit加入sudo权限
+sudo vi /etc/sudoers
+gerrit ALL=(ALL:ALL) ALL
+备注：这里我直接使用root用户安装</li></ol><h3 id=二-安装与配置gerrit>二. 安装与配置gerrit</h3><ol><li>配置gerrit
+默认安装：java -jar gerrit-2.15.1.war init -d /usr/local/review(此目录最好放在空间比较大的目录)</li></ol><blockquote><p>配置的时候 该选择Y的时候要选择Y</p></blockquote><p>Install Verified label [y/N]? N //如果选择默认的话 会出现没有submit按钮
+Install plugin download-commands version v2.13.4 [y/N]? y //如果不安装 会出现创建项目没有clone地址</p><p>更新配置文件：vim /usr/local/review/etc/gerrit.config</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[gerrit]
+        basePath = git
+        serverId = 90b8d687-f735-4a2c-b117-0518fe571670
+        canonicalWebUrl = http://192.168.2.238:8080/
+[database]
+        type = h2
+        database = /usr/local/review/db/ReviewDB
+[index]
+        type = LUCENE
+[auth]
+        type = HTTP
+[receive]
+        enableSignedPush = true
+[sendemail]
+        enable = true
+        smtpServer = smtp.exmail.qq.com
+        smtpServerPort = 465  
+        smtpEncryption = ssl
+        smtpUser = *@*.com
+        smtpPass = ***
+        sslVerify = false
+        from = Code Review &lt;*@*.comm&gt;
+[container]
+        user = root
+        javaHome = /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.171-3.b10.el6_9.x86_64/jre
+[sshd]
+        listenAddress = *:29418
+[httpd]
+        listenUrl = http://192.168.2.238:8080/
+[cache]
+        directory = cache
+</code></pre></td></tr></table></div></div><ol start=2><li>配置nginx反向代理
+配置：vim gerrit.conf</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>server {
+         listen 80;
+         server_name 192.168.2.238;
+         auth_basic &#34;Welcomme to Gerrit Code Review Site!&#34;;
+         auth_basic_user_file /opt/.passwd;
+         location / {
+            proxy_pass  http://192.168.2.238:8080;
+         }
+       }
+</code></pre></td></tr></table></div></div><ol start=3><li><p>配置gerrit账户密码 创建认证用户(通过httpd-tools工具)
+touch /opt/.passwd
+htpasswd -c -b /opt/.passwd admin 123456(管理员)</p></li><li><p>启动gerrit&启动nginx
+sudo /usr/local/review/bin/gerrit.sh restart
+service nginx start</p></li><li><p>访问gerrit 管理界面 <a href=http://xxx.xxxxx.com/>http://xxx.xxxxx.com/</a>
+第一次访问，需要输入第3步设置的admin及密码，该账户将作为gerrit管理员账户。</p></li></ol><h3 id=三如何使用gerrit>三、如何使用gerrit</h3><p>前提：需要git使用端 / gerrit服务端配合使用。</p><ol><li>添加项目(gerrit 服务端)
+1.1 使用gerrit添加新项目：（适用于开启新项目并使用gerrit）
+使用gerrit管理界面创建项目</li></ol><p>1.2使用gerrit添加已有项目：（适用于已有项目下移植到gerrit中）
+ssh -p 3389 gerrit1@公网IP gerrit create-project &ndash;name exist-project #建议采用管理界面添加
+或者使用gerrit管理界面
+然后将已有项目与gerrit上建立的exist-project关联，即将已有代码库代码push到gerrit中进行管理。
+cd /usr/local/review/git/exist-project
+git push ssh://gerrit1@公网IP:3389/exist-project <em>:</em></p><ol start=2><li>生成sshkey(git使用端)
+在开发账户中生成sshkey，用作与gerrit服务器连接。
+ssh-keygen -t rsa #生成sshkey</li></ol><p>cat ~/.ssh/id_rsa.pub #查看sshkey</p><ol start=3><li><p>添加sshkey到gerrit服务器(gerrit 服务端)
+此步骤与git流程类似，即将/root/.ssh/id_rsa.pub内容添加到gerri和gitlab(后面gerrit和gitlab直接同步)</p></li><li><p>拉取代码＆配置git hooks(git client端)
+验证sshkey是否配置成功：ssh -p 29418 <a href=mailto:admin@192.168.199.222>admin@192.168.199.222</a></p></li></ol><p>拉取代码url：选择 clone with commit-msg hook //会直接配置Change-ID gerrit流程必备</p><p>修改代码并提交，推送时与原有git流程不一致，采用 git push origin HEAD:refs/for/master</p><h3 id=四使用gerrit-website完成code-review>四.使用gerrit website完成code review</h3><p>当完成push后，可在gerrit管理界面看到当前提交code review的change。
+查看需要code review的提交：
+查看某次提交的详细信息（审核者+2可通过本次提交，提交者可通过Abandon本次提交）：
+如果审核者+2通过后，可提交该次commit.</p><h5 id=配置gerrit和gitlab同步>配置gerrit和gitlab同步</h5><p>gerrit和gitlab同步需要配置两个地方 (前提示已将sshkey 添加至gerrit和gitlab)</p><p>配置 /root/.ssh/config</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>Host 192.168.2.244
+    User root
+    IdentityFile ~/.ssh/id_rsa
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    PreferredAuthentications publickey
+</code></pre></td></tr></table></div></div><p>配置replation插件
+/usr/local/review/etc/replication.config //以实际gerrit安装位置为准</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[remote &#34;192.168.2.244&#34;]
+         url = git@192.168.2.244:root/${name}.git
+         push = +refs/heads/*:refs/heads/*
+         push = +refs/tags/*:refs/tags/*
+         push = +refs/changes/*:refs/changes/*
+         timtout = 30
+         threads = 3
+</code></pre></td></tr></table></div></div><h3 id=五gerrit注意事项>五.gerrit注意事项</h3><ul><li>需要为每个使用者分配gerrit账号，不要都使用admin账号，因为admin账号可直接push master</li><li>push代码时需要使用
+git push origin HEAD:refs/for/master(branch),gerrit默认关闭非admin账号的push direct权限</li><li>push代码时需要commit email与gerrit logoutaccount email一致，否则无法push成功，可选择关闭email notify，并开启forge user权限，或者通过修改gerrit数据库account email信息</li><li>git配置的email一定要和gerrit里注册的email一致，否者push会出错</li><li>gerrit数据库与gitlab同步，需要安装replication插件，并开启该功能</li></ul></div><div class=post-copyright><p class=copyright-item><span class=item-title>Author</span>
+<span class=item-content>Nevea Chan</span></p><p class=copyright-item><span class=item-title>LastMod</span>
+<span class=item-content>2018-04-18</span></p></div><footer class=post-footer><nav class=post-nav><a class=prev href=/post/vscode%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/><i class="iconfont icon-left"></i><span class="prev-text nav-default">VScode使用笔记</span>
+<span class="prev-text nav-mobile">Prev</span></a>
+<a class=next href=/post/yum%E5%91%BD%E4%BB%A4%E8%A2%AB%E9%94%81%E8%A7%A3%E5%86%B3/><span class="next-text nav-default">Yum 命令被锁</span>
+<span class="next-text nav-mobile">Next</span>
+<i class="iconfont icon-right"></i></a></nav></footer></article></div></div></main><footer id=footer class=footer><div class=social-links><a href=mailto:your@email.com class="iconfont icon-email" title=email></a><a href=http://localhost:1313/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a></div><div class=copyright><span class=power-by>Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a></span>
+<span class=division>|</span>
+<span class=theme-info>Theme -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a></span>
+<span class=copyright-year>&copy;
+2017 -
+2020
+<span class=heart><i class="iconfont icon-heart"></i></span><span class=author>Nevea Chan</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script><script type=text/javascript src=/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js></script></body></html>
