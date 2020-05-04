@@ -29,7 +29,7 @@ jobs:
       - name: Mirror github coding
         uses: wearerequired/git-mirror-action@v1
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY}}
+          SSH_PRIVATE_KEY: ${{ secrets.CODING_KEY}}
         with:
           source-repo: 'git@github.com:hichenxinyu/hichenxinyu.github.io.git'
           destination-repo: 'git@e.coding.net:nevea/blog_nevea.git'
