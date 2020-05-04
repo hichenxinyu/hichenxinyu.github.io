@@ -32,4 +32,4 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.CODING_KEY}}
         with:
           source-repo: 'git@github.com:hichenxinyu/hichenxinyu.github.io.git'
-          destination-repo: 'git@e.coding.net:nevea/blog_nevea.git'
+          destination-repo: 'git@e.coding.net:nevea/blog.git'
