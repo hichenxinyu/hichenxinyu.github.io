@@ -1,4 +1,8 @@
-# GitLab CI/CD
+---
+title: Gitlab CI/CD
+date: 2019-05-03
+layout: post
+---
 
 GitLab CI / CD是GitLab内置的工具，用于通过[连续方法](https://docs.gitlab.com/ce/ci/introduction/index.html#introduction-to-cicd-methodologies)进行软件开发：
 
