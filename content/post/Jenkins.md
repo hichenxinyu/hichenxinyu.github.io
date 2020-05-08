@@ -190,11 +190,11 @@ sed -i 's/http:\/\/updates.jenkins-ci.org\/download/https:\/\/mirrors.tuna.tsing
 - 2. 通过 Gitlab 配置的 Jenkins Webhook 触发 Pipeline 自动构建
 - 3. Jenkins 触发构建构建任务，根据 Pipeline 脚本定义分步骤构建
 - 4. 先进行代码静态分析，单元测试
-- \5. 然后进行 Maven 构建（Java 项目）
-- \6. 根据构建结果构建 Docker 镜像
-- \7. 推送 Docker 镜像到 Harbor 仓库
-- \8. 触发更新服务阶段，使用 Helm 安装/更新 Release
-- \9. 查看服务是否更新成功。
+- 5. 然后进行 Maven 构建（Java 项目）
+- 6. 根据构建结果构建 Docker 镜像
+- 7. 推送 Docker 镜像到 Harbor 仓库
+- 8. 触发更新服务阶段，使用 Helm 安装/更新 Release
+- 9. 查看服务是否更新成功。
 
 
 
