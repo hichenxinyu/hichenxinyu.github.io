@@ -40,14 +40,14 @@ copyright = ""            # default: author.name ↓        # 默认为下面配
   url = "/post/"
 [[menu.main]]
   name = "Categories"
-  weight = 40
+  weight = 30
   identifier = "categories"
   url = "/categories/"
-#[[menu.main]]
-#  name = "Tags"
-#  weight = 30
-#  identifier = "tags"
-#  url = "/tags/"
+[[menu.main]]
+  name = "Tags"
+  weight = 30
+  identifier = "tags"
+  url = "/tags/"
 [[menu.main]]
   name = "About"
   weight = 40
