@@ -13,9 +13,7 @@ Harbor 是基于 Docker Registry 的带UI的容器镜像仓库，界面友好，
 
 #### Harbor 高可用的方式
 
-- 多个Harbor实例，前端加一层负载均衡，后端使用相同的存储（OSS，NFS）与数据库（pg，redis）    该方式是把Harbor 无状态的部分抽离出来
-- 多实例共享后端存储(采取挂载文件系统方式：可以是S3，Ceph，OSS）
-- 多实例相互数据同步(基于镜像复制模式)
+多个Harbor实例，前端加一层负载均衡，后端使用相同的存储（OSS，NFS）与数据库（pg，redis）    该方式是把Harbor 无状态的部分抽离出来，如下图
 
 
 
@@ -151,3 +149,8 @@ docker-compose up -d
 
 
 
+#### 一些问题
+
+- 禁止自动创建镜像仓库
+
+- 更新SSL证书 要重新执行 ./prepare
