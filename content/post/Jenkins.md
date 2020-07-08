@@ -91,7 +91,7 @@ Slave 节点（Agent 节点）无需安装Jenkins，只要能保证
 
 #### 在项目中使用Jenkins  来构建 ：
 
-- 通过 webhook 触发来执行 pipeline  （我们把 pipeline 代码和 业务代码是放在不同仓库的 对服务来说没有侵入性）
+- Jenkins 页面设置 pipeline  （我们把 pipeline 代码和 业务代码是放在不同仓库的 对服务来说没有侵入性）
 
 - 项目中配置 Jenkinsfile 文件  （类似.gitlab-ci.yml）
 
