@@ -10,16 +10,17 @@ tags:
 #### 第一步：备份你的原镜像文件，以免出错后可以恢复。
 
 ````
-mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+cp -a /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
+
 ````
 
 #### 第二步：下载新的CentOS-Base.repo 到/etc/yum.repos.d/
 ````
 CentOS 6
-wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo
-CentOS 7
-wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.huaweicloud.com/repository/conf/CentOS-6-anon.repo
 
+CentOS 7
+wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.huaweicloud.com/repository/conf/CentOS-7-anon.repo
 ````
 <!-- more --> 
 
