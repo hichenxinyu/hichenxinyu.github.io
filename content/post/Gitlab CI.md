@@ -17,7 +17,6 @@ GitLab CI/CD 是gitlab8.0之后自带的一个持续集成系统，中心思想�
 GitLab CI/CD的脚本执行，需要自定义安装对应gitlab-runner来执行，gitlab-runner 默认每三秒去调用gitlab api，发现代码有更新就会触发gitlab-CI，分配到各个Runner来运行相应的脚本script。这些脚本有的是测试项目用的，有的是部署用的。
 
 
-
 ### GitLab CI/CD 优势
 
 - 轻量级，不需要复杂的安装手段。
