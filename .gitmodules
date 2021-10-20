@@ -1,6 +1,9 @@
-[submodule "themes/LeaveIt"]
-	path = themes/LeaveIt
-	url = https://github.com/hichenxinyu/LeaveIt.git
 [submodule "themes/even"]
 	path = themes/even
 	url = https://github.com/hichenxinyu/hugo-theme-even.git
+[submodule "themes/hugo-theme-stack"]
+	path = themes/hugo-theme-stack
+	url = https://github.com/CaiJimmy/hugo-theme-stack/
+[submodule "themes/diary"]
+	path = themes/diary
+	url = https://github.com/AmazingRise/hugo-theme-diary.git
