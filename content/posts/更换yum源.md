@@ -16,11 +16,9 @@ cp -a /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
 
 #### 第二步：下载新的CentOS-Base.repo 到/etc/yum.repos.d/
 ````
-CentOS 6
-wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.huaweicloud.com/repository/conf/CentOS-6-anon.repo
-
 CentOS 7
-wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.huaweicloud.com/repository/conf/CentOS-7-anon.repo
+curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.huaweicloud.com/repository/conf/CentOS-7-anon.repo
+
 ````
 <!-- more --> 
 
