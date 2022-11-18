@@ -22,7 +22,6 @@ curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
 ````
 <!-- more --> 
 
- 
 
 #### 第三步：运行yum makecache生成缓存
 ````
