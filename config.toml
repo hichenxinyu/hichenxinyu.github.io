@@ -474,7 +474,7 @@ enableEmoji = true
   rel = "alternate"
   isHTML = false
   noUgly = true
-  permalinkable = false utteranc.es
+  permalinkable = false
 
 # 用于 Hugo 输出文档的设置
 [outputs]
