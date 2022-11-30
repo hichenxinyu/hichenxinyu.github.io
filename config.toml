@@ -200,7 +200,7 @@ enableEmoji = true
         shortname = "ryan4yin"
       # DoIt 新增 | 0.2.5 Utterances 评论系统设置
       [params.page.comment.utterances]
-        enable = true
+        enable = false
         # owner/repo
         repo = "ryan4yin/thiscute.world"
         issueTerm = "pathname"
@@ -264,11 +264,11 @@ enableEmoji = true
     hasCJKLanguage = true
 
     [languages.zh-cn.params.home.profile]
-      enable = true
+      enable = false
       # Gravatar 邮箱，用于优先在主页显示的头像
       # gravatarEmail = "xiaoyin_c@qq.com"
       # 主页显示头像的 URL
-      avatarURL = "/avatar/myself.webp"
+      #avatarURL = "/avatar/myself.webp"
       # DoIt 更改 | 0.2.7 主页显示的网站标题 (支持 HTML 格式)
       title = ""
       # 主页显示的网站副标题
@@ -347,11 +347,11 @@ enableEmoji = true
     languageCode = "en"
     languageName = "English"
     [languages.en.params.home.profile]
-      enable = true
+      enable = false
       # Gravatar 邮箱，用于优先在主页显示的头像
       # gravatarEmail = "xiaoyin_c@qq.com"
       # 主页显示头像的 URL
-      avatarURL = "/avatar/myself.webp"
+      #avatarURL = "/avatar/myself.webp"
       # DoIt 更改 | 0.2.7 主页显示的网站标题 (支持 HTML 格式)
       title = ""
       # 主页显示的网站副标题
