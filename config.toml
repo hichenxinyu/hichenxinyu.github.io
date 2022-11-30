@@ -1,6 +1,6 @@
 baseURL = "http://hichenxinyu.github.io"
 title = "Nevea"
-theme = "kitto"
+theme = "even"
 
 languageCode = "cn"
 hasCJKLanguage = true
