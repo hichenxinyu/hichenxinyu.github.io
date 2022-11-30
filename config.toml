@@ -231,12 +231,12 @@ enableEmoji = true
         logoUrl = "/avatar/myself.png"
 
   # 网站验证代码，用于 Google/Bing/Yandex/Pinterest/Baidu
-  [params.verification]
-    google = "E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"
-    bing = ""
-    yandex = ""
-    pinterest = ""
-    baidu = "code-ZZtDruAnX1"
+#  [params.verification]
+#    google = "E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"
+#    bing = ""
+#    yandex = ""
+#    pinterest = ""
+#    baidu = "code-ZZtDruAnX1"
 
   # DoIt 新增 | 0.2.10 网站 SEO 配置
   [params.seo]
@@ -247,7 +247,7 @@ enableEmoji = true
 
   # DoIt 新增 | 0.2.0 网站分析配置
   [params.analytics]
-    enable = true
+    enable = false
     # Google Analytics
     [params.analytics.google]
       id = "G-4V93QVSNFW"
@@ -272,11 +272,11 @@ enableEmoji = true
       # DoIt 更改 | 0.2.7 主页显示的网站标题 (支持 HTML 格式)
       title = ""
       # 主页显示的网站副标题
-      subtitle = "脚下虽有万水千山，但行者必至。"
+      subtitle = "不如就一起散散步"
       # 是否为副标题显示打字机动画
-      typeit = true
+      typeit = false
       # 是否显示社交账号
-      social = true
+      social = false
       # DoIt 新增 | 0.2.0 免责声明 (支持 HTML 格式)
       disclaimer = ""
 
@@ -325,14 +325,6 @@ enableEmoji = true
       url = "/tags/"
       title = ""
       weight = 9
-    [[languages.zh-cn.menu.main]]
-      identifier = "friends"
-      pre = ""
-      post = ""
-      name = "朋友们"
-      url = "/friends/"
-      title = ""
-      weight = 11
     [[languages.zh-cn.menu.main]]
       identifier = "now"
       pre = ""
@@ -457,8 +449,8 @@ enableEmoji = true
 
 # 作者配置
 [author]
-  name = "ryan4yin"
-  link = "https://thiscute.world/"
+  name = "Nevea"
+  link = "https://hichenxinyu-github-io.vercel.app/"
 
 
 # 网站地图配置
