@@ -25,8 +25,8 @@ Markdown编辑器：Typora+PicGo
 云盘： OneDrive ，iCloud
        OneDrive是Office 365 订阅赠送，日常来用作资料同步 ，Apple 全家桶的前提下，iCloud非常好用，免费的5GB也够用了，大文件放在Onedrive中。
 
-Git GUI客户端：GitKraken
-​	 非常经典的章鱼，感觉比Sourcetree好用，基于electron ，跨平台。免费版本也够用了，只是不支持github私有仓库。
+Git GUI客户端：Fork
+​	 之前使用GitKraken，Sourcetree，现在全部使用Fork，很稳定
 
 终端：iTerm2
 ​	iTerm2 +oh-my-zsh ，作为运维，命令行是经常打交道的地方，一个好看好用功能强大的终端是以一个很好的工具，Mac上最好用的终端工具
