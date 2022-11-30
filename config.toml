@@ -22,10 +22,10 @@ enableEmoji = true
   # DoIt 主题版本
   version = "0.2.X"
 
-  description = "This Cute World"
+  description = "陈欣宇的个人博客"
 
   # 网站关键词
-  keywords = ["Blog", "部落格", "博客", "Ryan4Yin", "於清樂", "ThisCuteWorld"]
+  keywords = ["Blog", "chenxinyu", "博客", "Nevea",]
   # 网站默认主题样式 ("light", "dark", "auto")
   defaultTheme = "auto"
 
@@ -63,7 +63,7 @@ enableEmoji = true
       # LOGO 的 URL（不要设置这个！）
       logo = ""
       # 标题名称
-      name = "This Cute World"
+      name = "Nevea's Blog"
       # 你可以在名称 (允许 HTML 格式) 之前添加其他信息, 例如图标
       pre = ""
       # 你可以在名称 (允许 HTML 格式) 之后添加其他信息, 例如图标
@@ -293,14 +293,7 @@ enableEmoji = true
     #   # "assets/data/cdn/"
     #   data = "jsdelivr.yml"
       
-    [[languages.zh-cn.menu.main]]
-      identifier = "statistics"
-      pre = ""
-      post = ""
-      name = "阅读排行"
-      url = "/statistics/"
-      title = ""
-      weight = 1
+
     [[languages.zh-cn.menu.main]]
       identifier = "tech"
       pre = ""
@@ -325,14 +318,6 @@ enableEmoji = true
       url = "/tags/"
       title = ""
       weight = 9
-    [[languages.zh-cn.menu.main]]
-      identifier = "now"
-      pre = ""
-      post = ""
-      name = "此刻"
-      url = "/now/"
-      title = ""
-      weight = 13
     [[languages.zh-cn.menu.main]]
       identifier = "about"
       pre = ""
@@ -489,7 +474,7 @@ enableEmoji = true
   rel = "alternate"
   isHTML = false
   noUgly = true
-  permalinkable = false
+  permalinkable = false utteranc.es
 
 # 用于 Hugo 输出文档的设置
 [outputs]
