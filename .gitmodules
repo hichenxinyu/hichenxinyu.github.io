@@ -1,3 +1,6 @@
 [submodule "themes/kitto"]
 	path = themes/kitto
 	url = https://github.com/keaising/kitto.git
+[submodule "hexo-theme-even"]
+	path = hexo-theme-even
+	url = https://github.com/ahonn/hexo-theme-even
