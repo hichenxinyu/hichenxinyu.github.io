@@ -7,7 +7,7 @@ layout: post
 ### **优化 Nginx 进程数量**
 
 ```
-worker_processes 1; # 指定 Nginx 要开启的进程数，结尾的数字就是进程的个数，可以为 auto
+worker_processes auto; # 指定 Nginx 要开启的进程数，建议配置为 auto，会开启
 ```
 
 这个参数调整的是 Nginx 服务的 worker 进程数，Nginx 有 Master 进程和 worker 进程之分，Master 为管理进程、真正接待“顾客”的是 worker 进程。
